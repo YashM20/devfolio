@@ -18,7 +18,7 @@ export function SiteHeader() {
 
   return (
     <>
-      <div className="flex h-14" />
+      <div className="flex h-14 xs:h-16" />
 
       <SiteHeaderWrapper
         className={cn(
