@@ -1,58 +1,42 @@
 export const USER = {
-  firstName: "Chánh Đại",
-  lastName: "Nguyễn",
-  displayName: "Chánh Đại",
-  username: "ncdai",
+  firstName: "Yash",
+  lastName: "Mahajan",
+  displayName: "Yash Mahajan",
+  username: "yash_mhj",
   gender: "male",
-  bio: "Creating with code, driven by passion.",
+  bio: "Transforming complex ideas into elegant web and mobile applications.",
   flipSentences: [
     "Software Developer",
-    "UI/UX Designer",
     "Open Source Contributor",
+    "React, React Native, Node.js and more.",
   ],
-  address: "Ho Chi Minh City, Viet Nam",
+  address: "Gujarat, India",
   phoneNumber: "Kzg0Nzc3ODg4MTQ4", // E.164 format, base64 encoded (https://t.io.vn/base64-string-converter)
-  email: "ZGFpQGNoYW5oZGFpLmNvbQ==", // base64 encoded
-  website: "https://chanhdai.com",
+  email: "eWFzaHNlY29uZDYwNkBnbWFpbC5jb20=", // base64 encoded
+  website: "https://reactopia.me",
   otherWebsites: [
-    "https://dai.ng",
-    "https://dai.so",
-    "https://d.io.vn",
-    "https://d.id.vn",
-    "https://dai.io.vn",
-    "https://dai.id.vn",
-    "https://chanhdai.io.vn",
-    "https://chanhdai.id.vn",
-    "https://ncdai.vn",
-    "https://ncdai.net",
-    "https://dai.is-a.dev",
+    "https://github.com/yashm20",
+    "https://linkedin.com/in/yash-mhj",
+    "https://x.com/yash_mhj",
+    "https://instagram.com/yash_mhj",
+    "https://youtube.com/@yashm20",
   ],
-  dateOfBirth: "2000-08-14", // YYYY-MM-DD
-  jobTitle: "Software Developer & UI/UX Designer",
+  jobTitle: "Software Developer",
   jobs: [
     {
-      title: "Senior Frontend Developer & UI Design Lead",
-      company: "Simplamo",
-      website: "https://simplamo.com?ref=IN-926722",
+      title: "Senior Frontend Developer",
+      company: "PromeTechAi Innovations pvt. ltd.",
+      website: "https://www.prometheanz.com/",
     },
     {
       title: "Founder",
-      company: "Quaric",
-      website: "https://quaric.com",
+      company: "Reactopia",
+      website: "https://reactopia.me",
     },
   ],
-  about: `
-Hello, World! I am Chánh Đại — a Software Developer & UI/UX Designer passionate about creating high-performance, user-centric software solutions with intuitive and engaging designs.
-
-With 5+ years of experience, I specialize in building high-quality web and mobile applications using Next.js, React, TypeScript, and modern front-end technologies. Beyond work, I love exploring new technologies and turning ideas into reality through personal projects.
-
-One of my key projects, [ZaDark](https://zadark.com), enhances the Zalo experience on PC and Web, surpassing 80,000 downloads on [SourceForge](https://sourceforge.net/projects/zadark) and 15,000 active users on the [Chrome Web Store](https://chromewebstore.google.com/detail/llfhpkkeljlgnjgkholeppfnepmjppob) since 2022.
-
-Let's connect and collaborate!
-  `,
-  avatar: "https://assets.chanhdai.com/images/chanhdai-avatar-ghibli.jpeg",
+  about: "Software Engineer with 4+ years of experience.  I have been developing web and mobile applications using JavaScript frameworks and libraries, including Next.js, React JS, React Native & expo cli. I'm passionate about staying up to date with the modern frontend development trends & React Community.",
+  avatar: "https://github.com/yashm20.png",
   ogImage: "https://assets.chanhdai.com/images/screenshot-og-image-dark.png",
-  keywords:
-    "ncdai, nguyenchanhdai, nguyen chanh dai, chanhdai, chanh dai, iamncdai, quaric, zadark, nguyễn chánh đại, chánh đại",
-  dateCreated: "2023-10-20", // YYYY-MM-DD
+  keywords: "yash, mahajan, yashmahajan, mahajanyash, yash_mhj, yashmhj",
+  dateCreated: "2025-07-01", // YYYY-MM-DD
 };
