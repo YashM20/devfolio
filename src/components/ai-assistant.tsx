@@ -151,12 +151,12 @@ export function AiAssistant() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsOpen(false)}
-            />
+            ></motion.div>
 
             {/* Chat Container */}
             <motion.div
               className={cn(
-                "flex flex-col relative w-full max-w-md h-fit md:h-[700px] z-2",
+                "flex flex-col relative w-full max-w-md max-h-[90vh] z-2",
                 "bg-[radial-gradient(circle_200px_at_50%_0%,#1a1a1a,#0a0a0a)] backdrop-blur-md border border-white/10",
                 "rounded-3xl shadow-2xl overflow-hidden",
               )}
@@ -230,8 +230,9 @@ export function AiAssistant() {
               </div>
 
               {/* Messages */}
-              <ScrollArea className="flex-1 p-4 h-[400px] md:h-[500px]">
-                <div className="space-y-4">
+              <div className="flex relative w-full max-h-[100%] overflow-hidden">
+                <ScrollArea className="w-full">
+                  <div className="space-y-4 p-4">
                   {messages.length === 0 && (
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
@@ -291,7 +292,7 @@ export function AiAssistant() {
                     >
                       {message.role === 'assistant' && (
                         <Avatar className="h-8 w-8 border border-cyan-400/30">
-                          <AvatarFallback className="bg-gradient-to-br from-cyan-500 to-blue-500 text-white text-xs">
+                          <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-emerald-900 text-white text-xs">
                             <Bot className="h-4 w-4" />
                           </AvatarFallback>
                         </Avatar>
@@ -310,7 +311,7 @@ export function AiAssistant() {
                       
                       {message.role === 'user' && (
                         <Avatar className="h-8 w-8 border border-cyan-400/30">
-                          <AvatarFallback className="bg-gradient-to-br from-cyan-500 to-blue-500 text-white text-xs">
+                          <AvatarFallback className="bg-gradient-to-br from-cyan-500 to-blue-900 text-white text-xs">
                             <User className="h-4 w-4" />
                           </AvatarFallback>
                         </Avatar>
@@ -365,45 +366,69 @@ export function AiAssistant() {
                       </div>
                     </motion.div>
                   )}
-                </div>
-                <div ref={messagesEndRef} />
-              </ScrollArea>
+                  </div>
+                  <div ref={messagesEndRef} />
+                </ScrollArea>
+                
+                {/* Progressive Blur Overlays */}
+                <div className="absolute top-0 left-0 right-0 h-2 pointer-events-none z-10
+                               bg-gradient-to-bl from-black/40 via-black/20 to-transparent backdrop-blur-sm" />
+                <div className="absolute bottom-0 left-0 right-0 h-2 pointer-events-none z-10
+                               bg-gradient-to-tr from-black/40 via-black/20 to-transparent backdrop-blur-sm" />
+              </div>
 
               {/* Input */}
-              <div className="p-4 border-t border-white/5 bg-gradient-to-r from-white/5 to-transparent">
-                <form onSubmit={handleFormSubmit} className="flex gap-2">
+              <div className="flex p-4 border-t border-white/5 bg-gradient-to-r from-white/5 to-transparent">
+                <form onSubmit={handleFormSubmit} className="flex w-full gap-2">
                   <Input
                     value={input}
                     onChange={handleInputChange}
                     placeholder="Ask me anything..."
                     className={cn(
                       "flex-1 bg-white/5 border-white/10 text-white placeholder:text-white/50",
-                      "focus:border-cyan-400/40 focus:ring-cyan-400/20",
-                      "rounded-2xl"
+                      "focus:border-white/20 focus:ring-0",
+                      "rounded-2xl transition-all duration-200"
                     )}
                     disabled={isLoading}
                     autoComplete="off"
                     spellCheck="false"
                     data-testid="chat-input"
                   />
-                  <Button
+                  <button
                     type="submit"
                     disabled={isLoading || !input.trim()}
                     className={cn(
-                      "bg-gradient-to-r from-cyan-500 to-blue-500",
-                      "hover:from-cyan-600 hover:to-blue-600",
+                      "relative cursor-pointer rounded-full border-none p-[1.5px] text-[1rem] transform-gpu",
+                      "bg-[radial-gradient(circle_40px_at_80%_-10%,#ffffff,#181b1b)]",
+                      "transition-all duration-300 ease-out hover:scale-[1.02] active:scale-[0.99]",
+                      "hover:shadow-[0_8px_30px_rgba(0,225,255,0.12)]",
                       "disabled:opacity-50 disabled:cursor-not-allowed",
-                      "rounded-2xl"
+                      "h-10 w-10"
                     )}
                     onClick={() => console.log('📤 Send button clicked')}
                   >
-                    <Send className="h-4 w-4" />
-                  </Button>
+                    <div
+                      className="absolute left-0 bottom-0 h-full w-[40px] rounded-full
+                                 bg-[radial-gradient(circle_30px_at_0%_100%,#3fe9ff,#0000ff80,transparent)]
+                                 shadow-[-6px_6px_15px_#0051ff1a]"
+                    />
+
+                    <div
+                      className="relative z-[3] rounded-full px-[10px] py-[10px] text-white font-medium
+                                 bg-[radial-gradient(circle_40px_at_80%_-50%,#777777,#0f1111)]
+                                 flex items-center justify-center"
+                    >
+                      <span className="absolute left-0 top-0 h-full w-full rounded-full
+                                       bg-[radial-gradient(circle_30px_at_0%_100%,#00e1ff1a,#0000ff11,transparent)]" />
+                      <Send className="h-4 w-4 relative z-10" />
+                    </div>
+
+                    <div
+                      className="absolute top-0 right-0 z-[-1] h-[50%] w-[55%] rounded-[80px]
+                                 shadow-[0_0_15px_#ffffff25]"
+                    />
+                  </button>
                 </form>
-                {(() => {
-                  console.log('🔍 Input section rendered successfully')
-                  return null
-                })()}
               </div>
             </motion.div>
           </motion.div>
