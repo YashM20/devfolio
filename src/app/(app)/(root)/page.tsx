@@ -76,6 +76,11 @@ function getPageJsonLd(): WithContext<PageSchema> {
   };
 }
 
+/**
+ * Renders a horizontal separator with a patterned background for visual separation between profile sections.
+ *
+ * @param className - Optional additional CSS classes for custom styling
+ */
 function Separator({ className }: { className?: string }) {
   return (
     <div

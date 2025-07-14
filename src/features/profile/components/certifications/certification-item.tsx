@@ -9,6 +9,15 @@ import { cn } from "@/lib/utils";
 
 import type { Certification } from "../../types/certifications";
 
+/**
+ * Renders a styled, accessible link displaying certification details, including issuer, title, issue date, and logo or icon.
+ *
+ * The component visually highlights the certification and links to its credential URL in a new browser tab.
+ *
+ * @param className - Optional additional CSS classes for custom styling.
+ * @param certification - The certification data to display.
+ * @returns A React element representing the certification item.
+ */
 export function CertificationItem({
   className,
   certification,

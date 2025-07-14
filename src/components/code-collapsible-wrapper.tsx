@@ -9,6 +9,14 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
+/**
+ * Wraps content in a styled, collapsible container with custom triggers and expand/collapse controls.
+ *
+ * Displays a toggle button and separator at the top-right, and an "Expand" trigger at the bottom when collapsed. Content remains mounted in the DOM regardless of state.
+ *
+ * @param className - Additional class names to apply to the wrapper.
+ * @param children - The content to display inside the collapsible area.
+ */
 export function CodeCollapsibleWrapper({
   className,
   children,

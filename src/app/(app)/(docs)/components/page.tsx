@@ -9,6 +9,11 @@ export const metadata: Metadata = {
   description: "A collection of reusable components.",
 };
 
+/**
+ * Renders a page displaying a list of blog posts categorized under "components."
+ *
+ * Each post is shown as a styled link with its title, a React icon, and an optional "New" badge if applicable.
+ */
 export default function Page() {
   const posts = getPostsByCategory("components");
 

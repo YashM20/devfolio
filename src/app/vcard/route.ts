@@ -6,6 +6,13 @@ import { decodeEmail, decodePhoneNumber } from "@/utils/string";
 
 export const dynamic = "force-static";
 
+/**
+ * Handles a GET request to generate and return a vCard file containing user information.
+ *
+ * The vCard includes the user's name, address, email, website, avatar photo (if available), and the first job's company and title (if present). The response prompts the client to download the vCard as a `.vcf` file named after the user's username.
+ *
+ * @returns An HTTP response with the generated vCard as a downloadable file.
+ */
 export async function GET() {
   const card = new VCard();
 

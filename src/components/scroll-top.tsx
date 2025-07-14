@@ -12,6 +12,11 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
+/**
+ * Renders a floating button that appears after scrolling down, allowing users to smoothly scroll back to the top of the page.
+ *
+ * The button animates its appearance and opacity based on scroll direction and is accessible via a visually hidden label.
+ */
 export function ScrollTop({
   className,
   ...props

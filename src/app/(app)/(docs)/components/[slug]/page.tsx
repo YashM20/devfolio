@@ -85,6 +85,13 @@ function getPageJsonLd(post: Post): WithContext<PageSchema> {
   };
 }
 
+/**
+ * Renders a blog post page for a given "components" category post, including navigation, structured data, and content.
+ *
+ * Displays the post's title, description, inline table of contents, and MDX-rendered content. Embeds JSON-LD structured data for SEO and provides navigation to previous and next posts within the category. Returns a 404 page if the post does not exist or does not belong to the "components" category.
+ *
+ * @param params - A promise resolving to an object containing the post slug.
+ */
 export default async function Page({
   params,
 }: {

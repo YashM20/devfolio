@@ -5,6 +5,11 @@ import * as ProgressPrimitive from "@radix-ui/react-progress";
 
 import { cn } from "@/lib/utils";
 
+/**
+ * Renders a styled progress bar with a customizable fill level.
+ *
+ * The progress indicator's fill is controlled by the `value` prop, representing the completion percentage from 0 to 100. Additional props are passed to the underlying Radix UI Progress component.
+ */
 function Progress({
   className,
   value,

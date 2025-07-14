@@ -10,6 +10,11 @@ import type { NpmCommands } from "@/types/unist";
 import { CopyButton } from "./copy-button";
 import { getIconForPackageManager } from "./icons";
 
+/****
+ * Renders a tabbed code block interface for displaying and copying package manager commands.
+ *
+ * Displays command strings for pnpm, yarn, npm, and bun in a tabbed layout, allowing users to switch between package managers and copy the relevant command to the clipboard. The active tab and package manager selection are synchronized with the user's configuration.
+ */
 export function CodeBlockCommand({
   __pnpm__,
   __yarn__,

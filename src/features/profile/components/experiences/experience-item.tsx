@@ -4,6 +4,11 @@ import React from "react";
 import type { Experience } from "../../types/experiences";
 import { ExperiencePositionItem } from "./experience-position-item";
 
+/**
+ * Renders a detailed view of a work experience, including company information, logo, current employer indicator, and a list of positions held.
+ *
+ * @param experience - The work experience data to display, including company details and associated positions.
+ */
 export function ExperienceItem({ experience }: { experience: Experience }) {
   return (
     <div className="screen-line-after space-y-4 py-4">

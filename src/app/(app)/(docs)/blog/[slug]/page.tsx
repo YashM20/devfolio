@@ -85,6 +85,11 @@ function getPageJsonLd(post: Post): WithContext<PageSchema> {
   };
 }
 
+/**
+ * Renders a blog post page with navigation, metadata, and structured data for SEO.
+ *
+ * Displays the post content, title, description, and an inline table of contents. Provides navigation to the blog index and to previous and next posts if available. Embeds JSON-LD structured data for search engines. Triggers a 404 page if the post is not found.
+ */
 export default async function Page({
   params,
 }: {

@@ -7,6 +7,11 @@ import { FlipSentences } from "@/registry/flip-sentences";
 
 import { VerifiedIcon } from "./verified-icon";
 
+/**
+ * Renders the user profile header section, displaying the user's avatar, display name with verification status, and a rotating set of bio sentences.
+ *
+ * Combines user information and visual elements into a styled header layout, including support for dark mode and responsive design.
+ */
 export function ProfileHeader() {
   return (
     <div className="screen-line-after border-edge flex border-x">
