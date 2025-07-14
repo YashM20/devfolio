@@ -5,11 +5,6 @@ import * as SliderPrimitive from "@radix-ui/react-slider";
 
 import { cn } from "@/lib/utils";
 
-/**
- * A customizable slider component supporting single or multiple thumbs, built on top of Radix UI's slider primitive.
- *
- * Renders a styled slider track, range, and one or more thumbs based on the provided value or defaultValue arrays. Supports horizontal and vertical orientations, as well as disabled state styling.
- */
 function Slider({
   className,
   defaultValue,

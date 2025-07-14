@@ -22,13 +22,6 @@ import { USER } from "@/data/user";
 import { cn } from "@/lib/utils";
 import posthog from "posthog-js";
 
-/**
- * Renders an interactive AI chat assistant modal with animated UI, keyboard shortcuts, error handling, and message history.
- *
- * Provides a floating "Ask Me" button that opens a modal chat interface, allowing users to interact with an AI assistant about a specific user. Supports keyboard shortcuts (Ctrl/Cmd + / to open, Escape to close), displays typing indicators, handles API errors with user-friendly messages, and offers suggested questions for quick interaction. Integrates analytics tracking and smooth UI animations.
- *
- * @returns The AI assistant chat React component.
- */
 export function AiAssistant() {
   const [isOpen, setIsOpen] = useState(false);
   const [isTyping, setIsTyping] = useState(false);

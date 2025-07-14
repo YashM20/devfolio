@@ -7,11 +7,6 @@ import { cn } from "@/lib/utils";
 import { TECH_STACK } from "../data/tech-stack";
 import { Panel, PanelContent, PanelHeader, PanelTitle } from "./panel";
 
-/**
- * Displays a styled panel showcasing a list of technology stack icons with tooltips and external links.
- *
- * Each technology icon adapts to the current theme (light or dark) if available, and includes accessible labels for screen readers.
- */
 export function TeckStack() {
   return (
     <Panel id="stack">

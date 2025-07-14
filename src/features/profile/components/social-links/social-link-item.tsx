@@ -4,11 +4,6 @@ import Image from "next/image";
 import type { SocialLink } from "@/features/profile/types/social-links";
 import { cn } from "@/lib/utils";
 
-/**
- * Renders a styled external social link with an icon, title, optional description, and an external link indicator.
- *
- * Displays the provided icon and title, optionally followed by a description, and opens the link in a new browser tab.
- */
 export function SocialLinkItem({ icon, title, description, href }: SocialLink) {
   return (
     <a

@@ -1,12 +1,5 @@
 import { cn } from "@/lib/utils";
 
-/**
- * Provides a styled layout container for documentation pages, applying decorative borders and a patterned background.
- *
- * Renders its `children` within a visually distinct section suitable for documentation content.
- *
- * @param children - The content to display within the documentation layout
- */
 export default function DocsLayout({
   children,
 }: {

@@ -9,12 +9,6 @@ export const metadata: Metadata = {
   description: "A collection of articles on development, design, and ideas.",
 };
 
-/**
- * Renders the blog listing page, displaying all posts sorted by creation date in descending order.
- *
- * Shows a header, a description, decorative vertical lines, and a grid of blog post previews.
- * The first five posts have their images preloaded for improved performance.
- */
 export default function Page() {
   const allPosts = getAllPosts();
 

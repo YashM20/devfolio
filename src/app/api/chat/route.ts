@@ -24,12 +24,7 @@ const globalRequests = { count: 0, date: new Date().toDateString() };
 const MAX_USER_REQUESTS_PER_DAY = 100;
 const MAX_GLOBAL_REQUESTS_PER_DAY = 10000;
 
-/**
- * Extracts the client's IP address from the request headers, checking common proxy headers and falling back to a default value if none are found.
- *
- * @param req - The incoming HTTP request
- * @returns The detected client IP address, or "unknown-ip" if not available
- */
+// Helper functions for rate limiting
 function getClientIP(req: Request): string {
   // Try to get real IP from various headers
   const xForwardedFor = req.headers.get("x-forwarded-for");
@@ -50,22 +45,10 @@ function getClientIP(req: Request): string {
   return "unknown-ip";
 }
 
-/**
- * Determines whether the provided date string represents a different day than today.
- *
- * @param date - A date string to compare, typically in the format returned by `toDateString()`
- * @returns `true` if the date is not today; otherwise, `false`
- */
 function isNewDay(date: string): boolean {
   return date !== new Date().toDateString();
 }
 
-/**
- * Checks and updates rate limits for a given client IP, enforcing both per-user and global daily limits.
- *
- * @param clientIP - The IP address of the client making the request
- * @returns An object indicating whether the request is allowed and, if not, a message explaining the limit reached
- */
 function checkAndUpdateRateLimit(clientIP: string): {
   allowed: boolean;
   message?: string;
@@ -157,11 +140,6 @@ Instructions:
 - Keep responses conversational and professional
 `;
 
-/**
- * Handles POST requests to the AI chat endpoint, providing a rate-limited, streaming AI assistant for a portfolio website.
- *
- * Validates API key and request format, enforces per-user and global rate limits, and integrates with Google Gemini AI to answer questions about the user's portfolio, projects, experience, tech stack, and blog posts. Supports enhanced querying through custom search tools and returns responses as a streaming data response.
- */
 export async function POST(req: Request) {
   console.log("🔍 API Route called - /api/chat");
 

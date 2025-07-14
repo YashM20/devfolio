@@ -114,13 +114,6 @@ const SOCIAL_LINK_ITEMS: CommandLinkItem[] = SOCIAL_LINKS.map((item) => ({
   openInNewTab: true,
 }));
 
-/**
- * Renders a command palette UI for searching, navigating, and executing actions within the application.
- *
- * Displays grouped navigation links, blog posts, component documentation, social links, brand asset utilities, and theme switching options. Supports keyboard shortcuts (Cmd/Ctrl+K or `/`) to open the menu, and provides handlers for navigation, copying brand assets, and changing the theme.
- *
- * @param posts - The list of blog posts to include in the command menu.
- */
 export function CommandMenu({ posts }: { posts: Post[] }) {
   const router = useRouter();
 
@@ -435,9 +428,6 @@ const ENTER_ACTION_LABELS: Record<CommandKind, string> = {
   link: "Open Link",
 };
 
-/**
- * Renders the footer for the command menu, displaying the current action label, keyboard shortcuts for executing commands and exiting, and the brand mark.
- */
 function CommandMenuFooter() {
   const selectedCommandKind = useCommandState(
     (state) => COMMAND_META_MAP.get(state.value)?.commandKind ?? "page"
@@ -467,11 +457,6 @@ function CommandMenuFooter() {
   );
 }
 
-/**
- * Renders a styled keyboard shortcut indicator for use in command menus.
- *
- * Accepts all standard `<kbd>` element props and merges additional class names for custom styling.
- */
 function CommandMenuKbd({ className, ...props }: React.ComponentProps<"kbd">) {
   return (
     <kbd

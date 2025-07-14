@@ -29,13 +29,6 @@ export function Nav({
   );
 }
 
-/**
- * Renders a navigation link with conditional styling based on its active state.
- *
- * Applies a distinct style when the link is active.
- *
- * @param active - Whether the navigation item is currently active
- */
 export function NavItem({
   active,
   ...props

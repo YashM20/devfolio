@@ -4,11 +4,6 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-/**
- * Renders a centered 404 error page with a graphic, error code, and a link to the home page.
- *
- * @param className - Optional additional CSS class names for custom styling
- */
 export function NotFound({ className }: { className?: string }) {
   return (
     <div

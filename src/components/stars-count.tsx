@@ -9,11 +9,6 @@ type StarsCountResponse = {
   stargazers_count: number;
 };
 
-/**
- * Displays the current stargazer count fetched from the API, or a placeholder if unavailable.
- *
- * Renders a styled placeholder when the data is loading or invalid, and shows the formatted star count when available.
- */
 export function StarsCount() {
   const { data } = useSWR<StarsCountResponse>(`/api/stargazers_count`, fetcher);
 
