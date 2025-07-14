@@ -5,11 +5,6 @@ const Slot = SlotPrimitive.Slot;
 
 import { cn } from "@/lib/utils";
 
-/**
- * Renders a panel section with predefined styling and a data attribute for identification.
- *
- * Combines default panel styles with any additional class names provided.
- */
 function Panel({ className, ...props }: React.ComponentProps<"section">) {
   return (
     <section

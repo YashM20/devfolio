@@ -10,11 +10,6 @@ import { USER } from "@/data/user";
 import { useIsClient } from "@/hooks/use-is-client";
 import { decodeEmail } from "@/utils/string";
 
-/**
- * Displays a fixed bottom action bar with quick access buttons for saving a vCard and sending an email.
- *
- * The bar animates its opacity based on scroll direction, becoming less prominent when scrolling down and fully visible when scrolling up or hovered. Includes a mobile navigation menu on small screens.
- */
 export function QuickActions() {
   const isClient = useIsClient();
 

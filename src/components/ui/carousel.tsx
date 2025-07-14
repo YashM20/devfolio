@@ -32,12 +32,6 @@ type CarouselContextProps = {
 
 const CarouselContext = React.createContext<CarouselContextProps | null>(null);
 
-/**
- * Retrieves the carousel context, providing access to carousel state and controls.
- *
- * @returns The current carousel context.
- * @throws If called outside of a `<Carousel />` component.
- */
 function useCarousel() {
   const context = React.useContext(CarouselContext);
 
@@ -48,13 +42,6 @@ function useCarousel() {
   return context;
 }
 
-/**
- * Provides a context-enabled carousel component with keyboard navigation and orientation support.
- *
- * Renders a carousel container that manages scroll state, exposes navigation controls, and supports both horizontal and vertical layouts. Child components can access carousel state and controls via context.
- *
- * @param orientation - The carousel's orientation, either "horizontal" or "vertical". Defaults to "horizontal".
- */
 function Carousel({
   orientation = "horizontal",
   opts,
@@ -145,11 +132,6 @@ function Carousel({
   );
 }
 
-/**
- * Renders the container for carousel slides, applying orientation-based layout and providing the carousel ref.
- *
- * Includes a flex container for slide items, with styles adjusted for horizontal or vertical orientation.
- */
 function CarouselContent({ className, ...props }: React.ComponentProps<"div">) {
   const { carouselRef, orientation } = useCarousel();
 
@@ -171,11 +153,6 @@ function CarouselContent({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-/**
- * Renders a single slide within the carousel, applying orientation-based padding and accessibility roles.
- *
- * The slide adapts its layout for horizontal or vertical carousels and includes ARIA attributes for improved accessibility.
- */
 function CarouselItem({ className, ...props }: React.ComponentProps<"div">) {
   const { orientation } = useCarousel();
 
@@ -194,11 +171,6 @@ function CarouselItem({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-/**
- * Renders a button for navigating to the previous slide in the carousel.
- *
- * The button is disabled if scrolling to the previous slide is not possible and is positioned based on the carousel's orientation.
- */
 function CarouselPrevious({
   className,
   variant = "outline",
@@ -229,11 +201,6 @@ function CarouselPrevious({
   );
 }
 
-/**
- * Renders a button that navigates to the next slide in the carousel.
- *
- * The button is positioned based on the carousel's orientation and is disabled when scrolling forward is not possible.
- */
 function CarouselNext({
   className,
   variant = "outline",

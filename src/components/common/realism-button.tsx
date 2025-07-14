@@ -10,13 +10,6 @@ interface RealismButtonProps {
   disabled?: boolean;
 }
 
-/**
- * Renders a visually layered, glowing button with customizable content and optional click handling.
- *
- * The button features multiple gradient and shadow effects for a distinctive appearance. It supports disabling and accepts additional CSS classes for further customization.
- *
- * @param children - The content displayed inside the button. Defaults to "Realism" if not provided.
- */
 export function RealismButton({
   children = "Realism",
   onClick,

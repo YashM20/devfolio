@@ -11,17 +11,6 @@ import {
 
 const Slot = SlotPrimitive.Slot;
 
-/**
- * Renders a list of items with a collapsible "show more/show less" feature.
- *
- * Displays up to a specified maximum number of items initially, with the option to expand and reveal the remaining items. Each item is rendered using the provided `renderItem` function. An optional `keyExtractor` can be supplied to generate unique keys for each item.
- *
- * @param items - The array of items to display in the list.
- * @param max - The maximum number of items to show before collapsing. Defaults to 3.
- * @param keyExtractor - Optional function to extract a unique key for each item.
- * @param renderItem - Function that renders a React node for each item.
- * @returns A React element displaying the collapsible list.
- */
 export function CollapsibleList<T>({
   items,
   max = 3,

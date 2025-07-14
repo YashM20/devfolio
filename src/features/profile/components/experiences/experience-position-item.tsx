@@ -18,13 +18,6 @@ import { Prose } from "@/components/ui/typography";
 import type { ExperiencePosition } from "../../types/experiences";
 import { ExperienceIcon } from "./experience-position-icon";
 
-/**
- * Renders a collapsible UI element displaying details for a single work experience position.
- *
- * Shows the position's title, icon, employment type, employment period, description (as Markdown), and associated skills. The content can be expanded or collapsed, with accessibility features for screen readers.
- *
- * @param position - The work experience position to display
- */
 export function ExperiencePositionItem({
   position,
 }: {

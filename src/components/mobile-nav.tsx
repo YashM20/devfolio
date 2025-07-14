@@ -12,14 +12,6 @@ import {
 import { cn } from "@/lib/utils";
 import type { NavItem } from "@/types/nav";
 
-/**
- * Renders a mobile navigation dropdown menu with animated hamburger icon and navigation links.
- *
- * Displays a button that toggles a dropdown menu containing navigation items. The button animates between a hamburger and "X" icon based on menu state. Each menu item navigates to the corresponding route when selected.
- *
- * @param items - The navigation items to display in the dropdown menu
- * @param className - Optional additional CSS class names for the toggle button
- */
 export function MobileNav({
   items,
   className,

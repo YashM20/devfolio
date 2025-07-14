@@ -14,15 +14,6 @@ const variants = {
   },
 };
 
-/**
- * Animates a logo resizing sequence with visual border and label effects.
- *
- * The logo smoothly transitions its width from `maxWidth` to `minWidth` and back, displaying animated borders and a label showing the current width and half-width. The animation plays once when the component enters the viewport.
- *
- * @param minWidth - The minimum width of the logo during the animation (default: 128)
- * @param maxWidth - The maximum width of the logo during the animation (default: 160)
- * @returns A React element containing the animated logo and effects
- */
 export function LogoResizeAnimation({
   minWidth = 128,
   maxWidth = 160,

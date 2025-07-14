@@ -2,11 +2,6 @@ import { BrandContextMenu } from "@/components/brand-context-menu";
 import { ChanhDaiMark } from "@/components/chanhdai-mark";
 import { cn } from "@/lib/utils";
 
-/**
- * Renders a stylized profile cover section with a decorative background and brand mark.
- *
- * The cover features a responsive aspect ratio, adaptive color scheme, and a radial gradient pattern. The `ChanhDaiMark` logo is centered within the cover area.
- */
 export function ProfileCover() {
   return (
     <BrandContextMenu>

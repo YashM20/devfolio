@@ -19,14 +19,6 @@ import { Prose } from "@/components/ui/typography";
 
 import type { Award } from "../../types/awards";
 
-/**
- * Renders an award entry with title, prize, date, grade, and an optional expandable description.
- *
- * Displays an award icon, metadata, and a reference link if available. If the award includes a description, the entry becomes expandable to reveal the description content.
- *
- * @param className - Optional CSS class for the root container
- * @param award - The award data to display
- */
 export function AwardItem({
   className,
   award,

@@ -22,13 +22,6 @@ import { addQueryParams } from "@/utils/url";
 
 import type { Project } from "../../types/projects";
 
-/**
- * Renders a collapsible UI element displaying a project's details, including logo, title, period, description, and associated skills.
- *
- * @param className - Optional CSS class for the root container
- * @param project - The project data to display
- * @returns A React element representing the project item
- */
 export function ProjectItem({
   className,
   project,

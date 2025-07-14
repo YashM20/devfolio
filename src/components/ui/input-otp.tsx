@@ -6,11 +6,6 @@ import { MinusIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-/**
- * Renders a styled OTP (One-Time Password) input component with customizable container and input classes.
- *
- * Accepts all props supported by the underlying `OTPInput` component, along with an optional `containerClassName` for additional container styling.
- */
 function InputOTP({
   className,
   containerClassName,
@@ -31,11 +26,6 @@ function InputOTP({
   );
 }
 
-/**
- * Renders a container for grouping OTP input slots with horizontal alignment.
- *
- * Applies flexbox styling to arrange its children in a row.
- */
 function InputOTPGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
@@ -46,11 +36,6 @@ function InputOTPGroup({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-/**
- * Renders a single OTP input slot, displaying its character and an optional blinking caret if active.
- *
- * @param index - The position of the slot within the OTP input sequence
- */
 function InputOTPSlot({
   index,
   className,
@@ -81,11 +66,6 @@ function InputOTPSlot({
   );
 }
 
-/**
- * Renders a visual separator with a minus icon for use between OTP input slots.
- *
- * Accepts all standard `div` props.
- */
 function InputOTPSeparator({ ...props }: React.ComponentProps<"div">) {
   return (
     <div data-slot="input-otp-separator" role="separator" {...props}>

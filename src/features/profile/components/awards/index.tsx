@@ -10,11 +10,6 @@ const SORTED_AWARDS = [...AWARDS].sort((a, b) => {
   return dayjs(b.date).diff(dayjs(a.date));
 });
 
-/**
- * Displays a panel listing honors and awards, showing up to eight awards by most recent date.
- *
- * Renders the total number of awards and allows users to expand the list to view additional items.
- */
 export function Awards() {
   return (
     <Panel id="awards">

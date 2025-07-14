@@ -4,11 +4,6 @@ import { SOCIAL_LINKS } from "../../data/social-links";
 import { Panel } from "../panel";
 import { SocialLinkItem } from "./social-link-item";
 
-/**
- * Renders a panel containing a responsive grid of social media links with decorative borders.
- *
- * The component displays each social link using the `SocialLinkItem` component and includes accessibility features such as a visually hidden heading.
- */
 export function SocialLinks() {
   return (
     <Panel>
