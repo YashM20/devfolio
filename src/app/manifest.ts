@@ -9,25 +9,25 @@ export default function manifest(): MetadataRoute.Manifest {
     description: SITE_INFO.description,
     icons: [
       {
-        src: "https://assets.chanhdai.com/images/icon-vector.svg",
-        type: "image/svg+xml",
-        sizes: "any",
+        src: "https://ui-avatars.com/api/?name=YM&size=32&background=111111&color=fff&bold=true&format=svg",
+        type: "image/png",
+        sizes: "16x16 32x32",
         purpose: "any",
       },
       {
-        src: "https://assets.chanhdai.com/images/icon-192x192.png",
+        src: "https://ui-avatars.com/api/?name=Yash+Mahajan&size=192&background=111111&color=fff&bold=true",
         type: "image/png",
         sizes: "192x192",
         purpose: "any",
       },
       {
-        src: "https://assets.chanhdai.com/images/icon-512x512.png",
+        src: "https://ui-avatars.com/api/?name=Yash+Mahajan&size=512&background=111111&color=fff&bold=true",
         type: "image/png",
         sizes: "512x512",
         purpose: "any",
       },
       {
-        src: "https://assets.chanhdai.com/images/maskable-icon.png",
+        src: "https://ui-avatars.com/api/?name=YM&size=512&background=111111&color=fff&bold=true&rounded=true",
         type: "image/png",
         sizes: "512x512",
         purpose: "maskable",
@@ -39,25 +39,25 @@ export default function manifest(): MetadataRoute.Manifest {
     scope: "/",
     screenshots: [
       {
-        src: "https://assets.chanhdai.com/images/screenshot-mobile-dark.webp",
+        src: "/images/ss/screenshot-mobile-dark.webp",
         type: "image/webp",
         sizes: "440x956",
         form_factor: "narrow",
       },
       {
-        src: "https://assets.chanhdai.com/images/screenshot-mobile-light.webp",
+        src: "/images/ss/screenshot-mobile-light.webp",
         type: "image/webp",
         sizes: "440x956",
         form_factor: "narrow",
       },
       {
-        src: "https://assets.chanhdai.com/images/screenshot-desktop-dark.webp",
+        src: "/images/ss/screenshot-desktop-dark.webp",
         type: "image/webp",
         sizes: "1920x1080",
         form_factor: "wide",
       },
       {
-        src: "https://assets.chanhdai.com/images/screenshot-desktop-light.webp",
+        src: "/images/ss/screenshot-desktop-light.webp",
         type: "image/webp",
         sizes: "1920x1080",
         form_factor: "wide",

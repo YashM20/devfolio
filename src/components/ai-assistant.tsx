@@ -120,8 +120,8 @@ export function AiAssistant() {
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Open chat with Ctrl/Cmd + /
-      if ((e.ctrlKey || e.metaKey) && e.key === "/" && !isOpen) {
+      // Open chat with Ctrl/Cmd + I
+      if ((e.ctrlKey || e.metaKey) && e.key === "i" && !isOpen) {
         e.preventDefault();
         setIsOpen(true);
       }
@@ -357,7 +357,7 @@ export function AiAssistant() {
                         <p className="text-muted-foreground text-xs">
                           💡 Tip: Press{" "}
                           <kbd className="bg-muted border-border rounded border px-1.5 py-0.5 text-xs">
-                            Ctrl+/
+                            Ctrl+I
                           </kbd>{" "}
                           to quickly open this chat
                         </p>

@@ -2,6 +2,7 @@ import { RssIcon } from "lucide-react";
 
 import { SITE_INFO, SOURCE_CODE_GITHUB_URL } from "@/config/site";
 import { cn } from "@/lib/utils";
+import { showCookiePreferences } from "@/components/cookie-consent";
 
 import { Icons } from "./icons";
 
@@ -58,6 +59,14 @@ export function SiteFooter() {
             >
               llms.txt
             </a>
+            <Separator />
+            <button
+              className="text-muted-foreground hover:text-foreground flex font-mono text-xs font-medium transition-colors"
+              onClick={showCookiePreferences}
+              type="button"
+            >
+              Cookie Preferences
+            </button>
             <Separator />
             <a
               className="text-muted-foreground hover:text-foreground flex items-center transition-colors"
