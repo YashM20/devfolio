@@ -1,3 +1,8 @@
+/**
+ * Renders an SVG element displaying a pixelated pattern using a customizable color.
+ *
+ * The pattern is defined by multiple small rectangles arranged within a repeating SVG `<pattern>`, filling the entire SVG area. The color can be set via the `color` prop or defaults to "currentColor".
+ */
 export function ChanhDaiMark(props: React.ComponentProps<"svg">) {
   const color = props.color || "currentColor";
   return (

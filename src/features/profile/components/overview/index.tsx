@@ -8,6 +8,11 @@ import { EmailItem } from "./email-item";
 import { IntroItem } from "./intro-item";
 import { JobItem } from "./job-item";
 
+/**
+ * Displays an overview panel with the user's job history, location, email, and website.
+ *
+ * Renders a summary section using user data, including a list of jobs, address, email, and website information.
+ */
 export function Overview() {
   return (
     <Panel>

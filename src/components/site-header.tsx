@@ -13,6 +13,11 @@ import { BrandContextMenu } from "./brand-context-menu";
 import { SiteHeaderMark } from "./site-header-mark";
 import { SiteHeaderWrapper } from "./site-header-wrapper";
 
+/**
+ * Renders the main site header with branding, navigation, and utility controls for both desktop and mobile views.
+ *
+ * Includes the site logo, primary navigation, theme toggle, GitHub link, command menu with blog posts, and responsive layout adjustments.
+ */
 export function SiteHeader() {
   const posts = getAllPosts();
 

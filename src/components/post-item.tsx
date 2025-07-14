@@ -6,6 +6,15 @@ import React from "react";
 import { cn } from "@/lib/utils";
 import type { Post } from "@/types/blog";
 
+/**
+ * Renders a blog post preview as a clickable link, displaying the post image, title, and publication date.
+ *
+ * If the post is marked as new, a "New" badge is shown. The image is optionally preloaded for performance.
+ *
+ * @param post - The blog post data to display
+ * @param shouldPreloadImage - Whether to preload the post image for faster loading
+ * @returns A React element representing the post preview
+ */
 export function PostItem({
   post,
   shouldPreloadImage,

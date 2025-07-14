@@ -4,6 +4,11 @@ import { PROJECTS } from "../../data/projects";
 import { Panel, PanelHeader, PanelTitle } from "../panel";
 import { ProjectItem } from "./project-item";
 
+/**
+ * Displays a panel listing projects with a header showing the total project count.
+ *
+ * Renders a collapsible list of projects, showing up to four items by default, with each project displayed using the `ProjectItem` component.
+ */
 export function Projects() {
   return (
     <Panel id="projects">

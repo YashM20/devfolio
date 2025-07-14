@@ -5,6 +5,11 @@ import { cn } from "@/lib/utils";
 
 import { Icons } from "./icons";
 
+/**
+ * Renders the website footer with credits, resource links, and decorative styling.
+ *
+ * Displays inspiration and builder credits, links to llms.txt, RSS feed, and DMCA protection status, and includes visual separators and responsive layout.
+ */
 export function SiteFooter() {
   return (
     <footer className="max-w-screen overflow-x-hidden px-2">
@@ -95,6 +100,9 @@ export function SiteFooter() {
   );
 }
 
+/**
+ * Renders a vertical separator line for visually dividing footer links.
+ */
 function Separator() {
   return <div className="bg-edge flex h-11 w-px" />;
 }

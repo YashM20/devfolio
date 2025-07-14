@@ -2,6 +2,11 @@ import { cn } from "@/lib/utils";
 
 import { LogoResizeAnimation } from "./logo-resize-animation";
 
+/**
+ * Renders a responsive grid layout with decorative borders and a central animated logo.
+ *
+ * The layout adapts to screen size, displaying the logo at different sizes for small and large screens, and applies distinct background and border styles for light and dark modes.
+ */
 export function ChanhDaiCoverGrid() {
   return (
     <div

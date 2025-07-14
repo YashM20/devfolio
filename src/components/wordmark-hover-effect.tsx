@@ -19,6 +19,11 @@ function WordmarkPaths() {
   );
 }
 
+/**
+ * Renders an interactive SVG wordmark with a radial gradient color reveal effect that follows the cursor on hover.
+ *
+ * The component animates a radial gradient mask to reveal a multicolor gradient inside the wordmark as the user moves the mouse over the SVG. When not hovered, the wordmark displays only its outline.
+ */
 export function WordmarkHoverEffect() {
   const containerRef = useRef<SVGSVGElement>(null);
   const [cursor, setCursor] = useState({ x: 0, y: 0 });

@@ -8,6 +8,9 @@ import { getAllPosts } from "@/data/blog";
 
 import { Panel, PanelHeader, PanelTitle } from "./panel";
 
+/**
+ * Renders a blog section displaying up to four recent posts and a button linking to the full blog page.
+ */
 export function Blog() {
   const allPosts = getAllPosts();
 

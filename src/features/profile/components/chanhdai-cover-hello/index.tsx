@@ -2,6 +2,11 @@ import { cn } from "@/lib/utils";
 
 import { Hello } from "./hello";
 
+/**
+ * Renders a styled container with a centered Hello component and adaptive background patterns.
+ *
+ * The container uses responsive aspect ratios, border styles, and background patterns that adjust for light and dark modes.
+ */
 export function ChanhDaiCoverHello() {
   return (
     <div

@@ -1,3 +1,8 @@
+/**
+ * Renders a two-part SVG wordmark consisting of a pixelated pattern background and centered text.
+ *
+ * The first SVG displays a grid-based pixel pattern using the specified color or "currentColor" by default. The second SVG overlays centered text ("Yash Mahajan") with scalable font size and color. All standard SVG props are supported and applied to both SVG elements.
+ */
 export function ChanhDaiWordmark(props: React.ComponentProps<"svg">) {
   const color = props.color || "currentColor";
   return (

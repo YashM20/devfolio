@@ -100,6 +100,13 @@ export const viewport: Viewport = {
   themeColor: META_THEME_COLORS.light,
 };
 
+/**
+ * Root layout component for the Next.js application, providing global HTML structure, metadata, theme scripts, and context providers.
+ *
+ * Wraps all pages with consistent `<html>`, `<head>`, and `<body>` elements, injects site-wide metadata, theme and platform detection scripts, and structured data for SEO. All page content is rendered within the provided context providers.
+ *
+ * @param children - The page content to be rendered within the layout
+ */
 export default function RootLayout({
   children,
 }: {

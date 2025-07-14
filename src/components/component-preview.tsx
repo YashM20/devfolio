@@ -13,6 +13,18 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { Code as CodeInline } from "@/components/ui/typography";
 import { SimpleTooltip } from "@/components/ui/tooltip";
 
+/**
+ * Displays a live preview of a registered React component alongside its source code, with optional replay and external link features.
+ *
+ * Renders a tabbed interface allowing users to switch between a preview of the specified component and its code. If enabled, provides a button to remount the previewed component and a button to open the component externally. If the component is not found in the registry, displays an informative message.
+ *
+ * @param name - The name of the component to preview from the registry.
+ * @param openInV0Url - Optional URL for an external "open in v0" button.
+ * @param canReplay - If true, enables a button to remount the previewed component.
+ * @param notProse - If true, disables prose styling for the container.
+ * @param codeCollapsible - If true, displays the code block inside a collapsible wrapper.
+ * @param children - The code block to display in the "Code" tab.
+ */
 export function ComponentPreview({
   className,
   name,

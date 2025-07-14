@@ -6,6 +6,11 @@ import { cn } from "@/lib/utils";
 
 const Slot = SlotPrimitive.Slot;
 
+/**
+ * Renders styled rich text content with consistent typography and formatting.
+ *
+ * Applies a set of prose-specific CSS classes for headings, links, code, and other elements. Can render as a custom component if `asChild` is true.
+ */
 function Prose({
   className,
   asChild = false,
@@ -33,6 +38,11 @@ function Prose({
   );
 }
 
+/**
+ * Renders a styled code element, distinguishing between inline code and code blocks.
+ *
+ * Applies specific styles for inline code and sets a `data-slot` attribute to indicate the code type.
+ */
 function Code({ className, ...props }: React.ComponentProps<"code">) {
   const isCodeBlock = "data-language" in props;
 
@@ -54,6 +64,13 @@ type HeadingProps<T extends HeadingTypes> = React.ComponentProps<T> & {
   as?: T;
 };
 
+/**
+ * Renders a heading element with optional anchor link functionality for section linking.
+ *
+ * If an `id` is provided, displays a linkable anchor and a link icon for easy section navigation.
+ *
+ * @param as - The heading tag to render (e.g., "h1", "h2"). Defaults to "h1".
+ */
 function Heading<T extends HeadingTypes = "h1">({
   as,
   className,

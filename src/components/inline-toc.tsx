@@ -8,6 +8,16 @@ import {
 } from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
 
+/**
+ * Renders a collapsible inline table of contents (TOC) with hierarchical links.
+ *
+ * Displays a trigger that toggles the visibility of the TOC. Each TOC item is rendered as an indented link based on its depth. Returns `null` if no items are provided.
+ *
+ * @param items - The array of TOC items to display
+ * @param className - Optional additional CSS classes for the root element
+ * @param children - Optional custom trigger content replacing the default label
+ * @returns A collapsible TOC component, or `null` if `items` is empty
+ */
 export function InlineTOC({
   items,
   className,
