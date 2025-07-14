@@ -7,7 +7,7 @@ import { Icons } from "./icons";
 
 export function SiteFooter() {
   return (
-    <footer className="max-w-screen overflow-x-hidden px-2">
+    <footer className="max-w-screen overflow-x-hidden px-2 pb-20">
       <div className="screen-line-before border-edge mx-auto border-x pt-4 md:max-w-3xl">
         <p className="text-muted-foreground mb-1 text-balance text-center font-mono text-sm">
           Inspired by tailwindcss.com && ui.shadcn.com &&{" "}
@@ -58,9 +58,7 @@ export function SiteFooter() {
             >
               llms.txt
             </a>
-
             <Separator />
-
             <a
               className="text-muted-foreground hover:text-foreground flex items-center transition-colors"
               href={`${SITE_INFO.url}/rss`}
@@ -70,11 +68,11 @@ export function SiteFooter() {
               <RssIcon className="size-4" />
               <span className="sr-only">RSS</span>
             </a>
-
             <Separator />
-
+            <script src="https://images.dmca.com/Badges/DMCABadgeHelper.min.js"></script>
             <a
-              className="text-muted-foreground hover:text-foreground flex transition-colors"
+              title="DMCA.com Protection Status"
+              className="dmca-badge text-muted-foreground hover:text-foreground flex transition-colors"
               href={
                 process.env.NEXT_PUBLIC_DMCA_URL ||
                 "https://www.dmca.com/ProtectionPro.aspx"
