@@ -19,7 +19,7 @@ export default function Page() {
       </div>
 
       <div className="screen-line-after p-4">
-        <p className="font-mono text-sm text-balance text-muted-foreground">
+        <p className="text-muted-foreground text-balance font-mono text-sm">
           {metadata.description}
         </p>
       </div>
@@ -28,22 +28,22 @@ export default function Page() {
         <Link
           key={post.slug}
           href={`/components/${post.slug}`}
-          className="group/post flex items-center border-b border-edge pr-4"
+          className="group/post border-edge flex items-center border-b pr-4"
         >
           <Icons.react
-            className="mx-4 size-5 shrink-0 text-(--color-react)"
+            className="text-(--color-react) mx-4 size-5 shrink-0"
             aria-hidden
           />
 
-          <div className="border-l border-dashed border-edge p-4">
-            <h2 className="leading-snug font-medium text-balance underline-offset-4 group-hover/post:underline">
+          <div className="border-edge border-l border-dashed p-4">
+            <h2 className="text-balance font-medium leading-snug underline-offset-4 group-hover/post:underline">
               {post.metadata.title}
             </h2>
           </div>
 
           {post.metadata.new && (
             <span
-              className="shrink-0 rounded-md bg-info px-1.5 font-mono text-sm font-medium text-white text-shadow-xs"
+              className="bg-info text-shadow-xs shrink-0 rounded-md px-1.5 font-mono text-sm font-medium text-white"
               aria-hidden
             >
               New

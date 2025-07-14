@@ -157,23 +157,28 @@ export const CERTIFICATIONS: Certification[] = [
     issuerIconName: "udemy",
     issueDate: "2022-08-12",
     credentialID: "7023139122038910976-YBx_s",
-    credentialURL: "https://www.linkedin.com/posts/activity-7023139122038910976-YBx_?utm_source=share&utm_medium=member_desktop&rcm=ACoAACie6SIB-A0ugfaMNsTMWORUqskzUkLbvKc",
+    credentialURL:
+      "https://www.linkedin.com/posts/activity-7023139122038910976-YBx_?utm_source=share&utm_medium=member_desktop&rcm=ACoAACie6SIB-A0ugfaMNsTMWORUqskzUkLbvKc",
   },
   {
     title: "Learning Python",
     issuer: "LinkedIn",
     issuerIconName: "linkedin",
     issueDate: "2021-03-23",
-    credentialID: "33b80f886ad5d9883f6d072a82876a2f9dac34fc983ab6dadcc6ebaa41dcf24b",
-    credentialURL: "https://www.linkedin.com/learning/certificates/33b80f886ad5d9883f6d072a82876a2f9dac34fc983ab6dadcc6ebaa41dcf24b?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_certifications_details%3Bi8EO0xAUThaMV6AD7xmkXg%3D%3D",
+    credentialID:
+      "33b80f886ad5d9883f6d072a82876a2f9dac34fc983ab6dadcc6ebaa41dcf24b",
+    credentialURL:
+      "https://www.linkedin.com/learning/certificates/33b80f886ad5d9883f6d072a82876a2f9dac34fc983ab6dadcc6ebaa41dcf24b?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_certifications_details%3Bi8EO0xAUThaMV6AD7xmkXg%3D%3D",
   },
   {
     title: "CompTIA Network + (N10-007) Cert Prep: 1 Understanding Networks",
     issuer: "LinkedIn",
     issuerIconName: "linkedin",
     issueDate: "2020-10-02",
-    credentialID: "454637c51f21319c81a6f74a01f3a5f5698a3975a30c789fb051548310e80f9e",
-    credentialURL: "https://www.linkedin.com/learning/certificates/454637c51f21319c81a6f74a01f3a5f5698a3975a30c789fb051548310e80f9e?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_certifications_details%3B57CO0Ni%2BQqOB9yZzxM0cPA%3D%3D",
+    credentialID:
+      "454637c51f21319c81a6f74a01f3a5f5698a3975a30c789fb051548310e80f9e",
+    credentialURL:
+      "https://www.linkedin.com/learning/certificates/454637c51f21319c81a6f74a01f3a5f5698a3975a30c789fb051548310e80f9e?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_certifications_details%3B57CO0Ni%2BQqOB9yZzxM0cPA%3D%3D",
   },
   {
     title: "EduSkills Cloud Riders - 2020",
@@ -181,7 +186,8 @@ export const CERTIFICATIONS: Certification[] = [
     issuerIconName: "linkedin",
     issueDate: "2020-09-01",
     credentialID: "6710515942310461440-pxUB",
-    credentialURL: "https://www.linkedin.com/posts/activity-6710515942310461440-pxUB?utm_source=share&utm_medium=member_desktop&rcm=ACoAACie6SIB-A0ugfaMNsTMWORUqskzUkLbvKc",
+    credentialURL:
+      "https://www.linkedin.com/posts/activity-6710515942310461440-pxUB?utm_source=share&utm_medium=member_desktop&rcm=ACoAACie6SIB-A0ugfaMNsTMWORUqskzUkLbvKc",
   },
   {
     title: "Github & Azure - Code to Cloud Workshop",
@@ -189,7 +195,8 @@ export const CERTIFICATIONS: Certification[] = [
     issuerIconName: "linkedin",
     issueDate: "2021-03-01",
     credentialID: "6787768420470521856",
-    credentialURL: "https://www.linkedin.com/posts/activity-6787768420470521856-oH15?utm_source=share&utm_medium=member_desktop&rcm=ACoAACie6SIB-A0ugfaMNsTMWORUqskzUkLbvKc",
+    credentialURL:
+      "https://www.linkedin.com/posts/activity-6787768420470521856-oH15?utm_source=share&utm_medium=member_desktop&rcm=ACoAACie6SIB-A0ugfaMNsTMWORUqskzUkLbvKc",
   },
   {
     title: "Data science to Cyber Security using Python Programming",

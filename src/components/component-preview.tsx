@@ -39,7 +39,7 @@ export function ComponentPreview({
 
     if (!Component) {
       return (
-        <p className="text-sm text-muted-foreground">
+        <p className="text-muted-foreground text-sm">
           Component <CodeInline>{name}</CodeInline> not found in registry.
         </p>
       );
@@ -57,7 +57,7 @@ export function ComponentPreview({
         </TabsList>
 
         <TabsContent value="preview">
-          <div className="rounded-lg border border-edge bg-zinc-950/0.75 bg-[radial-gradient(var(--pattern-foreground)_1px,transparent_0)] bg-size-[10px_10px] bg-center p-4 [--pattern-foreground:var(--color-zinc-950)]/5 dark:bg-white/0.75 dark:[--pattern-foreground:var(--color-white)]/5">
+          <div className="border-edge bg-zinc-950/0.75 bg-size-[10px_10px] [--pattern-foreground:var(--color-zinc-950)]/5 dark:bg-white/0.75 dark:[--pattern-foreground:var(--color-white)]/5 rounded-lg border bg-[radial-gradient(var(--pattern-foreground)_1px,transparent_0)] bg-center p-4">
             {(canReplay || openInV0Url) && (
               <div className="flex justify-end gap-2">
                 {canReplay && (
@@ -82,7 +82,7 @@ export function ComponentPreview({
             >
               <React.Suspense
                 fallback={
-                  <div className="flex items-center justify-center text-sm text-muted-foreground">
+                  <div className="text-muted-foreground flex items-center justify-center text-sm">
                     Loading...
                   </div>
                 }

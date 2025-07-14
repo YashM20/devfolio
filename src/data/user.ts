@@ -11,7 +11,6 @@ export const USER = {
     "React, React Native, Node.js and more.",
   ],
   address: "Gujarat, India",
-  phoneNumber: "Kzg0Nzc3ODg4MTQ4", // E.164 format, base64 encoded (https://t.io.vn/base64-string-converter)
   email: "eWFzaHNlY29uZDYwNkBnbWFpbC5jb20=", // base64 encoded
   website: "https://reactopia.me",
   otherWebsites: [
@@ -29,12 +28,13 @@ export const USER = {
       website: "https://www.prometheanz.com/",
     },
     {
-      title: "Founder",
+      title: "Creator of",
       company: "Reactopia",
       website: "https://reactopia.me",
     },
   ],
-  about: "Software Engineer with 4+ years of experience.  I have been developing web and mobile applications using JavaScript frameworks and libraries, including Next.js, React JS, React Native & expo cli. I'm passionate about staying up to date with the modern frontend development trends & React Community.",
+  about:
+    "Software Engineer with 4+ years of experience.  I have been developing web and mobile applications using JavaScript frameworks and libraries, including Next.js, React JS, React Native & expo cli. I'm passionate about staying up to date with the modern frontend development trends & React Community.",
   avatar: "https://github.com/yashm20.png",
   ogImage: "https://assets.chanhdai.com/images/screenshot-og-image-dark.png",
   keywords: "yash, mahajan, yashmahajan, mahajanyash, yash_mhj, yashmhj",

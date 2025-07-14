@@ -12,10 +12,10 @@ export function IntroItem({
   return (
     <div className="flex items-center gap-4 font-mono text-sm">
       <div
-        className="flex size-6 shrink-0 items-center justify-center rounded-lg bg-muted"
+        className="bg-muted flex size-6 shrink-0 items-center justify-center rounded-lg"
         aria-hidden
       >
-        <Icon className="pointer-events-none size-4 text-muted-foreground" />
+        <Icon className="text-muted-foreground pointer-events-none size-4" />
       </div>
 
       <p className="text-balance">

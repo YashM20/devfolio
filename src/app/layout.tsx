@@ -112,6 +112,10 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        <meta
+          name="dmca-site-verification"
+          content="aXZTY21Pd2dNWXF0aDZWcTdMdG1EbTRET2xMTmZEM3hvdWFsRVA4R0RTVT01"
+        />
         <script
           type="text/javascript"
           dangerouslySetInnerHTML={{ __html: darkModeScript }}

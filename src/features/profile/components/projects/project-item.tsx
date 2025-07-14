@@ -49,21 +49,21 @@ export function ProjectItem({
             />
           ) : (
             <div
-              className="mx-4 flex size-6 shrink-0 items-center justify-center text-muted-foreground"
+              className="text-muted-foreground mx-4 flex size-6 shrink-0 items-center justify-center"
               aria-hidden="true"
             >
               <Icons.project className="size-5" />
             </div>
           )}
 
-          <div className="flex-1 border-l border-dashed border-edge">
-            <CollapsibleTrigger className="group/project flex w-full items-center justify-between gap-4 p-4 pr-2 text-left select-none">
+          <div className="border-edge flex-1 border-l border-dashed">
+            <CollapsibleTrigger className="group/project flex w-full select-none items-center justify-between gap-4 p-4 pr-2 text-left">
               <div>
-                <h3 className="mb-1 flex items-center gap-2 leading-snug font-medium text-balance">
+                <h3 className="mb-1 flex items-center gap-2 text-balance font-medium leading-snug">
                   {project.title}
                   <SimpleTooltip content="Open Project Link">
                     <a
-                      className="flex shrink-0 text-muted-foreground hover:text-foreground"
+                      className="text-muted-foreground hover:text-foreground flex shrink-0"
                       href={addQueryParams(project.link, UTM_PARAMS)}
                       target="_blank"
                       rel="noopener"
@@ -74,7 +74,7 @@ export function ProjectItem({
                   </SimpleTooltip>
                 </h3>
 
-                <div className="text-sm text-muted-foreground">
+                <div className="text-muted-foreground text-sm">
                   <dt className="sr-only">Period</dt>
                   <dd className="flex items-center gap-0.5">
                     <span>{start}</span>
@@ -95,7 +95,7 @@ export function ProjectItem({
               </div>
 
               <div
-                className="shrink-0 text-muted-foreground [&_svg]:size-4"
+                className="text-muted-foreground shrink-0 [&_svg]:size-4"
                 aria-hidden
               >
                 <ChevronsDownUpIcon className="hidden group-data-[state=open]/project:block" />
@@ -105,8 +105,8 @@ export function ProjectItem({
           </div>
         </div>
 
-        <CollapsibleContent className="overflow-hidden duration-300 data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
-          <div className="space-y-4 border-t border-dashed border-edge p-4">
+        <CollapsibleContent className="data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down overflow-hidden duration-300">
+          <div className="border-edge space-y-4 border-t border-dashed p-4">
             {project.description && (
               <Prose>
                 <Markdown>{project.description}</Markdown>

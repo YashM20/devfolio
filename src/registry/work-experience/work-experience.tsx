@@ -106,20 +106,20 @@ export function ExperienceItem({
           )}
         </div>
 
-        <h3 className="text-lg leading-snug font-medium">
+        <h3 className="text-lg font-medium leading-snug">
           {experience.companyName}
         </h3>
 
         {experience.isCurrentEmployer && (
           <span className="relative flex items-center justify-center">
-            <span className="absolute inline-flex size-3 animate-ping rounded-full bg-info opacity-50" />
-            <span className="relative inline-flex size-2 rounded-full bg-info" />
+            <span className="bg-info absolute inline-flex size-3 animate-ping rounded-full opacity-50" />
+            <span className="bg-info relative inline-flex size-2 rounded-full" />
             <span className="sr-only">Current Employer</span>
           </span>
         )}
       </div>
 
-      <div className="relative space-y-4 before:absolute before:left-3 before:h-full before:w-px before:bg-border">
+      <div className="before:bg-border relative space-y-4 before:absolute before:left-3 before:h-full before:w-px">
         {experience.positions.map((position) => (
           <ExperiencePositionItem key={position.id} position={position} />
         ))}
@@ -137,22 +137,22 @@ export function ExperiencePositionItem({
 
   return (
     <Collapsible defaultOpen={position.isExpanded} asChild>
-      <div className="relative last:before:absolute last:before:h-full last:before:w-4 last:before:bg-background">
-        <CollapsibleTrigger className="group/experience not-prose block w-full text-left select-none">
-          <div className="relative z-1 mb-1 flex items-center gap-3 bg-background">
+      <div className="last:before:bg-background relative last:before:absolute last:before:h-full last:before:w-4">
+        <CollapsibleTrigger className="group/experience not-prose block w-full select-none text-left">
+          <div className="z-1 bg-background relative mb-1 flex items-center gap-3">
             <div
-              className="flex size-6 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground"
+              className="bg-muted text-muted-foreground flex size-6 shrink-0 items-center justify-center rounded-lg"
               aria-hidden
             >
               <ExperienceIcon className="size-4" />
             </div>
 
-            <h4 className="flex-1 text-base font-medium text-balance">
+            <h4 className="flex-1 text-balance text-base font-medium">
               {position.title}
             </h4>
 
             <div
-              className="shrink-0 text-muted-foreground [&_svg]:size-4"
+              className="text-muted-foreground shrink-0 [&_svg]:size-4"
               aria-hidden
             >
               <ChevronsDownUpIcon className="hidden group-data-[state=open]/experience:block" />
@@ -160,7 +160,7 @@ export function ExperiencePositionItem({
             </div>
           </div>
 
-          <div className="flex items-center gap-2 pl-9 text-sm text-muted-foreground">
+          <div className="text-muted-foreground flex items-center gap-2 pl-9 text-sm">
             {position.employmentType && (
               <>
                 <div>
@@ -182,15 +182,15 @@ export function ExperiencePositionItem({
           </div>
         </CollapsibleTrigger>
 
-        <CollapsibleContent className="overflow-hidden duration-300 data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
+        <CollapsibleContent className="data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down overflow-hidden duration-300">
           {position.description && (
-            <Prose className="pt-2 pl-9">
+            <Prose className="pl-9 pt-2">
               <ReactMarkdown>{position.description}</ReactMarkdown>
             </Prose>
           )}
 
           {Array.isArray(position.skills) && position.skills.length > 0 && (
-            <ul className="not-prose flex flex-wrap gap-1.5 pt-2 pl-9">
+            <ul className="not-prose flex flex-wrap gap-1.5 pl-9 pt-2">
               {position.skills.map((skill, index) => (
                 <li key={index} className="flex">
                   <Skill>{skill}</Skill>
@@ -208,7 +208,7 @@ function Prose({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       className={cn(
-        "prose prose-sm max-w-none font-mono text-foreground prose-zinc dark:prose-invert",
+        "prose prose-sm text-foreground prose-zinc dark:prose-invert max-w-none font-mono",
         "prose-a:font-medium prose-a:break-words prose-a:text-foreground prose-a:underline prose-a:underline-offset-4",
         "prose-code:rounded-md prose-code:border prose-code:bg-muted/50 prose-code:px-[0.3rem] prose-code:py-[0.2rem] prose-code:text-sm prose-code:font-normal prose-code:before:content-none prose-code:after:content-none",
         className
@@ -222,7 +222,7 @@ function Skill({ className, ...props }: React.ComponentProps<"span">) {
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-lg border bg-muted/50 px-1.5 py-0.5 font-mono text-xs text-muted-foreground",
+        "bg-muted/50 text-muted-foreground inline-flex items-center rounded-lg border px-1.5 py-0.5 font-mono text-xs",
         className
       )}
       {...props}

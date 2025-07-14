@@ -17,11 +17,11 @@ export function TeckStack() {
       <PanelContent
         className={cn(
           "[--pattern-foreground:var(--color-zinc-950)]/5 dark:[--pattern-foreground:var(--color-white)]/5",
-          "bg-[radial-gradient(var(--pattern-foreground)_1px,transparent_0)] bg-size-[10px_10px] bg-center",
+          "bg-size-[10px_10px] bg-[radial-gradient(var(--pattern-foreground)_1px,transparent_0)] bg-center",
           "bg-zinc-950/0.75 dark:bg-white/0.75"
         )}
       >
-        <ul className="flex flex-wrap gap-4 select-none">
+        <ul className="flex select-none flex-wrap gap-4">
           {TECH_STACK.map((tech) => {
             return (
               <li key={tech.key} className="flex">

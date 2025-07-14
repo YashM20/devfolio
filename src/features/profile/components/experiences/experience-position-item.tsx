@@ -28,22 +28,22 @@ export function ExperiencePositionItem({
 
   return (
     <Collapsible defaultOpen={position.isExpanded} asChild>
-      <div className="relative last:before:absolute last:before:h-full last:before:w-4 last:before:bg-background">
-        <CollapsibleTrigger className="group/experience block w-full text-left select-none">
-          <div className="relative z-1 mb-1 flex items-center gap-3 bg-background">
+      <div className="last:before:bg-background relative last:before:absolute last:before:h-full last:before:w-4">
+        <CollapsibleTrigger className="group/experience block w-full select-none text-left">
+          <div className="z-1 bg-background relative mb-1 flex items-center gap-3">
             <div
-              className="flex size-6 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground"
+              className="bg-muted text-muted-foreground flex size-6 shrink-0 items-center justify-center rounded-lg"
               aria-hidden
             >
               <ExperienceIcon className="size-4" icon={position.icon} />
             </div>
 
-            <h4 className="flex-1 font-medium text-balance">
+            <h4 className="flex-1 text-balance font-medium">
               {position.title}
             </h4>
 
             <div
-              className="shrink-0 text-muted-foreground [&_svg]:size-4"
+              className="text-muted-foreground shrink-0 [&_svg]:size-4"
               aria-hidden
             >
               <ChevronsDownUpIcon className="hidden group-data-[state=open]/experience:block" />
@@ -51,7 +51,7 @@ export function ExperiencePositionItem({
             </div>
           </div>
 
-          <div className="flex items-center gap-2 pl-9 text-sm text-muted-foreground">
+          <div className="text-muted-foreground flex items-center gap-2 pl-9 text-sm">
             {position.employmentType && (
               <>
                 <div>
@@ -87,15 +87,15 @@ export function ExperiencePositionItem({
           </div>
         </CollapsibleTrigger>
 
-        <CollapsibleContent className="overflow-hidden duration-300 data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
+        <CollapsibleContent className="data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down overflow-hidden duration-300">
           {position.description && (
-            <Prose className="pt-2 pl-9">
+            <Prose className="pl-9 pt-2">
               <Markdown>{position.description}</Markdown>
             </Prose>
           )}
 
           {Array.isArray(position.skills) && position.skills.length > 0 && (
-            <ul className="flex flex-wrap gap-1.5 pt-2 pl-9">
+            <ul className="flex flex-wrap gap-1.5 pl-9 pt-2">
               {position.skills.map((skill, index) => (
                 <li key={index} className="flex">
                   <Tag>{skill}</Tag>
