@@ -19,15 +19,15 @@ export default function Page() {
       </div>
 
       <div className="screen-line-after p-4">
-        <p className="font-mono text-sm text-balance text-muted-foreground">
+        <p className="text-muted-foreground text-balance font-mono text-sm">
           {metadata.description}
         </p>
       </div>
 
       <div className="relative pt-4">
-        <div className="absolute inset-0 -z-1 grid grid-cols-1 gap-4 max-sm:hidden sm:grid-cols-2">
-          <div className="border-r border-edge"></div>
-          <div className="border-l border-edge"></div>
+        <div className="-z-1 absolute inset-0 grid grid-cols-1 gap-4 max-sm:hidden sm:grid-cols-2">
+          <div className="border-edge border-r"></div>
+          <div className="border-edge border-l"></div>
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">

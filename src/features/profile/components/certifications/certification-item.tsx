@@ -36,19 +36,19 @@ export function CertificationItem({
         />
       ) : (
         <div
-          className="mx-4 flex size-6 shrink-0 items-center justify-center [&_svg]:size-5 [&_svg]:text-muted-foreground"
+          className="[&_svg]:text-muted-foreground mx-4 flex size-6 shrink-0 items-center justify-center [&_svg]:size-5"
           aria-hidden
         >
           {getIcon(certification.issuerIconName) ?? <Icons.certificate />}
         </div>
       )}
 
-      <div className="flex-1 space-y-1 border-l border-dashed border-edge p-4 pr-2">
-        <h3 className="leading-snug font-medium text-balance underline-offset-4 group-hover/cert:underline">
+      <div className="border-edge flex-1 space-y-1 border-l border-dashed p-4 pr-2">
+        <h3 className="text-balance font-medium leading-snug underline-offset-4 group-hover/cert:underline">
           {certification.title}
         </h3>
 
-        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
+        <div className="text-muted-foreground flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
           <div>
             <dt className="sr-only">Issued by</dt>
             <dd>
@@ -75,7 +75,7 @@ export function CertificationItem({
 
       {certification.credentialURL && (
         <ArrowUpRightIcon
-          className="size-4 text-muted-foreground"
+          className="text-muted-foreground size-4"
           aria-hidden
         />
       )}

@@ -25,20 +25,20 @@ export function ExperienceItem({ experience }: { experience: Experience }) {
           )}
         </div>
 
-        <h3 className="text-lg leading-snug font-medium">
+        <h3 className="text-lg font-medium leading-snug">
           {experience.companyName}
         </h3>
 
         {experience.isCurrentEmployer && (
           <span className="relative flex items-center justify-center">
-            <span className="absolute inline-flex size-3 animate-ping rounded-full bg-info opacity-50" />
-            <span className="relative inline-flex size-2 rounded-full bg-info" />
+            <span className="bg-info absolute inline-flex size-3 animate-ping rounded-full opacity-50" />
+            <span className="bg-info relative inline-flex size-2 rounded-full" />
             <span className="sr-only">Current Employer</span>
           </span>
         )}
       </div>
 
-      <div className="relative space-y-4 before:absolute before:left-3 before:h-full before:w-px before:bg-border">
+      <div className="before:bg-border relative space-y-4 before:absolute before:left-3 before:h-full before:w-px">
         {experience.positions.map((position) => (
           <ExperiencePositionItem key={position.id} position={position} />
         ))}

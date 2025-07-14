@@ -2,13 +2,13 @@ export function ChanhDaiMark(props: React.ComponentProps<"svg">) {
   const color = props.color || "currentColor";
   return (
     <svg
-    xmlns="http://www.w3.org/2000/svg"
-    version="1.1"
-    xmlnsXlink="http://www.w3.org/1999/xlink"
-    // xmlnsSvgjs="http://svgjs.dev/svgjs"
-    viewBox="0 0 800 600"
-    preserveAspectRatio="xMidYMid slice"
-    {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      version="1.1"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+      // xmlnsSvgjs="http://svgjs.dev/svgjs"
+      viewBox="0 0 800 600"
+      preserveAspectRatio="xMidYMid slice"
+      {...props}
     >
       <defs>
         <pattern

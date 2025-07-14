@@ -4,8 +4,30 @@ import path from "node:path";
 import type { Browser } from "puppeteer-core";
 import puppeteer from "puppeteer-core";
 
-const executablePath =
-  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+const getChromePath = () => {
+  switch (process.platform) {
+    case "win32":
+      return [
+        "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
+        `${process.env.LOCALAPPDATA}\\Google\\Chrome\\Application\\chrome.exe`,
+      ].find(path => {
+        try {
+          return fs.existsSync(path);
+        } catch {
+          return false;
+        }
+      }) || "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
+    case "darwin":
+      return "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+    case "linux":
+      return "/usr/bin/google-chrome";
+    default:
+      throw new Error(`Unsupported platform: ${process.platform}`);
+  }
+};
+
+const executablePath = getChromePath();
 const url = process.env.URL || "http://localhost:1408";
 const outputDir = path.join(process.cwd(), ".ncdai/screenshots");
 

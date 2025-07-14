@@ -36,7 +36,7 @@ export function ScrollTop({
           key="scroll-top"
           className={cn(
             "[--bottom:1rem] lg:[--bottom:2rem]",
-            "fixed right-4 bottom-[calc(var(--bottom,1rem)+env(safe-area-inset-bottom,0px))] z-50 lg:right-8",
+            "fixed bottom-[calc(var(--bottom,1rem)+env(safe-area-inset-bottom,0px))] right-4 z-50 lg:right-8",
             className
           )}
           variant="secondary"

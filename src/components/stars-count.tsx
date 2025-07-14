@@ -13,15 +13,15 @@ export function StarsCount() {
   const { data } = useSWR<StarsCountResponse>(`/api/stargazers_count`, fetcher);
 
   if (!data) {
-    return <span className="h-3 w-7 rounded-full bg-muted" />;
+    return <span className="bg-muted h-3 w-7 rounded-full" />;
   }
 
   if (data.stargazers_count < 0) {
-    return <span className="h-3 w-7 rounded-full bg-muted" />;
+    return <span className="bg-muted h-3 w-7 rounded-full" />;
   }
 
   return (
-    <span className="w-7 text-center font-mono text-xs/none text-muted-foreground tabular-nums">
+    <span className="text-muted-foreground w-7 text-center font-mono text-xs/none tabular-nums">
       {data.stargazers_count.toLocaleString()}
     </span>
   );

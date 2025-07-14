@@ -106,7 +106,7 @@ export function WordmarkHoverEffect() {
       </defs>
 
       <g
-        className="fill-transparent stroke-border"
+        className="stroke-border fill-transparent"
         strokeWidth="2"
         mask="url(#pathOutsideMask)"
       >

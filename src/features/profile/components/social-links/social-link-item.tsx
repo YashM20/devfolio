@@ -8,7 +8,7 @@ export function SocialLinkItem({ icon, title, description, href }: SocialLink) {
   return (
     <a
       className={cn(
-        "group/link flex cursor-pointer items-center gap-4 rounded-2xl p-4 pr-2 transition-colors select-none",
+        "group/link flex cursor-pointer select-none items-center gap-4 rounded-2xl p-4 pr-2 transition-colors",
         "max-sm:screen-line-before max-sm:screen-line-after",
         "sm:nth-[2n+1]:screen-line-before sm:nth-[2n+1]:screen-line-after"
       )}
@@ -26,7 +26,7 @@ export function SocialLinkItem({ icon, title, description, href }: SocialLink) {
           quality={100}
           unoptimized
         />
-        <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-black/8 ring-inset dark:ring-white/8" />
+        <div className="ring-black/8 dark:ring-white/8 pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset" />
       </div>
 
       <div className="flex-1">
@@ -35,11 +35,11 @@ export function SocialLinkItem({ icon, title, description, href }: SocialLink) {
         </h3>
 
         {description && (
-          <p className="text-sm text-muted-foreground">{description}</p>
+          <p className="text-muted-foreground text-sm">{description}</p>
         )}
       </div>
 
-      <ArrowUpRightIcon className="size-4 text-muted-foreground" />
+      <ArrowUpRightIcon className="text-muted-foreground size-4" />
     </a>
   );
 }
