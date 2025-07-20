@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { RealismButton, Markdown } from "@/components/common";
@@ -38,6 +38,7 @@ export function AiAssistant() {
   );
 
   const [input, setInput] = useState("");
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const { messages, sendMessage, setMessages } = useChat({
     onFinish: () => {
@@ -94,6 +95,28 @@ export function AiAssistant() {
     scrollToBottom();
   }, [messages]);
 
+  // Auto-resize textarea
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = "44px"; // Reset to min height
+      const scrollHeight = textarea.scrollHeight;
+      const maxHeight = 128; // max-h-32 = 128px
+      textarea.style.height = Math.min(scrollHeight, maxHeight) + "px";
+    }
+  }, [input]);
+
+  // Auto-resize textarea
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = "44px"; // Reset to min height
+      const scrollHeight = textarea.scrollHeight;
+      const maxHeight = 128; // max-h-32 = 128px
+      textarea.style.height = Math.min(scrollHeight, maxHeight) + "px";
+    }
+  }, [input]);
+
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -143,6 +166,15 @@ export function AiAssistant() {
     setInput("");
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    // Submit on Enter (without Shift)
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleFormSubmit(e as any);
+    }
+    // Allow Shift+Enter for new lines (default behavior)
+  };
+
   const handleClearChat = () => {
     console.log("🗑️ Clear chat triggered");
     setMessages([]);
@@ -174,8 +206,10 @@ export function AiAssistant() {
   const suggestions = [
     "What's Yash's experience?",
     "Tell me about his projects",
+    "Show me his tech stack",
+    "How to implement React hooks?",
     "What technologies does he use?",
-    "Show me his latest work",
+    "Show me TypeScript examples",
   ];
 
   return (
@@ -219,7 +253,7 @@ export function AiAssistant() {
             {/* Chat Container */}
             <motion.div
               className={cn(
-                "z-2 relative flex max-h-[90vh] w-full max-w-md flex-col",
+                "z-2 relative flex h-full max-h-[98vh] w-full max-w-[clamp(300px,800px,95vw)] flex-col",
                 "bg-background/95 border-border border backdrop-blur-md dark:border-white/10 dark:bg-[radial-gradient(circle_200px_at_50%_0%,#1a1a1a,#0a0a0a)]",
                 "overflow-hidden rounded-3xl shadow-2xl"
               )}
@@ -300,9 +334,9 @@ export function AiAssistant() {
               </div>
 
               {/* Messages */}
-              <div className="relative flex max-h-[100%] w-full overflow-hidden">
+              <div className="relative flex h-full max-h-full w-full overflow-hidden">
                 <ScrollArea className="w-full">
-                  <div className="space-y-4 p-4">
+                  <div className="space-y-4 overflow-x-auto p-4">
                     {messages.length === 0 && (
                       <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -345,13 +379,18 @@ export function AiAssistant() {
                           </div>
                         </div>
 
-                        <p className="text-muted-foreground text-xs">
-                          💡 Tip: Press{" "}
-                          <kbd className="bg-muted border-border rounded border px-1.5 py-0.5 text-xs">
-                            Ctrl+I
-                          </kbd>{" "}
-                          to quickly open this chat
-                        </p>
+                        <div className="text-muted-foreground space-y-2 text-xs">
+                          <p>💡 Tips:</p>
+                          <div className="space-y-1 text-center">
+                            <p>
+                              • Press{" "}
+                              <kbd className="bg-muted border-border rounded border px-1.5 py-0.5 text-xs">
+                                Ctrl+I
+                              </kbd>{" "}
+                              to quickly open this chat
+                            </p>
+                          </div>
+                        </div>
                       </motion.div>
                     )}
 
@@ -378,69 +417,121 @@ export function AiAssistant() {
 
                         <div
                           className={cn(
-                            "max-w-[80%] rounded-2xl px-4 py-3 text-sm",
+                            "min-w-0 max-w-[85%] overflow-hidden rounded-2xl px-4 py-3 text-sm",
                             message.role === "user"
                               ? "from-primary/20 to-primary/10 text-foreground border-primary/30 border bg-gradient-to-r dark:border-cyan-400/30 dark:from-cyan-500/20 dark:to-blue-500/20"
                               : "bg-muted/50 text-foreground border-border border dark:border-white/10 dark:bg-gradient-to-r dark:from-white/10 dark:to-white/5"
                           )}
                         >
                           {message.parts ? (
-                            message.parts.map((part: any, i: number) => {
-                              switch (part.type) {
-                                case "text":
-                                  return message.role === "assistant" ? (
-                                    <div
-                                      key={i}
-                                      className="prose prose-sm dark:prose-invert max-w-none"
-                                    >
-                                      <Markdown>{part.text}</Markdown>
-                                    </div>
-                                  ) : (
-                                    <p key={i} className="whitespace-pre-wrap">
-                                      {part.text}
-                                    </p>
-                                  );
-                                case "tool-searchProjects":
-                                case "tool-searchBlogPosts":
-                                case "tool-getTechStack":
-                                case "tool-getExperience":
+                            message.parts
+                              .filter((part: any) => {
+                                // Filter out step-related parts and empty content
+                                if (typeof part === "object" && part.type) {
                                   return (
-                                    <div
-                                      key={i}
-                                      className="mt-2 text-xs opacity-70"
-                                    >
-                                      <details>
-                                        <summary>🔧 Tool Call</summary>
-                                        <pre className="mt-1 overflow-auto text-xs">
-                                          {JSON.stringify(part, null, 2)}
-                                        </pre>
-                                      </details>
-                                    </div>
+                                    !part.type.includes("step") &&
+                                    part.type !== "tool-result"
                                   );
-                                default:
-                                  return (
-                                    <div key={i}>
-                                      {typeof part === "string" ? (
-                                        message.role === "assistant" ? (
-                                          <div className="prose prose-sm dark:prose-invert max-w-none">
-                                            <Markdown>{part}</Markdown>
-                                          </div>
+                                }
+                                return true;
+                              })
+                              .map((part: any, i: number) => {
+                                switch (part.type) {
+                                  case "text":
+                                    return message.role === "assistant" ? (
+                                      <div
+                                        key={i}
+                                        className="prose prose-sm dark:prose-invert min-w-0 max-w-none"
+                                        style={{
+                                          wordBreak: "break-word",
+                                          overflowWrap: "anywhere",
+                                        }}
+                                      >
+                                        <Markdown>{part.text}</Markdown>
+                                      </div>
+                                    ) : (
+                                      <p
+                                        key={i}
+                                        className="whitespace-pre-wrap"
+                                      >
+                                        {part.text}
+                                      </p>
+                                    );
+                                  case "tool-call":
+                                    return (
+                                      <div
+                                        key={i}
+                                        className="mb-1 mt-2 text-xs opacity-70"
+                                      >
+                                        <div className="flex items-center gap-1 text-blue-500 dark:text-blue-400">
+                                          <span className="animate-spin">
+                                            ⚙️
+                                          </span>
+                                          <span>Using {part.toolName}...</span>
+                                        </div>
+                                      </div>
+                                    );
+                                  case "tool-result":
+                                    // Don't show tool results in UI, they're used internally
+                                    return null;
+                                  case "tool-searchProjects":
+                                  case "tool-searchBlogPosts":
+                                  case "tool-getTechStack":
+                                  case "tool-getExperience":
+                                  case "tool-generateCodeSnippet":
+                                    return (
+                                      <div
+                                        key={i}
+                                        className="mt-2 text-xs opacity-70"
+                                      >
+                                        <details>
+                                          <summary>🔧 Tool Call</summary>
+                                          <pre className="mt-1 overflow-auto text-xs">
+                                            {JSON.stringify(part, null, 2)}
+                                          </pre>
+                                        </details>
+                                      </div>
+                                    );
+                                  case "step-start":
+                                  case "step-finish":
+                                    // Hide step markers from UI - they're used for internal processing
+                                    return null;
+                                  default:
+                                    // Only show non-step content to users
+                                    if (
+                                      typeof part === "object" &&
+                                      part.type &&
+                                      part.type.includes("step")
+                                    ) {
+                                      return null; // Hide any step-related content
+                                    }
+
+                                    return (
+                                      <div key={i}>
+                                        {typeof part === "string" ? (
+                                          message.role === "assistant" ? (
+                                            <div className="prose prose-sm dark:prose-invert max-w-none overflow-x-auto">
+                                              <Markdown>{part}</Markdown>
+                                            </div>
+                                          ) : (
+                                            <p className="whitespace-pre-wrap">
+                                              {part}
+                                            </p>
+                                          )
                                         ) : (
-                                          <p className="whitespace-pre-wrap">
-                                            {part}
-                                          </p>
-                                        )
-                                      ) : (
-                                        <p className="whitespace-pre-wrap">
-                                          {JSON.stringify(part)}
-                                        </p>
-                                      )}
-                                    </div>
-                                  );
-                              }
-                            })
+                                          // Only show non-step objects
+                                          !part.type?.includes("step") && (
+                                            <p className="whitespace-pre-wrap">
+                                              {JSON.stringify(part)}
+                                            </p>
+                                          )
+                                        )}
+                                      </div>
+                                    );
+                                }
+                              })
                           ) : message.role === "assistant" ? (
-                            <div className="prose prose-sm dark:prose-invert max-w-none">
+                            <div className="prose prose-sm dark:prose-invert max-w-none overflow-x-auto">
                               <Markdown>{message.content}</Markdown>
                             </div>
                           ) : (
@@ -518,21 +609,34 @@ export function AiAssistant() {
 
               {/* Input */}
               <div className="border-border bg-muted/50 flex border-t p-4 dark:border-white/5 dark:bg-gradient-to-r dark:from-white/5 dark:to-transparent">
-                <form onSubmit={handleFormSubmit} className="flex w-full gap-2">
-                  <Input
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    placeholder="Ask me anything..."
-                    className={cn(
-                      "bg-background/50 border-border text-foreground placeholder:text-muted-foreground flex-1 dark:border-white/10 dark:bg-white/5 dark:placeholder:text-white/50",
-                      "focus:border-primary/20 focus:ring-0 dark:focus:border-white/20",
-                      "rounded-2xl transition-all duration-200"
+                <form
+                  onSubmit={handleFormSubmit}
+                  className="flex w-full items-end gap-2"
+                >
+                  <div className="relative flex-1">
+                    <Textarea
+                      ref={textareaRef}
+                      value={input}
+                      onChange={(e) => setInput(e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      placeholder="Ask me anything... (Shift+Enter for new line)"
+                      className={cn(
+                        "bg-background/50 border-border text-foreground placeholder:text-muted-foreground h-10 max-h-32 resize-none dark:border-white/10 dark:bg-white/5 dark:placeholder:text-white/50",
+                        "focus:border-primary/20 focus:ring-0 dark:focus:border-white/20",
+                        "rounded-2xl px-4 py-3 transition-all duration-200"
+                      )}
+                      disabled={isTyping}
+                      autoComplete="off"
+                      spellCheck="false"
+                      data-testid="chat-input"
+                      rows={1}
+                    />
+                    {input.trim() && (
+                      <div className="text-muted-foreground absolute bottom-2 right-2 text-xs">
+                        {input.length} chars
+                      </div>
                     )}
-                    disabled={isTyping}
-                    autoComplete="off"
-                    spellCheck="false"
-                    data-testid="chat-input"
-                  />
+                  </div>
                   <button
                     type="submit"
                     disabled={isTyping || !input.trim()}

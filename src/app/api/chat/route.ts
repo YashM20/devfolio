@@ -7,9 +7,12 @@ import {
   JsonToSseTransformStream,
   stepCountIs,
   UIMessageStreamWriter,
+  smoothStream,
+  generateId,
 } from "ai";
 import { z } from "zod";
 
+import { USER } from "@/data/user";
 import { EXPERIENCES } from "@/features/profile/data/experiences";
 import { PROJECTS } from "@/features/profile/data/projects";
 import { TECH_STACK } from "@/features/profile/data/tech-stack";
@@ -37,12 +40,13 @@ export async function POST(req: Request) {
     console.log("🚀 Creating UI message stream with Gemini model...");
 
     const stream = createUIMessageStream({
-      execute: ({ writer }: { writer: UIMessageStreamWriter }) => {
+      execute: ({ writer: dataStream }) => {
         const result = streamText({
           model: google("gemini-2.5-flash"),
           system: personalContext,
           messages: convertToModelMessages(messages),
           stopWhen: stepCountIs(5),
+          // experimental_transform: smoothStream({ chunking: "line" }),
           tools: {
             searchProjects: tool({
               description:
@@ -155,12 +159,181 @@ export async function POST(req: Request) {
                 };
               },
             }),
+            generateCodeSnippet: tool({
+              description:
+                "Generate portfolio-related code snippets ONLY for technologies and concepts that exist in the portfolio's tech stack. Do not generate code for unrelated topics.",
+              inputSchema: z.object({
+                topic: z
+                  .string()
+                  .describe(
+                    "MUST be a technology or concept from the portfolio tech stack (React, TypeScript, Next.js, etc.). Will reject topics not related to the portfolio."
+                  ),
+                language: z
+                  .string()
+                  .optional()
+                  .describe(
+                    "Preferred programming language from the portfolio stack"
+                  ),
+                complexity: z
+                  .enum(["beginner", "intermediate", "advanced"])
+                  .optional()
+                  .describe(
+                    "Complexity level of the snippet (default: intermediate)"
+                  ),
+              }),
+              execute: async ({
+                topic,
+                language = "auto",
+                complexity = "intermediate",
+              }) => {
+                // Validate topic is portfolio-related
+                const portfolioTechnologies = TECH_STACK.map((tech) =>
+                  tech.title.toLowerCase()
+                );
+                const portfolioSkills = [
+                  ...USER.flipSentences,
+                  ...PROJECTS.flatMap((p) => p.skills),
+                ].map((s) => s.toLowerCase());
+                const topicLower = topic.toLowerCase();
+
+                // Check if topic is related to portfolio technologies
+                const isPortfolioRelated =
+                  portfolioTechnologies.some(
+                    (tech) =>
+                      topicLower.includes(tech.toLowerCase()) ||
+                      tech.toLowerCase().includes(topicLower)
+                  ) ||
+                  portfolioSkills.some(
+                    (skill) =>
+                      topicLower.includes(skill.toLowerCase()) ||
+                      skill.toLowerCase().includes(topicLower)
+                  ) ||
+                  [
+                    "react",
+                    "javascript",
+                    "typescript",
+                    "nextjs",
+                    "next.js",
+                    "node",
+                    "css",
+                    "html",
+                    "web development",
+                    "frontend",
+                    "backend",
+                    "component",
+                    "hook",
+                    "api",
+                  ].some((keyword) => topicLower.includes(keyword));
+
+                if (!isPortfolioRelated) {
+                  return {
+                    error: `Sorry, I can only provide code snippets for technologies and concepts related to ${USER.firstName}'s portfolio and tech stack. The topic "${topic}" is outside the scope of the portfolio. Please ask about: ${portfolioTechnologies.join(", ")}.`,
+                  };
+                }
+
+                // Determine the best language based on the topic and portfolio tech stack
+                const getLanguageForTopic = (
+                  topic: string,
+                  preferredLang?: string
+                ) => {
+                  if (preferredLang && preferredLang !== "auto")
+                    return preferredLang;
+
+                  const topicLower = topic.toLowerCase();
+
+                  // Frontend/React related
+                  if (
+                    topicLower.includes("react") ||
+                    topicLower.includes("jsx") ||
+                    topicLower.includes("component")
+                  )
+                    return "javascript";
+                  if (
+                    topicLower.includes("typescript") ||
+                    topicLower.includes("types")
+                  )
+                    return "typescript";
+                  if (
+                    topicLower.includes("css") ||
+                    topicLower.includes("styling")
+                  )
+                    return "css";
+
+                  // Backend related
+                  if (
+                    topicLower.includes("node") ||
+                    topicLower.includes("express") ||
+                    topicLower.includes("api")
+                  )
+                    return "javascript";
+                  if (
+                    topicLower.includes("python") ||
+                    topicLower.includes("django") ||
+                    topicLower.includes("flask")
+                  )
+                    return "python";
+
+                  // Default to JavaScript for web development topics
+                  return "javascript";
+                };
+
+                const selectedLanguage = getLanguageForTopic(topic, language);
+
+                // Generate snippet guidelines
+                const snippetGuidelines = `
+PORTFOLIO CODE SNIPPET GUIDELINES:
+1. Each snippet should be complete and runnable on its own
+2. Include helpful comments explaining the code
+3. Keep snippets concise (generally under 20 lines)
+4. Use modern best practices relevant to ${USER.firstName}'s tech stack
+5. Handle potential errors gracefully when applicable
+6. Return meaningful output that demonstrates functionality
+7. Focus on practical, real-world examples
+8. Relate to technologies and concepts from the portfolio when possible
+9. For web examples, use modern ES6+ syntax
+10. Include console.log() or appropriate output methods
+
+COMPLEXITY LEVELS:
+- beginner: Basic concepts, simple examples
+- intermediate: Practical examples with some advanced features
+- advanced: Complex patterns, optimizations, architectural concepts
+
+TOPIC: ${topic}
+LANGUAGE: ${selectedLanguage}
+COMPLEXITY: ${complexity}
+
+Generate a practical code snippet that demonstrates ${topic} using ${selectedLanguage}, suitable for ${complexity} level.
+Include a brief explanation of what the code does and how it relates to modern web development practices.
+`;
+
+                return {
+                  snippet: {
+                    topic,
+                    language: selectedLanguage,
+                    complexity,
+                    guidelines: snippetGuidelines,
+                    portfolioContext: `This snippet relates to ${USER.firstName}'s experience with ${TECH_STACK.map((tech) => tech.title).join(", ")} and modern web development practices.`,
+                  },
+                };
+              },
+            }),
           },
         });
 
         result.consumeStream();
 
-        writer.merge(result.toUIMessageStream());
+        dataStream.merge(
+          result.toUIMessageStream({
+            sendReasoning: false,
+          })
+        );
+      },
+      generateId: () => generateId(),
+      onFinish: async ({ messages }) => {
+        console.log("✅ Chat completed with", messages.length, "messages");
+      },
+      onError: () => {
+        return "Oops, an error occurred!";
       },
     });
 
