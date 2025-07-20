@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { useChat } from "ai/react";
+import { useChat } from "@ai-sdk/react";
 import {
   Send,
   MessageCircle,
@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { RealismButton } from "@/components/common";
+import { RealismButton, Markdown } from "@/components/common";
 import { USER } from "@/data/user";
 import { cn } from "@/lib/utils";
 import posthog from "posthog-js";
@@ -37,31 +37,15 @@ export function AiAssistant() {
     error
   );
 
-  const {
-    messages,
-    input,
-    handleInputChange,
-    handleSubmit,
-    isLoading,
-    setMessages,
-  } = useChat({
-    api: "/api/chat",
+  const [input, setInput] = useState("");
+
+  const { messages, sendMessage, setMessages } = useChat({
     onFinish: () => {
       console.log("✅ Chat onFinish called");
       setIsTyping(false);
       setError(null);
     },
-    onResponse: () => {
-      console.log("📨 Chat onResponse called");
-      posthog.capture("chat_on_response", {
-        is_open: isOpen,
-        is_typing: isTyping,
-        error: error,
-      });
-      setIsTyping(true);
-      setError(null);
-    },
-    onError: async (error) => {
+    onError: (error: any) => {
       console.log("❌ Chat onError called:", error);
       setIsTyping(false);
 
@@ -100,14 +84,7 @@ export function AiAssistant() {
     },
   });
 
-  console.log(
-    "🔍 useChat state - messages:",
-    messages.length,
-    "input:",
-    input,
-    "isLoading:",
-    isLoading
-  );
+  console.log("🔍 useChat state - messages:", messages.length, "input:", input);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -136,12 +113,7 @@ export function AiAssistant() {
   }, [isOpen]);
 
   const handleFormSubmit = (e: React.FormEvent) => {
-    console.log(
-      "🚀 Form submit triggered - input:",
-      input,
-      "isLoading:",
-      isLoading
-    );
+    console.log("🚀 Form submit triggered - input:", input);
     e.preventDefault();
 
     if (!input.trim()) {
@@ -149,15 +121,26 @@ export function AiAssistant() {
       return;
     }
 
-    if (isLoading) {
-      console.log("⚠️ Form submit blocked - already loading");
+    if (isTyping) {
+      console.log("⚠️ Form submit blocked - already typing");
       return;
     }
 
-    console.log("✅ Form submit proceeding - calling handleSubmit");
+    console.log("✅ Form submit proceeding - calling sendMessage");
     setError(null); // Clear any previous errors
     setIsTyping(true);
-    handleSubmit(e);
+
+    // Log analytics
+    posthog.capture("chat_message_sent", {
+      is_open: isOpen,
+      message_length: input.length,
+    });
+
+    sendMessage({
+      role: "user",
+      parts: [{ type: "text", text: input }],
+    });
+    setInput("");
   };
 
   const handleClearChat = () => {
@@ -168,16 +151,24 @@ export function AiAssistant() {
   };
 
   const handleSuggestionClick = (suggestion: string) => {
-    // Simulate typing the suggestion
-    handleInputChange({ target: { value: suggestion } } as any);
-    // Auto-submit the suggestion
-    setTimeout(() => {
-      const syntheticEvent = new Event("submit", {
-        bubbles: true,
-        cancelable: true,
-      });
-      handleFormSubmit(syntheticEvent as any);
-    }, 100);
+    if (isTyping) {
+      console.log("⚠️ Suggestion blocked - already typing");
+      return;
+    }
+
+    setError(null);
+    setIsTyping(true);
+
+    // Log analytics
+    posthog.capture("chat_suggestion_clicked", {
+      suggestion,
+      is_open: isOpen,
+    });
+
+    sendMessage({
+      role: "user",
+      parts: [{ type: "text", text: suggestion }],
+    });
   };
 
   const suggestions = [
@@ -364,7 +355,7 @@ export function AiAssistant() {
                       </motion.div>
                     )}
 
-                    {messages.map((message, index) => (
+                    {messages.map((message: any, index: number) => (
                       <motion.div
                         key={message.id}
                         initial={{ opacity: 0, y: 20, scale: 0.95 }}
@@ -393,9 +384,70 @@ export function AiAssistant() {
                               : "bg-muted/50 text-foreground border-border border dark:border-white/10 dark:bg-gradient-to-r dark:from-white/10 dark:to-white/5"
                           )}
                         >
-                          <p className="whitespace-pre-wrap">
-                            {message.content}
-                          </p>
+                          {message.parts ? (
+                            message.parts.map((part: any, i: number) => {
+                              switch (part.type) {
+                                case "text":
+                                  return message.role === "assistant" ? (
+                                    <div
+                                      key={i}
+                                      className="prose prose-sm dark:prose-invert max-w-none"
+                                    >
+                                      <Markdown>{part.text}</Markdown>
+                                    </div>
+                                  ) : (
+                                    <p key={i} className="whitespace-pre-wrap">
+                                      {part.text}
+                                    </p>
+                                  );
+                                case "tool-searchProjects":
+                                case "tool-searchBlogPosts":
+                                case "tool-getTechStack":
+                                case "tool-getExperience":
+                                  return (
+                                    <div
+                                      key={i}
+                                      className="mt-2 text-xs opacity-70"
+                                    >
+                                      <details>
+                                        <summary>🔧 Tool Call</summary>
+                                        <pre className="mt-1 overflow-auto text-xs">
+                                          {JSON.stringify(part, null, 2)}
+                                        </pre>
+                                      </details>
+                                    </div>
+                                  );
+                                default:
+                                  return (
+                                    <div key={i}>
+                                      {typeof part === "string" ? (
+                                        message.role === "assistant" ? (
+                                          <div className="prose prose-sm dark:prose-invert max-w-none">
+                                            <Markdown>{part}</Markdown>
+                                          </div>
+                                        ) : (
+                                          <p className="whitespace-pre-wrap">
+                                            {part}
+                                          </p>
+                                        )
+                                      ) : (
+                                        <p className="whitespace-pre-wrap">
+                                          {JSON.stringify(part)}
+                                        </p>
+                                      )}
+                                    </div>
+                                  );
+                              }
+                            })
+                          ) : message.role === "assistant" ? (
+                            <div className="prose prose-sm dark:prose-invert max-w-none">
+                              <Markdown>{message.content}</Markdown>
+                            </div>
+                          ) : (
+                            <p className="whitespace-pre-wrap">
+                              {message.content}
+                            </p>
+                          )}
                         </div>
 
                         {message.role === "user" && (
@@ -469,21 +521,21 @@ export function AiAssistant() {
                 <form onSubmit={handleFormSubmit} className="flex w-full gap-2">
                   <Input
                     value={input}
-                    onChange={handleInputChange}
+                    onChange={(e) => setInput(e.target.value)}
                     placeholder="Ask me anything..."
                     className={cn(
                       "bg-background/50 border-border text-foreground placeholder:text-muted-foreground flex-1 dark:border-white/10 dark:bg-white/5 dark:placeholder:text-white/50",
                       "focus:border-primary/20 focus:ring-0 dark:focus:border-white/20",
                       "rounded-2xl transition-all duration-200"
                     )}
-                    disabled={isLoading}
+                    disabled={isTyping}
                     autoComplete="off"
                     spellCheck="false"
                     data-testid="chat-input"
                   />
                   <button
                     type="submit"
-                    disabled={isLoading || !input.trim()}
+                    disabled={isTyping || !input.trim()}
                     className={cn(
                       "relative transform-gpu cursor-pointer rounded-full border-none p-[1.5px] text-[1rem]",
                       "bg-[radial-gradient(circle_40px_at_80%_-10%,#ffffff,#181b1b)] dark:bg-[radial-gradient(circle_40px_at_80%_-10%,#ffffff,#181b1b)]",

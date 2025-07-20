@@ -1,0 +1,1764 @@
+---
+description: Ai SDK v5 overview
+globs:
+alwaysApply: false
+---
+
+TITLE: Server Action using `streamUI` with AI SDK OpenAI Provider
+DESCRIPTION: This Server Action illustrates the migration to the `streamUI` function from `@ai-sdk/rsc` using the `@ai-sdk/openai` provider. It configures the `gpt-4.1` model, defines system and user messages, and includes a `get_city_weather` tool. The tool uses `zod` for parameter validation and its `generate` key returns a React Server Component (`Spinner` then `Weather`) after fetching data, demonstrating the new API pattern and improved provider flexibility.
+SOURCE: https://v5.ai-sdk.dev/migration-guides/migration-guide-3-1
+
+LANGUAGE: TypeScript
+CODE:
+```
+import { streamUI } from '@ai-sdk/rsc';
+
+import { openai } from '@ai-sdk/openai';
+
+import { z } from 'zod';
+
+import { Spinner, Weather } from '@/components';
+
+import { getWeather } from '@/utils';
+
+async function submitMessage(userInput = 'What is the weather in SF?') {
+
+'use server';
+
+const result = await streamUI({
+
+model: openai('gpt-4.1'),
+
+system: 'You are a helpful assistant',
+
+messages: [{ role: 'user', content: userInput }],
+
+text: ({ content }) => <p>{content}</p>,
+
+tools: {
+
+get_city_weather: {
+
+description: 'Get the current weather for a city',
+
+parameters: z
+
+.object({
+
+city: z.string().describe('Name of the city'),
+
+})
+
+.required(),
+
+generate: async function* ({ city }) {
+
+yield <Spinner />;
+
+const weather = await getWeather(city);
+
+return <Weather info={weather} />;
+
+},
+
+},
+
+},
+
+});
+
+return result.value;
+
+}
+```
+
+----------------------------------------
+
+TITLE: Generate Text with AI SDK using OpenAI Model
+DESCRIPTION: This code snippet demonstrates how to use the AI SDK's `generateText` function to produce text output from an OpenAI model. It shows the basic setup for importing necessary modules and making an asynchronous call to generate text based on a given prompt.
+SOURCE: https://v5.ai-sdk.dev/introduction
+
+LANGUAGE: javascript
+CODE:
+```
+import { generateText } from "ai"
+import { openai } from "@ai-sdk/openai"
+
+const { text } = await generateText({
+  model: openai("o3-mini"),
+  prompt: "What is love?"
+})
+```
+
+----------------------------------------
+
+TITLE: Install @types/react to resolve JSX namespace error
+DESCRIPTION: To fix the 'Cannot find namespace 'JSX'' error, install the `@types/react` package as a dependency. This provides the necessary JSX namespace definitions that the AI SDK currently relies on, allowing your project to compile without this specific TypeScript error.
+SOURCE: https://v5.ai-sdk.dev/troubleshooting/typescript-cannot-find-namespace-jsx
+
+LANGUAGE: Shell
+CODE:
+```
+npm install @types/react
+```
+
+----------------------------------------
+
+TITLE: Define Chatbot API Route with AI SDK Tools
+DESCRIPTION: This server-side API route (`app/api/chat/route.ts`) demonstrates how to use `@ai-sdk/openai` and `ai` to stream text responses with integrated tool definitions. It configures three distinct tools: `getWeatherInformation` (server-side auto-executed), `askForConfirmation` (client-side user interaction), and `getLocation` (client-side auto-executed). The route processes incoming messages, generates tool calls via `streamText`, and returns a UI message stream response.
+SOURCE: https://v5.ai-sdk.dev/ai-sdk-ui/chatbot-with-tool-calling
+
+LANGUAGE: TypeScript
+CODE:
+```
+import { openai } from '@ai-sdk/openai';
+
+import { convertToModelMessages, streamText, UIMessage } from 'ai';
+
+import { z } from 'zod';
+
+// Allow streaming responses up to 30 seconds
+
+export const maxDuration = 30;
+
+export async function POST(req: Request) {
+
+const { messages }: { messages: UIMessage[] } = await req.json();
+
+const result = streamText({
+
+model: openai('gpt-4o'),
+
+messages: convertToModelMessages(messages),
+
+tools: {
+
+// server-side tool with execute function:
+
+getWeatherInformation: {
+
+description: 'show the weather in a given city to the user',
+
+parameters: z.object({ city: z.string() }),
+
+execute: async ({}: { city: string }) => {
+
+const weatherOptions = ['sunny', 'cloudy', 'rainy', 'snowy', 'windy'];
+
+return weatherOptions[
+
+Math.floor(Math.random() * weatherOptions.length)
+
+];
+
+},
+
+},
+
+// client-side tool that starts user interaction:
+
+askForConfirmation: {
+
+description: 'Ask the user for confirmation.',
+
+parameters: z.object({
+
+message: z.string().describe('The message to ask for confirmation.'),
+
+}),
+
+},
+
+// client-side tool that is automatically executed on the client:
+
+getLocation: {
+
+description:
+
+'Get the user location. Always ask for confirmation before using this tool.',
+
+parameters: z.object({}),
+
+},
+
+},
+
+});
+
+return result.toUIMessageStreamResponse();
+
+}
+```
+
+----------------------------------------
+
+TITLE: Sequential Processing (Chains) Example with AI SDK
+DESCRIPTION: This example demonstrates sequential processing, a workflow pattern where steps are executed in a predefined order. It shows how to generate marketing copy using `generateText`, then perform a quality check on the generated copy using `generateObject` with a Zod schema, and finally, conditionally regenerate the copy with specific instructions if it fails the quality criteria. This illustrates a simple chain of operations with a feedback loop.
+SOURCE: https://v5.ai-sdk.dev/foundations/agents
+
+LANGUAGE: typescript
+CODE:
+```
+import { openai } from '@ai-sdk/openai';
+
+import { generateText, generateObject } from 'ai';
+
+import { z } from 'zod';
+
+async function generateMarketingCopy(input: string) {
+
+const model = openai('gpt-4o');
+
+// First step: Generate marketing copy
+
+const { text: copy } = await generateText({
+
+model,
+
+prompt: `Write persuasive marketing copy for: ${input}. Focus on benefits and emotional appeal.`,
+
+});
+
+// Perform quality check on copy
+
+const { object: qualityMetrics } = await generateObject({
+
+model,
+
+schema: z.object({
+
+hasCallToAction: z.boolean(),
+
+emotionalAppeal: z.number().min(1).max(10),
+
+clarity: z.number().min(1).max(10),
+
+}),
+
+prompt: `Evaluate this marketing copy for:
+
+1. Presence of call to action (true/false)
+
+2. Emotional appeal (1-10)
+
+3. Clarity (1-10)
+
+Copy to evaluate: ${copy}`,
+
+});
+
+// If quality check fails, regenerate with more specific instructions
+
+if (
+
+!qualityMetrics.hasCallToAction ||
+
+qualityMetrics.emotionalAppeal < 7 ||
+
+qualityMetrics.clarity < 7
+
+) {
+
+const { text: improvedCopy } = await generateText({
+
+model,
+
+prompt: `Rewrite this marketing copy with:
+
+${!qualityMetrics.hasCallToAction ? '- A clear call to action' : ''}
+
+${qualityMetrics.emotionalAppeal < 7 ? '- Stronger emotional appeal' : ''}
+
+${qualityMetrics.clarity < 7 ? '- Improved clarity and directness' : ''}
+
+Original copy: ${copy}`,
+
+});
+
+return { copy: improvedCopy, qualityMetrics };
+
+}
+
+return { copy, qualityMetrics };
+
+}
+```
+
+----------------------------------------
+
+TITLE: Generate Structured JSON Data with AI SDK and OpenAI o3-mini
+DESCRIPTION: This snippet demonstrates how to leverage AI SDK Core's `generateObject` function to produce type-safe, structured JSON output. It shows how to define a schema using Zod and ensure the model's response conforms to it, which is crucial for data extraction and classification tasks.
+SOURCE: https://v5.ai-sdk.dev/guides/o3
+
+LANGUAGE: TypeScript
+CODE:
+```
+import { generateObject } from 'ai';
+
+import { openai } from '@ai-sdk/openai';
+
+import { z } from 'zod';
+
+const { object } = await generateObject({
+model: openai('o3-mini'),
+schema: z.object({
+recipe: z.object({
+name: z.string(),
+ingredients: z.array(z.object({ name: z.string(), amount: z.string() })),
+steps: z.array(z.string()),
+}),
+}),
+prompt: 'Generate a lasagna recipe.',
+});
+```
+
+----------------------------------------
+
+TITLE: AI SDK: Basic Text Prompt Usage
+DESCRIPTION: Demonstrates how to use a simple text string as a prompt for AI content generation. The `prompt` property is set directly with a static string, suitable for straightforward generation tasks using AI SDK functions like `generateText`.
+SOURCE: https://v5.ai-sdk.dev/foundations/prompts
+
+LANGUAGE: JavaScript
+CODE:
+```
+const result = await generateText({
+model: yourModel,
+prompt: 'Invent a new holiday and describe its traditions.',
+});
+```
+
+----------------------------------------
+
+TITLE: API: generateText() function
+DESCRIPTION: Generates text and allows calling tools from a language model.
+SOURCE: https://v5.ai-sdk.dev/reference/ai-sdk-core
+
+LANGUAGE: APIDOC
+CODE:
+```
+generateText(): Generate text and call tools from a language model.
+```
+
+----------------------------------------
+
+TITLE: Send Text Content in AI SDK User Message
+DESCRIPTION: Demonstrates how to send a simple text string as content in a user message to an AI model using `generateText`. The `content` property can be a string or an array of content parts.
+SOURCE: https://v5.ai-sdk.dev/ai-sdk-core/prompts
+
+LANGUAGE: JavaScript
+CODE:
+```
+const result = await generateText({
+  model: yourModel,
+  messages: [
+    {
+      role: 'user',
+      content: [
+        {
+          type: 'text',
+          text: 'Where can I buy the best Currywurst in Berlin?',
+        },
+      ],
+    },
+  ],
+});
+```
+
+----------------------------------------
+
+TITLE: Configure OpenAI API Key in .env.local
+DESCRIPTION: Add your OpenAI API key to the `.env.local` file. The AI SDK's OpenAI provider will automatically use this environment variable for authentication when making requests to the OpenAI service.
+SOURCE: https://v5.ai-sdk.dev/getting-started/nextjs-pages-router
+
+LANGUAGE: dotenv
+CODE:
+```
+OPENAI_API_KEY=xxxxxxxxx
+```
+
+----------------------------------------
+
+TITLE: Combine Multiple Tools for Complex Workflows
+DESCRIPTION: Demonstrates how to integrate and use multiple Anthropic tools (computer, bash, text editor) within a single `generateText` request. It shows the setup for each tool and their combined usage to execute a complex task involving file creation, writing, and terminal commands.
+SOURCE: https://v5.ai-sdk.dev/guides/computer-use
+
+LANGUAGE: JavaScript
+CODE:
+```
+const computerTool = anthropic.tools.computer_20241022({
+...
+});
+const bashTool = anthropic.tools.bash_20241022({
+execute: async ({ command, restart }) => execSync(command).toString()
+});
+const textEditorTool = anthropic.tools.textEditor_20241022({
+execute: async ({
+command,
+path,
+file_text,
+insert_line,
+new_str,
+old_str,
+view_range
+}) => {
+// Handle file operations based on command
+switch(command) {
+return executeTextEditorFunction({
+command,
+path,
+fileText: file_text,
+insertLine: insert_line,
+newStr: new_str,
+oldStr: old_str,
+viewRange: view_range
+});
+}
+}
+});
+const response = await generateText({
+model: anthropic("claude-3-5-sonnet-20241022"),
+prompt: "Create a new file called example.txt, write 'Hello World' to it, and run 'cat example.txt' in the terminal",
+tools: {
+computer: computerTool,
+bash: bashTool,
+str_replace_editor: textEditorTool
+},
+});
+```
+
+----------------------------------------
+
+TITLE: Create Server Action for Streaming Generative UI with AI SDK RSC
+DESCRIPTION: This server-side action uses `streamUI` from `@ai-sdk/rsc` to generate and stream React components based on AI model output. It defines a `getWeather` tool with a Zod schema, demonstrating how to yield loading states and return dynamic components based on tool execution, allowing for a more dynamic and responsive UI.
+SOURCE: https://v5.ai-sdk.dev/guides/llama-3_1
+
+LANGUAGE: TypeScript
+CODE:
+```
+'use server';
+
+import { streamUI } from '@ai-sdk/rsc';
+import { deepinfra } from '@ai-sdk/deepinfra';
+import { z } from 'zod';
+
+export async function streamComponent() {
+const result = await streamUI({
+model: deepinfra('meta-llama/Meta-Llama-3.1-70B-Instruct'),
+prompt: 'Get the weather for San Francisco',
+text: ({ content }) => <div>{content}</div>,
+tools: {
+getWeather: {
+description: 'Get the weather for a location',
+parameters: z.object({ location: z.string() }),
+generate: async function* ({ location }) {
+yield <div>loading...</div>;
+const weather = '25c'; // await getWeather(location);
+return (
+<div>
+the weather in {location} is {weather}.
+</div>
+);
+},
+},
+},
+});
+return result.value;
+}
+```
+
+----------------------------------------
+
+TITLE: Generate Structured JSON Data with AI SDK Core
+DESCRIPTION: This snippet showcases the AI SDK's capability to generate structured JSON data by constraining model output to a Zod schema. It demonstrates using `generateObject` with the Llama 3.1 70B Instruct model to produce a type-safe recipe object, useful for data extraction or synthetic data generation.
+SOURCE: https://v5.ai-sdk.dev/guides/llama-3_1
+
+LANGUAGE: TypeScript
+CODE:
+```
+import { generateObject } from 'ai';
+
+import { deepinfra } from '@ai-sdk/deepinfra';
+
+import { z } from 'zod';
+
+const { object } = await generateObject({
+
+model: deepinfra('meta-llama/Meta-Llama-3.1-70B-Instruct'),
+
+schema: z.object({
+
+recipe: z.object({
+
+name: z.string(),
+
+ingredients: z.array(z.object({ name: z.string(), amount: z.string() })),
+
+steps: z.array(z.string()),
+
+}),
+
+}),
+
+prompt: 'Generate a lasagna recipe.',
+
+});
+```
+
+----------------------------------------
+
+TITLE: Generate Text with AI SDK and OpenAI GPT-4o
+DESCRIPTION: This snippet demonstrates how to use the AI SDK's `generateText` function to interact with OpenAI's GPT-4o model. It shows a basic prompt to generate a text response, abstracting away provider-specific complexities.
+SOURCE: https://v5.ai-sdk.dev/guides/openai-responses
+
+LANGUAGE: TypeScript
+CODE:
+```
+import { generateText } from 'ai';
+import { openai } from '@ai-sdk/openai';
+
+const { text } = await generateText({
+model: openai.responses('gpt-4o'),
+prompt: 'Explain the concept of quantum entanglement.',
+});
+```
+
+----------------------------------------
+
+TITLE: Stream Text Generation using AI SDK with OpenAI
+DESCRIPTION: This code snippet demonstrates how to implement a streaming user interface for text generation using the AI SDK. It utilizes OpenAI's `gpt-4.1` model and the `streamText` function to display parts of the response as they become available, enhancing user experience for larger language models. Dependencies include `@ai-sdk/openai` and `ai`.
+SOURCE: https://v5.ai-sdk.dev/foundations/streaming
+
+LANGUAGE: TypeScript
+CODE:
+```
+import { openai } from '@ai-sdk/openai';
+
+import { streamText } from 'ai';
+
+const { textStream } = streamText({
+model: openai('gpt-4.1'),
+prompt: 'Write a poem about embedding models.',
+});
+
+for await (const textPart of textStream) {
+console.log(textPart);
+}
+```
+
+----------------------------------------
+
+TITLE: Implement Basic Chat UI with AI SDK React `useChat` Hook
+DESCRIPTION: This React component demonstrates a fundamental chat interface using the `@ai-sdk/react` `useChat` hook. It manages messages, user input, and submission to a backend API, displaying conversational flow.
+SOURCE: https://v5.ai-sdk.dev/ai-sdk-ui/generative-user-interfaces
+
+LANGUAGE: tsx
+CODE:
+```
+'use client';
+
+import { useChat } from '@ai-sdk/react';
+
+export default function Page() {
+  const { messages, input, handleInputChange, handleSubmit } = useChat();
+
+  return (
+    <div>
+      {messages.map(message => (
+        <div key={message.id}>
+          <div>{message.role === 'user' ? 'User: ' : 'AI: '}</div>
+          <div>{message.content}</div>
+        </div>
+      ))}
+
+      <form onSubmit={handleSubmit}>
+        <input
+          value={input}
+          onChange={handleInputChange}
+          placeholder="Type a message..."
+        />
+        <button type="submit">Send</button>
+      </form>
+    </div>
+  );
+}
+```
+
+----------------------------------------
+
+TITLE: AI SDK Tool Definition for Flight Search and UI Rendering
+DESCRIPTION: This `searchFlights` tool, defined within `actions.tsx`, allows the AI model to search for flights based on provided source, destination, and date parameters. It uses Zod for input validation and yields a loading message before executing the search. Crucially, it returns a React component (`<Flights />`) to render the search results directly into the AI conversation UI, enabling rich, interactive responses.
+SOURCE: https://v5.ai-sdk.dev/ai-sdk-rsc/multistep-interfaces
+
+LANGUAGE: TypeScript
+CODE:
+```
+searchFlights: {
+  description: 'search for flights',
+  parameters: z.object({
+    source: z.string().describe('The origin of the flight'),
+    destination: z.string().describe('The destination of the flight'),
+    date: z.string().describe('The date of the flight'),
+  }),
+  generate: async function* ({ source, destination, date }) {
+    yield `Searching for flights from ${source} to ${destination} on ${date}...`;
+    const results = await searchFlights(source, destination, date);
+    return (<Flights flights={results} />);
+  },
+}
+```
+
+----------------------------------------
+
+TITLE: Conditionally Rendering React Components from AI Tool Output
+DESCRIPTION: This React component demonstrates how to consume the structured JSON output from a language model's tool call. It checks if a message has a 'function' role, extracts the content, and passes it as props to a `<WeatherCard/>` component, enabling dynamic UI updates based on AI responses.
+SOURCE: https://v5.ai-sdk.dev/advanced/rendering-ui-with-language-models
+
+LANGUAGE: TypeScript
+CODE:
+```
+return (
+  <div>
+    {messages.map(message => {
+      if (message.role === 'function') {
+        const { name, content } = message
+        const { temperature, unit, description, forecast } = content;
+        return (
+          <WeatherCard
+            weather={{
+              temperature: 47,
+              unit: 'F',
+              description: 'sunny',
+              forecast,
+            }}
+          />
+        )
+      }
+    })}
+  </div>
+)
+```
+
+----------------------------------------
+
+TITLE: Define and Register a New Stock Tool in AI SDK
+DESCRIPTION: This snippet defines a `stockTool` using `createTool` from `@ai-sdk/react`, specifying its description, parameters (a stock symbol), and an asynchronous `execute` function that simulates an API call to fetch stock price. It then updates the main `tools` object to include this new tool alongside an existing `weatherTool`, making it available for the AI model.
+SOURCE: https://v5.ai-sdk.dev/ai-sdk-ui/generative-user-interfaces
+
+LANGUAGE: TypeScript
+CODE:
+```
+// Add a new stock tool
+export const stockTool = createTool({
+  description: 'Get price for a stock',
+  parameters: z.object({
+    symbol: z.string().describe('The stock symbol to get the price for')
+  }),
+  execute: async function ({ symbol }) {
+    // Simulated API call
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    return { symbol, price: 100 };
+  }
+});
+
+// Update the tools object
+export const tools = {
+  displayWeather: weatherTool,
+  getStockPrice: stockTool
+};
+```
+
+----------------------------------------
+
+TITLE: AI SDK: Using System Prompts for Model Guidance
+DESCRIPTION: Shows how to set a system prompt using the `system` property to provide initial instructions to the AI model. This guides the model's behavior and response style, here demonstrated for a travel itinerary planning assistant, combined with a user prompt.
+SOURCE: https://v5.ai-sdk.dev/foundations/prompts
+
+LANGUAGE: JavaScript
+CODE:
+```
+const result = await generateText({
+model: yourModel,
+system:
+`You help planning travel itineraries. ` +
+`Respond to the users' request with a list ` +
+`of the best stops to make in their destination.`,
+prompt:
+`I am planning a trip to ${destination} for ${lengthOfStay} days. ` +
+`Please suggest the best tourist activities for me to do.`,
+});
+```
+
+----------------------------------------
+
+TITLE: Stream Text Generations with AI SDK Core
+DESCRIPTION: Demonstrates how to use the `streamText` function from `@ai-sdk/openai` to generate and stream text from a language model, suitable for interactive applications like chat bots.
+SOURCE: https://v5.ai-sdk.dev/reference/ai-sdk-core/stream-text
+
+LANGUAGE: TypeScript
+CODE:
+```
+import { openai } from '@ai-sdk/openai';
+import { streamText } from 'ai';
+
+const { textStream } = streamText({
+model: openai('gpt-4o'),
+prompt: 'Invent a new holiday and describe its traditions.',
+});
+
+for await (const textPart of textStream) {
+process.stdout.write(textPart);
+}
+```
+
+----------------------------------------
+
+TITLE: LanguageModelV2: Redesigned LLM Communication Architecture
+DESCRIPTION: `LanguageModelV2` represents a complete architectural redesign for how the AI SDK interacts with language models, treating all LLM outputs as unified content parts. This new design enables consistent handling of diverse response types like text, images, and reasoning, offering improved type safety and simplified extensibility for new model capabilities.
+SOURCE: https://v5.ai-sdk.dev/announcing-ai-sdk-5-alpha
+
+LANGUAGE: APIDOC
+CODE:
+```
+LanguageModelV2:
+  - Content-First Design: All LLM outputs represented as ordered content parts in a unified array.
+  - Improved Type Safety: Better TypeScript type guarantees for different content types.
+  - Simplified Extensibility: Adding support for new model capabilities without core structure changes.
+```
+
+----------------------------------------
+
+TITLE: Stream Object Generation via Route Handler (After Migration)
+DESCRIPTION: This API route handler demonstrates the recommended approach for streaming object generations with AI SDK UI. It uses `streamObject` to generate structured data based on a schema and directly returns a `toTextStreamResponse()`, making it compatible with client-side hooks like `useObject`.
+SOURCE: https://v5.ai-sdk.dev/ai-sdk-rsc/migrating-to-ui
+
+LANGUAGE: TypeScript
+CODE:
+```
+import { streamObject } from 'ai';
+import { openai } from '@ai-sdk/openai';
+import { notificationSchema } from '@/utils/schemas';
+
+export async function POST(req: Request) {
+const context = await req.json();
+
+const result = streamObject({
+model: openai('gpt-4.1'),
+schema: notificationSchema,
+prompt:
+`Generate 3 notifications for a messages app in this context:` + context,
+});
+
+return result.toTextStreamResponse();
+}
+```
+
+----------------------------------------
+
+TITLE: Generate Text with AI SDK Core
+DESCRIPTION: Demonstrates the basic usage of the `generateText` function from AI SDK Core to generate text based on a simple prompt. It shows how to import the function and await the result to get the generated text.
+SOURCE: https://v5.ai-sdk.dev/ai-sdk-core/generating-text
+
+LANGUAGE: JavaScript
+CODE:
+```
+import { generateText } from 'ai';
+
+const { text } = await generateText({
+  model: yourModel,
+  prompt: 'Write a vegetarian lasagna recipe for 4 people.',
+});
+```
+
+----------------------------------------
+
+TITLE: Updated Next.js Server Action for Resource Creation with AI Embeddings
+DESCRIPTION: This updated `createResource` server action extends the initial functionality by integrating AI embedding generation. After creating a resource, it calls `generateEmbeddings` on the resource content and then stores these embeddings in a separate `embeddings` table, linking them to the newly created resource. This enables AI-powered features like semantic search or recommendations.
+SOURCE: https://v5.ai-sdk.dev/guides/rag-chatbot
+
+LANGUAGE: TypeScript
+CODE:
+```
+'use server';
+
+import {
+  NewResourceParams,
+  insertResourceSchema,
+  resources,
+} from '@/lib/db/schema/resources';
+import { db } from '../db';
+import { generateEmbeddings } from '../ai/embedding';
+import { embeddings as embeddingsTable } from '../db/schema/embeddings';
+
+export const createResource = async (input: NewResourceParams) => {
+  try {
+    const { content } = insertResourceSchema.parse(input);
+    const [resource] = await db
+      .insert(resources)
+      .values({ content })
+      .returning();
+    const embeddings = await generateEmbeddings(content);
+    await db.insert(embeddingsTable).values(
+      embeddings.map(embedding => ({
+        resourceId: resource.id,
+        ...embedding,
+      })),
+    );
+    return 'Resource successfully created and embedded.';
+  } catch (error) {
+    return error instanceof Error && error.message.length > 0
+      ? error.message
+      : 'Error, please try again.';
+  }
+};
+```
+
+----------------------------------------
+
+TITLE: Generate Text with OpenAI Model using AI SDK
+DESCRIPTION: This snippet demonstrates how to generate text using the `generateText` function from the AI SDK. It imports the necessary `generateText` utility and the `openai` provider, then calls `generateText` with a specific OpenAI model and a prompt to receive a text response.
+SOURCE: https://v5.ai-sdk.dev/foundations/overview
+
+LANGUAGE: TypeScript
+CODE:
+```
+import { generateText } from "ai"
+import { openai } from "@ai-sdk/openai"
+
+const { text } = await generateText({
+  model: openai("o3-mini"),
+  prompt: "What is love?"
+})
+```
+
+----------------------------------------
+
+TITLE: createAI Function
+DESCRIPTION: Creates a context provider that wraps your application, enabling shared state between the client and the language model on the server.
+SOURCE: https://v5.ai-sdk.dev/reference/ai-sdk-rsc
+
+LANGUAGE: APIDOC
+CODE:
+```
+createAI()
+  Description: Create a context provider that wraps your application and shares state between the client and language model on the server.
+```
+
+----------------------------------------
+
+TITLE: JavaScript: Language Model Routing with Dynamic Search Parameters
+DESCRIPTION: This example illustrates how a language model can generate function calls with dynamic parameters, such as `searchImages("Van Gogh")`, based on conversational user input. It demonstrates the model's ability to act as a router, directing the application flow by calling appropriate functions with extracted data.
+SOURCE: https://v5.ai-sdk.dev/advanced/model-as-router
+
+LANGUAGE: javascript
+CODE:
+```
+searchImages("Van Gogh");
+searchImages("Monet");
+```
+
+----------------------------------------
+
+TITLE: Next.js Frontend Chat UI with AI SDK useChat Hook
+DESCRIPTION: This React component (app/page.tsx) demonstrates how to build a chat interface in a Next.js application using the @ai-sdk/react useChat hook. It manages chat messages, user input, and submission, displaying conversations between the user and the AI. The hook automatically handles requests to the backend API route.
+SOURCE: https://v5.ai-sdk.dev/guides/o1
+
+LANGUAGE: TypeScript
+CODE:
+```
+'use client';
+
+import { useChat } from '@ai-sdk/react';
+
+export default function Page() {
+  const { messages, input, handleInputChange, handleSubmit, error } = useChat();
+
+  return (
+    <>
+      {messages.map(message => (
+        <div key={message.id}>
+          {message.role === 'user' ? 'User: ' : 'AI: '}
+          {message.content}
+        </div>
+      ))}
+
+      <form onSubmit={handleSubmit}>
+        <input name="prompt" value={input} onChange={handleInputChange} />
+        <button type="submit">Submit</button>
+      </form>
+    </>
+  );
+}
+```
+
+----------------------------------------
+
+TITLE: Generate Structured Data with AI SDK's generateObject
+DESCRIPTION: Demonstrates how to use `generateObject` to generate structured data (a recipe) based on a Zod schema. The schema is also used to validate the generated data, ensuring type safety and correctness.
+SOURCE: https://v5.ai-sdk.dev/ai-sdk-core/generating-structured-data
+
+LANGUAGE: typescript
+CODE:
+```
+import { generateObject } from 'ai';
+import { z } from 'zod';
+
+const { object } = await generateObject({
+  model: yourModel,
+  schema: z.object({
+    recipe: z.object({
+      name: z.string(),
+      ingredients: z.array(z.object({ name: z.string(), amount: z.string() })),
+      steps: z.array(z.string())
+    })
+  }),
+  prompt: 'Generate a lasagna recipe.'
+});
+```
+
+----------------------------------------
+
+TITLE: Client-Side Chat Interface with AI SDK `useChat` Hook
+DESCRIPTION: This snippet demonstrates how to integrate the `@ai-sdk/react` `useChat` hook into a Next.js client component. It sets up a basic chat interface, managing message display, user input, and form submission, automatically handling AI responses and parallel/multi-step tool calls.
+SOURCE: https://v5.ai-sdk.dev/ai-sdk-rsc/migrating-to-ui
+
+LANGUAGE: typescript
+CODE:
+```
+'use client';
+
+import { useChat } from '@ai-sdk/react';
+
+export default function Page() {
+
+const { messages, input, setInput, handleSubmit } = useChat();
+
+return (
+
+<div>
+
+{messages.map(message => (
+
+<div key={message.id}>
+
+<div>{message.role}</div>
+
+<div>{message.content}</div>
+
+</div>
+
+))}
+
+<form onSubmit={handleSubmit}>
+
+<input
+
+type="text"
+
+value={input}
+
+onChange={event => {
+
+setInput(event.target.value);
+
+}}
+
+/>
+
+<button type="submit">Send</button>
+
+</form>
+
+</div>
+
+);
+
+}
+```
+
+----------------------------------------
+
+TITLE: Server-Side UI Generation with AI SDK RSC
+DESCRIPTION: This snippet demonstrates how to use `@ai-sdk/rsc` to generate and stream React components from the server based on a language model's tool call. It showcases `createStreamableUI` for creating a streamable UI, defines a `getWeather` tool with Zod for parameter validation, and renders a `<WeatherCard/>` component which is then streamed to the client.
+SOURCE: https://v5.ai-sdk.dev/advanced/rendering-ui-with-language-models
+
+LANGUAGE: TypeScript
+CODE:
+```
+import { createStreamableUI } from '@ai-sdk/rsc'
+
+const uiStream = createStreamableUI();
+
+const text = generateText({
+
+model: openai('gpt-3.5-turbo'),
+
+system: 'you are a friendly assistant',
+
+prompt: 'what is the weather in SF?',
+
+tools: {
+
+getWeather: {
+
+description: 'Get the weather for a location',
+
+parameters: z.object({
+
+city: z.string().describe('The city to get the weather for'),
+
+unit: z
+
+.enum(['C', 'F'])
+
+.describe('The unit to display the temperature in')
+
+}),
+
+execute: async ({ city, unit }) => {
+
+const weather = getWeather({ city, unit })
+
+const { temperature, unit, description, forecast } = weather
+
+uiStream.done(
+
+<WeatherCard
+
+weather={{
+
+temperature: 47,
+
+unit: 'F',
+
+description: 'sunny',
+
+forecast,
+
+}}
+
+/>
+
+)
+
+}
+
+}
+
+}
+
+})
+
+return {
+
+display: uiStream.value
+
+}
+```
+
+----------------------------------------
+
+TITLE: Generate Slogans with Few-Shot Examples
+DESCRIPTION: Demonstrates the power of incorporating examples into a prompt to guide the LLM. This technique helps the model understand desired patterns and subtleties, leading to more appropriate and creative outputs.
+SOURCE: https://v5.ai-sdk.dev/advanced/prompt-engineering
+
+LANGUAGE: Prompt
+CODE:
+```
+Create three slogans for a business with unique features.
+Business: Bookstore with cats
+Slogans: "Purr-fect Pages", "Books and Whiskers", "Novels and Nuzzles"
+Business: Gym with rock climbing
+Slogans: "Peak Performance", "Reach New Heights", "Climb Your Way Fit"
+Business: Coffee shop with live music
+Slogans:
+```
+
+----------------------------------------
+
+TITLE: Cache OpenAI Responses with AI SDK Lifecycle Callbacks and Upstash Redis
+DESCRIPTION: This TypeScript example demonstrates how to implement response caching for OpenAI models using the AI SDK's `onFinish` lifecycle callback. It leverages Upstash Redis to store and retrieve AI generated text, preventing redundant API calls for identical requests. The `POST` function checks for a cached response before calling the language model, and then caches the new response for 1 hour upon completion.
+SOURCE: https://v5.ai-sdk.dev/advanced/caching
+
+LANGUAGE: typescript
+CODE:
+```
+import { openai } from '@ai-sdk/openai';
+import { formatDataStreamPart, streamText, UIMessage } from 'ai';
+import { Redis } from '@upstash/redis';
+
+// Allow streaming responses up to 30 seconds
+export const maxDuration = 30;
+
+const redis = new Redis({
+  url: process.env.KV_URL,
+  token: process.env.KV_TOKEN,
+});
+
+export async function POST(req: Request) {
+  const { messages }: { messages: UIMessage[] } = await req.json();
+
+  // come up with a key based on the request:
+  const key = JSON.stringify(messages);
+
+  // Check if we have a cached response
+  const cached = await redis.get(key);
+  if (cached != null) {
+    return new Response(formatDataStreamPart('text', cached), {
+      status: 200,
+      headers: { 'Content-Type': 'text/plain' },
+    });
+  }
+
+  // Call the language model:
+  const result = streamText({
+    model: openai('gpt-4o'),
+    messages: convertToModelMessages(messages),
+    async onFinish({ text }) {
+      // Cache the response text:
+      await redis.set(key, text);
+      await redis.expire(key, 60 * 60);
+    },
+  });
+
+  // Respond with the stream
+  return result.toUIMessageStreamResponse();
+}
+```
+
+----------------------------------------
+
+TITLE: Frontend Text Stream with useCompletion (Next.js Client Component)
+DESCRIPTION: This Next.js client component demonstrates how to use the `useCompletion` hook from `@ai-sdk/react` to handle text streams. It configures `streamProtocol` to 'text' and displays the streamed completion in a div.
+SOURCE: https://v5.ai-sdk.dev/ai-sdk-ui/stream-protocol
+
+LANGUAGE: tsx
+CODE:
+```
+'use client';
+
+import { useCompletion } from '@ai-sdk/react';
+
+export default function Page() {
+
+const { completion, input, handleInputChange, handleSubmit } = useCompletion({
+
+streamProtocol: 'text',
+
+});
+
+return (
+
+<form onSubmit={handleSubmit}>
+
+<input name="prompt" value={input} onChange={handleInputChange} />
+
+<button type="submit">Submit</button>
+
+<div>{completion}</div>
+
+</form>
+
+);
+
+}
+```
+
+----------------------------------------
+
+TITLE: Implement AI Chat UI with useChat Hook in Next.js
+DESCRIPTION: This client-side React component uses the `useChat` hook from `@ai-sdk/react` to manage chat state, input, and submission. It renders messages from the AI and user, and provides an input field and submit button for user interaction, enabling a seamless real-time chat experience.
+SOURCE: https://v5.ai-sdk.dev/guides/llama-3_1
+
+LANGUAGE: TypeScript
+CODE:
+```
+'use client';
+
+import { useChat } from '@ai-sdk/react';
+
+export default function Page() {
+const { messages, input, handleInputChange, handleSubmit } = useChat();
+
+return (
+<>
+{messages.map(message => (
+<div key={message.id}>
+{message.role === 'user' ? 'User: ' : 'AI: '}
+{message.content}
+</div>
+))}
+<form onSubmit={handleSubmit}>
+<input name="prompt" value={input} onChange={handleInputChange} />
+<button type="submit">Submit</button>
+</form>
+</>
+);
+}
+```
+
+----------------------------------------
+
+TITLE: AI SDK Chat API Reference
+DESCRIPTION: Comprehensive documentation for the parameters, return values, and data structures used in the AI SDK's chat functionality, likely associated with a `useChat` hook. It covers configuration options, message formats, and tool call handling.
+SOURCE: https://v5.ai-sdk.dev/reference/ai-sdk-ui/use-chat
+
+LANGUAGE: APIDOC
+CODE:
+```
+API Parameters:
+  api?: string = '/api/chat'
+    The API endpoint that is called to generate chat responses. It can be a relative path (starting with '/') or an absolute URL.
+  id?: string
+    An unique identifier for the chat. If not provided, a random one will be generated. When provided, the `useChat` hook with the same `id` will have shared states across components. This is useful when you have multiple components showing the same chat stream.
+  initialInput?: string = ''
+    An optional string for the initial prompt input.
+  initialMessages?: Messages[] = []
+    An optional array of initial chat messages
+  onToolCall?: ({toolCall: ToolCall}) => void | unknown| Promise<unknown>
+    Optional callback function that is invoked when a tool call is received. Intended for automatic client-side tool execution. You can optionally return a result for the tool call, either synchronously or asynchronously.
+  onResponse?: (response: Response) => void
+    An optional callback that will be called with the response from the API endpoint. Useful for throwing customized errors or logging
+  onFinish?: (message: Message, options: OnFinishOptions) => void
+    An optional callback function that is called when the completion stream ends.
+  onError?: (error: Error) => void
+    A callback that will be called when the chat stream encounters an error. Optional.
+  generateId?: () => string
+    A custom id generator for message ids and the chat id. Optional.
+  headers?: Record<string, string> | Headers
+    Additional headers to be passed to the API endpoint. Optional.
+  body?: any
+    Additional body object to be passed to the API endpoint. Optional.
+  credentials?: 'omit' | 'same-origin' | 'include'
+    An optional literal that sets the mode of credentials to be used on the request. Defaults to same-origin.
+  maxSteps?: number
+    Maximum number of backend calls to generate a response. A maximum number is required to prevent infinite loops in the case of misconfigured tools. By default, it is set to 1.
+  streamProtocol?: 'text' | 'data'
+    An optional literal that sets the type of stream to be used. Defaults to `data`. If set to `text`, the stream will be treated as a text stream.
+  fetch?: FetchFunction
+    Optional. A custom fetch function to be used for the API call. Defaults to the global fetch function.
+  experimental_prepareRequestBody?: (options: { messages: UIMessage[]; requestData?: JSONValue; requestBody?: object, chatId: string }) => unknown
+    Experimental. When a function is provided, it will be used to prepare the request body for the chat API. This can be useful for customizing the request body based on the messages and data in the chat.
+  experimental_throttle?: number
+    React only. Custom throttle wait time in milliseconds for the message and data updates. When specified, updates will be throttled using this interval. Defaults to undefined (no throttling).
+
+OnFinishOptions:
+  usage: CompletionTokenUsage
+    The token usage for the completion.
+  promptTokens: number
+    The total number of tokens in the prompt.
+  completionTokens: number
+    The total number of tokens in the completion.
+  totalTokens: number
+    The total number of tokens generated.
+  finishReason: 'stop' | 'length' | 'content-filter' | 'tool-calls' | 'error' | 'other' | 'unknown'
+    The reason why the generation ended.
+
+Return Values (from useChat hook):
+  messages: UIMessage[]
+    The current array of chat messages.
+  id: string
+    The unique identifier of the message.
+  role: 'system' | 'user' | 'assistant' | 'data'
+    The role of the message.
+  createdAt?: Date
+    The creation date of the message.
+  content: string
+    The content of the message.
+  annotations?: Array<JSONValue>
+    Additional annotations sent along with the message.
+  parts: Array<TextUIPart | ReasoningUIPart | ToolInvocationUIPart | SourceUIPart | StepStartUIPart>
+    An array of message parts that are associated with the message.
+
+UIMessage Part Types:
+  TextUIPart:
+    type: "text"
+    text: string
+      The text content of the part.
+  ReasoningUIPart:
+    type: "reasoning"
+    reasoning: string
+      The reasoning content of the part.
+  ToolInvocationUIPart:
+    type: "tool-invocation"
+    toolInvocation: ToolInvocation
+
+ToolInvocation (Partial Call):
+  state: 'partial-call'
+    The state of the tool call when it was partially created.
+  toolCallId: string
+    ID of the tool call. This ID is used to match the tool call with the tool result.
+  toolName: string
+    Name of the tool that is being called.
+  args: any
+    Partial arguments of the tool call. This is a JSON-serializable object.
+
+ToolInvocation (Full Call):
+  state: 'call'
+    The state of the tool call when it was fully created.
+  toolCallId: string
+    ID of the tool call. This ID is used to match the tool call with the tool result.
+  toolName: string
+    Name of the tool that is being called.
+```
+
+----------------------------------------
+
+TITLE: Implement Multi-Step Agent with stopWhen for Math Problems
+DESCRIPTION: This example demonstrates how to create an AI agent that solves math problems iteratively using the `stopWhen` parameter with `stepCountIs`. It integrates a `calculate` tool powered by `math.js` to evaluate mathematical expressions, allowing the LLM to reason step-by-step and use the tool as needed to arrive at a final, explained answer.
+SOURCE: https://v5.ai-sdk.dev/foundations/agents
+
+LANGUAGE: TypeScript
+CODE:
+```
+import { openai } from '@ai-sdk/openai';
+import { generateText, tool, stepCountIs } from 'ai';
+import * as mathjs from 'mathjs';
+import { z } from 'zod';
+
+const { text: answer } = await generateText({
+  model: openai('gpt-4o-2024-08-06'),
+  tools: {
+    calculate: tool({
+      description:
+        'A tool for evaluating mathematical expressions. ' +
+        'Example expressions: ' +
+        "'1.2 * (2 + 4.5)', '12.7 cm to inch', 'sin(45 deg) ^ 2'.",
+      parameters: z.object({ expression: z.string() }),
+      execute: async ({ expression }) => mathjs.evaluate(expression),
+    }),
+  },
+  stopWhen: stepCountIs(10),
+  system:
+    'You are solving math problems. ' +
+    'Reason step by step. ' +
+    'Use the calculator when necessary. ' +
+    'When you give the final answer, ' +
+    'provide an explanation for how you arrived at it.',
+  prompt:
+    'A taxi driver earns $9461 per 1-hour of work. ' +
+    'If he works 12 hours a day and in 1 hour ' +
+    'he uses 12 liters of petrol with a price  of $134 for 1 liter. ' +
+    'How much money does he earn in one day?',
+});
+
+console.log(`ANSWER: ${answer}`);
+```
+
+----------------------------------------
+
+TITLE: Create .env.local File for OpenAI API Key
+DESCRIPTION: This command creates an empty `.env.local` file in the project root. This file will be used to store sensitive environment variables, such as the OpenAI API key, which the AI SDK's OpenAI Provider will automatically use for authentication.
+SOURCE: https://v5.ai-sdk.dev/getting-started/expo
+
+LANGUAGE: shell
+CODE:
+```
+touch .env.local
+```
+
+----------------------------------------
+
+TITLE: Calling Server Action `sendMessage` from Client with `useActions` Hook
+DESCRIPTION: This React client component demonstrates how to use the `useActions` hook from `@ai-sdk/rsc` to invoke a server action named `sendMessage`. It manages UI state using `useUIState` to display user inputs and AI responses, ensuring the UI updates correctly after the server action call. The example includes a form for user input and a list to display messages.
+SOURCE: https://v5.ai-sdk.dev/ai-sdk-rsc/generative-ui-state
+
+LANGUAGE: TypeScript
+CODE:
+```
+'use client';
+
+import { useActions, useUIState } from '@ai-sdk/rsc';
+
+import { AI } from './ai';
+
+export default function Page() {
+  const { sendMessage } = useActions<typeof AI>();
+  const [messages, setMessages] = useUIState();
+
+  const handleSubmit = async event => {
+    event.preventDefault();
+    setMessages([
+      ...messages,
+      { id: Date.now(), role: 'user', display: event.target.message.value },
+    ]);
+
+    const response = await sendMessage(event.target.message.value);
+    setMessages([
+      ...messages,
+      { id: Date.now(), role: 'assistant', display: response },
+    ]);
+  };
+
+  return (
+    <>
+      <ul>
+        {messages.map(message => (
+          <li key={message.id}>{message.display}</li>
+        ))}
+      </ul>
+      <form onSubmit={handleSubmit}>
+        <input type="text" name="message" />
+        <button type="submit">Send</button>
+      </form>
+    </>
+  );
+}
+```
+
+----------------------------------------
+
+TITLE: Create Server-Side Chat API Route with AI SDK
+DESCRIPTION: Implement a server-side API route (`server/api/chat.ts`) that leverages the AI SDK to stream text responses from an OpenAI model. This route handles incoming messages, converts them for the model, and streams the generated text back to the client.
+SOURCE: https://v5.ai-sdk.dev/getting-started/nuxt
+
+LANGUAGE: typescript
+CODE:
+```
+import { streamText, UIMessage, convertToModelMessages } from 'ai';
+import { createOpenAI } from '@ai-sdk/openai';
+
+export default defineLazyEventHandler(async () => {
+const apiKey = useRuntimeConfig().openaiApiKey;
+if (!apiKey) throw new Error('Missing OpenAI API key');
+
+const openai = createOpenAI({
+apiKey: apiKey,
+});
+
+return defineEventHandler(async (event: any) => {
+const { messages }: { messages: UIMessage[] } = await readBody(event);
+const result = streamText({
+model: openai('gpt-4o'),
+messages: convertToModelMessages(messages),
+});
+
+return result.toUIMessageStreamResponse();
+});
+});
+```
+
+----------------------------------------
+
+TITLE: Client-side Chatbot with useChat and Dynamic Tool UI
+DESCRIPTION: This React component demonstrates a client-side chatbot using @ai-sdk/react's useChat hook. It showcases how to define and execute client-side tools via onToolCall (e.g., getLocation), manage multi-step tool interactions with maxSteps, and dynamically render different states of tool invocations (text, tool-invocation with call, partial-call, result states for askForConfirmation, getLocation, getWeatherInformation) within the chat UI.
+SOURCE: https://v5.ai-sdk.dev/ai-sdk-ui/chatbot-with-tool-calling
+
+LANGUAGE: TypeScript
+CODE:
+```
+'use client';
+
+import { useChat } from '@ai-sdk/react';
+
+export default function Chat() {
+
+const { messages, input, handleInputChange, handleSubmit, addToolResult } =
+
+useChat({
+
+maxSteps: 5,
+
+// run client-side tools that are automatically executed:
+
+async onToolCall({ toolCall }) {
+
+if (toolCall.toolName === 'getLocation') {
+
+const cities = [
+
+'New York',
+
+'Los Angeles',
+
+'Chicago',
+
+'San Francisco',
+
+];
+
+return cities[Math.floor(Math.random() * cities.length)];
+
+}
+
+},
+
+});
+
+return (
+
+<>
+
+{messages?.map(message => (
+
+<div key={message.id}>
+
+<strong>{`${message.role}: `}</strong>
+
+{message.parts.map(part => {
+
+switch (part.type) {
+
+// render text parts as simple text:
+
+case 'text':
+
+return part.text;
+
+// for tool invocations, distinguish between the tools and the state:
+
+case 'tool-invocation': {
+
+const callId = part.toolInvocation.toolCallId;
+
+switch (part.toolInvocation.toolName) {
+
+case 'askForConfirmation': {
+
+switch (part.toolInvocation.state) {
+
+case 'call':
+
+return (
+
+<div key={callId}>
+
+{part.toolInvocation.args.message}
+
+<div>
+
+<button
+
+onClick={() =>
+
+addToolResult({
+
+toolCallId: callId,
+
+result: 'Yes, confirmed.',
+
+})
+
+}
+
+>
+
+Yes
+
+</button>
+
+<button
+
+onClick={() =>
+
+addToolResult({
+
+toolCallId: callId,
+
+result: 'No, denied',
+
+})
+
+}
+
+>
+
+No
+
+</button>
+
+</div>
+
+</div>
+
+);
+
+case 'result':
+
+return (
+
+<div key={callId}>
+
+Location access allowed:{' '}
+
+{part.toolInvocation.result}
+
+</div>
+
+);
+
+}
+
+break;
+
+}
+
+case 'getLocation': {
+
+switch (part.toolInvocation.state) {
+
+case 'call':
+
+return <div key={callId}>Getting location...</div>;
+
+case 'result':
+
+return (
+
+<div key={callId}>
+
+Location: {part.toolInvocation.result}
+
+</div>
+
+);
+
+}
+
+break;
+
+}
+
+case 'getWeatherInformation': {
+
+switch (part.toolInvocation.state) {
+
+// example of pre-rendering streaming tool calls:
+
+case 'partial-call':
+
+return (
+
+<pre key={callId}>
+
+{JSON.stringify(part.toolInvocation, null, 2)}
+
+</pre>
+
+);
+
+case 'call':
+
+return (
+
+<div key={callId}>
+
+Getting weather information for{' '}
+
+{part.toolInvocation.args.city}...
+
+</div>
+
+);
+
+case 'result':
+
+return (
+
+<div key={callId}>
+
+Weather in {part.toolInvocation.args.city}:{' '}
+
+{part.toolInvocation.result}
+
+</div>
+
+);
+
+}
+
+break;
+
+}
+
+}
+
+}
+
+}
+
+})}
+
+<br />
+
+</div>
+
+))}
+
+<form onSubmit={handleSubmit}>
+
+<input value={input} onChange={handleInputChange} />
+
+</form>
+
+</>
+
+);
+
+}
+```
+
+----------------------------------------
+
+TITLE: Rendering AI SDK 4.2 Message Parts with useChat Hook
+DESCRIPTION: Example React component demonstrating how to iterate through the new `message.parts` array from the `useChat` hook to render different types of multi-modal AI responses in the UI, including text, source, reasoning, tool invocations, and files.
+SOURCE: https://v5.ai-sdk.dev/migration-guides/migration-guide-4-2
+
+LANGUAGE: JavaScript
+CODE:
+```
+function Chat() {
+
+const { messages } = useChat();
+
+return (
+
+<div>
+
+{messages.map(message =>
+
+message.parts.map((part, i) => {
+
+switch (part.type) {
+
+case 'text':
+
+return <p key={i}>{part.text}</p>;
+
+case 'source':
+
+return <p key={i}>{part.source.url}</p>;
+
+case 'reasoning':
+
+return <div key={i}>{part.reasoning}</div>;
+
+case 'tool-invocation':
+
+return <div key={i}>{part.toolInvocation.toolName}</div>;
+
+case 'file':
+
+return (
+
+<img
+
+key={i}
+
+src={`data:${part.mediaType};base64,${part.data}`}
+
+/>
+
+);
+
+}
+
+}),
+
+)}
+
+</div>
+
+);
+
+}
+```

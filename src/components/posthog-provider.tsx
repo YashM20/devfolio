@@ -10,7 +10,8 @@ const POSTHOG_KEY = process.env.NEXT_PUBLIC_POSTHOG_KEY;
 const POSTHOG_HOST = process.env.NEXT_PUBLIC_POSTHOG_HOST;
 const POSTHOG_UI_HOST = process.env.NEXT_PUBLIC_POSTHOG_UI_HOST;
 
-const shouldLoad = !!(POSTHOG_KEY && POSTHOG_HOST);
+const shouldLoad =
+  !!(POSTHOG_KEY && POSTHOG_HOST) && process.env.NODE_ENV === "production";
 
 export function PostHogProvider({ children }: { children: React.ReactNode }) {
   const [consentGiven, setConsentGiven] = useState(false);

@@ -3,10 +3,7 @@ import { ScrollTop } from "@/components/scroll-top";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { CookieConsent } from "@/components/cookie-consent";
-
-const AiAssistant = dynamic(() =>
-  import("@/components/ai-assistant").then((mod) => mod.AiAssistant)
-);
+import { AiAssistant } from "@/components/ai/ai-assistant";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
