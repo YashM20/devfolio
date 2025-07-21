@@ -7,17 +7,19 @@ import puppeteer from "puppeteer-core";
 const getChromePath = () => {
   switch (process.platform) {
     case "win32":
-      return [
-        "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-        "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
-        `${process.env.LOCALAPPDATA}\\Google\\Chrome\\Application\\chrome.exe`,
-      ].find(path => {
-        try {
-          return fs.existsSync(path);
-        } catch {
-          return false;
-        }
-      }) || "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
+      return (
+        [
+          "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+          "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
+          `${process.env.LOCALAPPDATA}\\Google\\Chrome\\Application\\chrome.exe`,
+        ].find((path) => {
+          try {
+            return fs.existsSync(path);
+          } catch {
+            return false;
+          }
+        }) || "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+      );
     case "darwin":
       return "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
     case "linux":
@@ -29,7 +31,8 @@ const getChromePath = () => {
 
 const executablePath = getChromePath();
 const url = process.env.URL || "http://localhost:1408";
-const outputDir = path.join(process.cwd(), ".ncdai/screenshots");
+const outputDir = path.join(process.cwd(), "public/images/ss");
+const oldDir = path.join(outputDir, "old");
 
 const SIZE = {
   // Full HD
@@ -50,6 +53,24 @@ const SIZE = {
 } as const;
 
 type Theme = "light" | "dark";
+
+async function moveOldScreenshots() {
+  // Create old directory if it doesn't exist
+  await fs.promises.mkdir(oldDir, { recursive: true });
+
+  // Get all files in the ss directory
+  const files = await fs.promises.readdir(outputDir);
+
+  // Move screenshot files to old directory
+  for (const file of files) {
+    if (file === "old") continue;
+    if (file.startsWith("screenshot-")) {
+      const oldPath = path.join(outputDir, file);
+      const newPath = path.join(oldDir, file);
+      await fs.promises.rename(oldPath, newPath);
+    }
+  }
+}
 
 async function captureScreenshot({
   browser,
@@ -97,6 +118,9 @@ async function captureScreenshot({
 }
 
 async function main() {
+  // Move old screenshots before capturing new ones
+  await moveOldScreenshots();
+
   const browser = await puppeteer.launch({
     executablePath,
   });

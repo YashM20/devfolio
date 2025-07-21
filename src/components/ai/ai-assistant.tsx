@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useChat } from "@ai-sdk/react";
+import { useQueryState, parseAsBoolean } from "nuqs";
 import {
   Send,
   MessageCircle,
@@ -23,7 +24,10 @@ import { cn } from "@/lib/utils";
 import posthog from "posthog-js";
 
 export function AiAssistant() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useQueryState(
+    "ai",
+    parseAsBoolean.withDefault(false)
+  );
   const [isTyping, setIsTyping] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
