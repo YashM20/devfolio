@@ -78,20 +78,24 @@ export function SiteFooter() {
               <span className="sr-only">RSS</span>
             </a>
             <Separator />
-            <script src="https://images.dmca.com/Badges/DMCABadgeHelper.min.js"></script>
-            <a
-              title="DMCA.com Protection Status"
-              className="dmca-badge text-muted-foreground hover:text-foreground flex transition-colors"
-              href={
-                process.env.NEXT_PUBLIC_DMCA_URL ||
-                "https://www.dmca.com/ProtectionPro.aspx"
-              }
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Icons.dmca className="h-5 w-auto" />
-              <span className="sr-only">DMCA.com Protection Status</span>
-            </a>
+            {process.env.NODE_ENV === "production" && (
+              <>
+                <script src="https://images.dmca.com/Badges/DMCABadgeHelper.min.js"></script>
+                <a
+                  title="DMCA.com Protection Status"
+                  className="dmca-badge text-muted-foreground hover:text-foreground flex transition-colors"
+                  href={
+                    process.env.NEXT_PUBLIC_DMCA_URL ||
+                    "https://www.dmca.com/ProtectionPro.aspx"
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Icons.dmca className="h-5 w-auto" />
+                  <span className="sr-only">DMCA.com Protection Status</span>
+                </a>
+              </>
+            )}
           </div>
         </div>
       </div>

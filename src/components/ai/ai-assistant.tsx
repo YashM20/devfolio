@@ -23,6 +23,9 @@ import { USER } from "@/data/user";
 import { cn } from "@/lib/utils";
 import posthog from "posthog-js";
 
+const MAX_INPUT_LENGTH = 1024;
+const WARNING_THRESHOLD = MAX_INPUT_LENGTH - 128;
+
 export function AiAssistant() {
   const [isOpen, setIsOpen] = useQueryState(
     "ai",
@@ -31,15 +34,6 @@ export function AiAssistant() {
   const [isTyping, setIsTyping] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  console.log(
-    "🔍 AiAssistant render - isOpen:",
-    isOpen,
-    "isTyping:",
-    isTyping,
-    "error:",
-    error
-  );
 
   const [input, setInput] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -88,8 +82,6 @@ export function AiAssistant() {
       console.error("Chat error:", error);
     },
   });
-
-  console.log("🔍 useChat state - messages:", messages.length, "input:", input);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -145,6 +137,14 @@ export function AiAssistant() {
 
     if (!input.trim()) {
       console.log("⚠️ Form submit blocked - empty input");
+      return;
+    }
+
+    if (input.trim().length > MAX_INPUT_LENGTH) {
+      console.log("⚠️ Form submit blocked - input too long");
+      setError(
+        `Message is too long. Please keep it under ${MAX_INPUT_LENGTH} characters.`
+      );
       return;
     }
 
@@ -211,9 +211,9 @@ export function AiAssistant() {
     "What's Yash's experience?",
     "Tell me about his projects",
     "Show me his tech stack",
-    "How to implement React hooks?",
-    "What technologies does he use?",
-    "Show me TypeScript examples",
+    "Reveal project case studies",
+    "What are his key achievements?",
+    "Dive into his developer journey",
   ];
 
   return (
@@ -340,7 +340,7 @@ export function AiAssistant() {
               {/* Messages */}
               <div className="relative flex h-full max-h-full w-full overflow-hidden">
                 <ScrollArea className="w-full">
-                  <div className="space-y-4 overflow-x-auto p-4">
+                  <div className="w-full space-y-4 overflow-x-auto p-4">
                     {messages.length === 0 && (
                       <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -405,7 +405,7 @@ export function AiAssistant() {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         transition={{ delay: index * 0.1 }}
                         className={cn(
-                          "flex gap-3",
+                          "flex w-full gap-3",
                           message.role === "user"
                             ? "justify-end"
                             : "justify-start"
@@ -434,7 +434,8 @@ export function AiAssistant() {
                                 if (typeof part === "object" && part.type) {
                                   return (
                                     !part.type.includes("step") &&
-                                    part.type !== "tool-result"
+                                    part.type !== "tool-result" &&
+                                    !part.type.startsWith("tool-")
                                   );
                                 }
                                 return true;
@@ -607,8 +608,8 @@ export function AiAssistant() {
                 </ScrollArea>
 
                 {/* Progressive Blur Overlays */}
-                <div className="from-background/40 via-background/20 pointer-events-none absolute left-0 right-0 top-0 z-10 h-2 bg-gradient-to-bl to-transparent backdrop-blur-sm dark:from-black/40 dark:via-black/20 dark:to-transparent" />
-                <div className="from-background/40 via-background/20 pointer-events-none absolute bottom-0 left-0 right-0 z-10 h-2 bg-gradient-to-tr to-transparent backdrop-blur-sm dark:from-black/40 dark:via-black/20 dark:to-transparent" />
+                <div className="from-background/40 via-background/20 pointer-events-none absolute -top-1 left-0 right-0 z-10 h-2 bg-gradient-to-bl to-transparent backdrop-blur-sm dark:from-black/40 dark:via-black/20 dark:to-transparent" />
+                <div className="from-background/40 via-background/20 pointer-events-none absolute -bottom-1 left-0 right-0 z-10 h-2 bg-gradient-to-tr to-transparent backdrop-blur-sm dark:from-black/40 dark:via-black/20 dark:to-transparent" />
               </div>
 
               {/* Input */}
@@ -621,23 +622,47 @@ export function AiAssistant() {
                     <Textarea
                       ref={textareaRef}
                       value={input}
-                      onChange={(e) => setInput(e.target.value)}
+                      onChange={(e) => {
+                        const newValue = e.target.value;
+                        if (newValue.length <= MAX_INPUT_LENGTH) {
+                          setInput(newValue);
+                          if (error && error.includes("too long")) {
+                            setError(null);
+                          }
+                        }
+                      }}
                       onKeyDown={handleKeyDown}
-                      placeholder="Ask me anything... (Shift+Enter for new line)"
+                      placeholder="Ask me anything... "
                       className={cn(
                         "bg-background/50 border-border text-foreground placeholder:text-muted-foreground h-10 max-h-32 resize-none dark:border-white/10 dark:bg-white/5 dark:placeholder:text-white/50",
                         "focus:border-primary/20 focus:ring-0 dark:focus:border-white/20",
-                        "rounded-2xl px-4 py-3 transition-all duration-200"
+                        "rounded-2xl px-4 py-3 transition-all duration-200",
+                        input.length >= WARNING_THRESHOLD &&
+                          "border-yellow-400/50 dark:border-yellow-400/50",
+                        input.length >= MAX_INPUT_LENGTH &&
+                          "border-red-400/50 dark:border-red-400/50"
                       )}
                       disabled={isTyping}
                       autoComplete="off"
                       spellCheck="false"
                       data-testid="chat-input"
                       rows={1}
+                      maxLength={MAX_INPUT_LENGTH}
                     />
-                    {input.trim() && (
-                      <div className="text-muted-foreground absolute bottom-2 right-2 text-xs">
-                        {input.length} chars
+                    {input.trim() && input.length > WARNING_THRESHOLD / 1.5 && (
+                      <div
+                        className={cn(
+                          "absolute bottom-2 right-2 text-xs",
+                          input.length >= WARNING_THRESHOLD &&
+                            input.length < MAX_INPUT_LENGTH &&
+                            "text-yellow-500 dark:text-yellow-400",
+                          input.length >= MAX_INPUT_LENGTH &&
+                            "text-red-500 dark:text-red-400",
+                          input.length < WARNING_THRESHOLD &&
+                            "text-muted-foreground"
+                        )}
+                      >
+                        {input.length}/{MAX_INPUT_LENGTH}
                       </div>
                     )}
                   </div>
