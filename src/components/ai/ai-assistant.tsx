@@ -21,7 +21,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { RealismButton, Markdown } from "@/components/common";
 import { USER } from "@/data/user";
 import { cn } from "@/lib/utils";
-import posthog from "posthog-js";
+import { posthogEvents, generateAIChatSessionId } from "@/lib/posthog-events";
 
 const MAX_INPUT_LENGTH = 1024;
 const WARNING_THRESHOLD = MAX_INPUT_LENGTH - 128;
@@ -34,6 +34,8 @@ export function AiAssistant() {
   const [isTyping, setIsTyping] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [sessionId] = useState(() => generateAIChatSessionId());
+  const messageStartTimeRef = useRef<number | null>(null);
 
   const [input, setInput] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -43,6 +45,13 @@ export function AiAssistant() {
       console.log("✅ Chat onFinish called");
       setIsTyping(false);
       setError(null);
+
+      // Track response received
+      if (messageStartTimeRef.current) {
+        const responseTime = Date.now() - messageStartTimeRef.current;
+        posthogEvents.ai.responseReceived(responseTime, undefined, sessionId);
+        messageStartTimeRef.current = null;
+      }
     },
     onError: (error: any) => {
       console.log("❌ Chat onError called:", error);
@@ -80,6 +89,19 @@ export function AiAssistant() {
 
       setError(errorMessage);
       console.error("Chat error:", error);
+
+      // Track error
+      let errorType = "unknown_error";
+      if (errorMessage.includes("Daily message limit")) {
+        errorType = "daily_limit_reached";
+      } else if (errorMessage.includes("Daily global message limit")) {
+        errorType = "global_limit_reached";
+      } else if (errorMessage.includes("Rate limit")) {
+        errorType = "rate_limit";
+      }
+
+      posthogEvents.ai.responseError(errorType, sessionId);
+      messageStartTimeRef.current = null;
     },
   });
 
@@ -131,6 +153,18 @@ export function AiAssistant() {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [isOpen]);
 
+  // Track chat open/close events
+  useEffect(() => {
+    if (isOpen) {
+      posthogEvents.ai.chatOpened({ session_id: sessionId });
+    } else if (!isOpen && messages.length > 0) {
+      posthogEvents.ai.chatClosed({
+        conversation_length: messages.length,
+        session_id: sessionId,
+      });
+    }
+  }, [isOpen, sessionId, messages.length]);
+
   const handleFormSubmit = (e: React.FormEvent) => {
     console.log("🚀 Form submit triggered - input:", input);
     e.preventDefault();
@@ -156,12 +190,10 @@ export function AiAssistant() {
     console.log("✅ Form submit proceeding - calling sendMessage");
     setError(null); // Clear any previous errors
     setIsTyping(true);
+    messageStartTimeRef.current = Date.now();
 
-    // Log analytics
-    posthog.capture("chat_message_sent", {
-      is_open: isOpen,
-      message_length: input.length,
-    });
+    // Track message sent
+    posthogEvents.ai.messageSent(input.length, messages.length, sessionId);
 
     sendMessage({
       role: "user",
@@ -181,6 +213,10 @@ export function AiAssistant() {
 
   const handleClearChat = () => {
     console.log("🗑️ Clear chat triggered");
+
+    // Track chat cleared
+    posthogEvents.ai.chatCleared(messages.length, sessionId);
+
     setMessages([]);
     setError(null);
     setIsTyping(false);
@@ -194,12 +230,10 @@ export function AiAssistant() {
 
     setError(null);
     setIsTyping(true);
+    messageStartTimeRef.current = Date.now();
 
-    // Log analytics
-    posthog.capture("chat_suggestion_clicked", {
-      suggestion,
-      is_open: isOpen,
-    });
+    // Track suggestion clicked
+    posthogEvents.ai.suggestionClicked(suggestion, sessionId);
 
     sendMessage({
       role: "user",
