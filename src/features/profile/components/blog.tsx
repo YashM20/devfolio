@@ -11,6 +11,10 @@ import { Panel, PanelHeader, PanelTitle } from "./panel";
 export function Blog() {
   const allPosts = getAllPosts();
 
+  if (allPosts.length === 0) {
+    return <></>;
+  }
+
   return (
     <Panel id="blog">
       <PanelHeader>
