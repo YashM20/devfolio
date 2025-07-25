@@ -20,8 +20,8 @@ export default function SpeechTestPage() {
         <ol className="list-inside list-decimal space-y-1">
           <li>Ensure GEMINI_API_KEY is set in your environment variables</li>
           <li>Grant microphone permissions when prompted</li>
-          <li>Click "Connect" to establish the AI session</li>
-          <li>Click "Start Listening" and speak your question</li>
+          <li>Click &quot;Connect&quot; to establish the AI session</li>
+          <li>Click &quot;Start Listening&quot; and speak your question</li>
           <li>The AI will respond with voice synthesis</li>
         </ol>
       </div>

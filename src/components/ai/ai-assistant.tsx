@@ -388,7 +388,7 @@ export function AiAssistant() {
                         </div>
 
                         <h3 className="text-foreground mb-2 text-lg font-semibold">
-                          Hi! I'm {USER.firstName}'s AI assistant
+                          Hi! I&apos;m {USER.firstName}&apos;s AI assistant
                         </h3>
                         <p className="text-muted-foreground mb-6 text-sm">
                           Ask me anything about his experience, projects, or

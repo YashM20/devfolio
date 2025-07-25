@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { showCookiePreferences } from "@/components/cookie-consent";
 
 import { Icons } from "./icons";
+import Script from "next/script";
 
 export function SiteFooter() {
   return (
@@ -80,7 +81,10 @@ export function SiteFooter() {
             <Separator />
             {process.env.NODE_ENV === "production" && (
               <>
-                <script src="https://images.dmca.com/Badges/DMCABadgeHelper.min.js"></script>
+                <Script
+                  defer
+                  src="https://images.dmca.com/Badges/DMCABadgeHelper.min.js"
+                ></Script>
                 <a
                   title="DMCA.com Protection Status"
                   className="dmca-badge text-muted-foreground hover:text-foreground flex transition-colors"
