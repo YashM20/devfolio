@@ -93,12 +93,41 @@ async function captureScreenshot({
   const { width, height } = SIZE[size];
   await page.setViewport({ width, height });
 
+  // Set localStorage to simulate cookie consent before loading the page
+  await page.evaluateOnNewDocument(() => {
+    localStorage.setItem(
+      "cookie-consent-preferences",
+      JSON.stringify({
+        necessary: true,
+        analytics: true,
+        marketing: true,
+      })
+    );
+    localStorage.setItem("cookie-banner-shown", "true");
+  });
+
   await page.goto(url, { waitUntil: "networkidle2" });
+
+  // Additional safety: hide any cookie banners that might still appear
+  await page.addStyleTag({
+    content: `
+      /* Hide cookie consent banners */
+      [class*="cookie"], [id*="cookie"], 
+      [class*="consent"], [id*="consent"],
+      .fixed.bottom-4.left-4.right-4.z-50,
+      .fixed.bottom-4.z-50 {
+        display: none !important;
+      }
+    `,
+  });
 
   for (const theme of themes) {
     await page.emulateMediaFeatures([
       { name: "prefers-color-scheme", value: theme },
     ]);
+
+    // Wait a bit for any animations to settle
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
     const filePath = path.join(
       outputDir,

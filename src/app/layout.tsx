@@ -71,13 +71,13 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    creator: "@iamncdai", // Twitter username
+    creator: "@yash_mhj", // Twitter username
     images: [SITE_INFO.ogImage],
   },
   icons: {
     icon: [
       {
-        url: "https://ui-avatars.com/api/?name=YM&size=32&background=111111&color=fff&bold=true&format=svg",
+        url: "https://ui-avatars.com/api/?name=YM&size=32&background=111111&color=fff&bold=true&format=png",
         type: "image/png",
         sizes: "any",
       },

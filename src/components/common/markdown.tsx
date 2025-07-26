@@ -42,12 +42,15 @@ const components: Partial<Components> = {
         className="text-blue-500 hover:underline"
         target="_blank"
         rel="noreferrer"
-        href={props.href || "#"}
         {...props}
+        href={props.href || "#"}
       >
         {children}
       </Link>
     );
+  },
+  img: ({ node, children, ...props }) => {
+    return <img data-mark {...props} />;
   },
   h1: ({ node, children, ...props }) => {
     return (

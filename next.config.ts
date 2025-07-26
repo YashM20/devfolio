@@ -17,6 +17,16 @@ const nextConfig: NextConfig = {
         hostname: "assets.chanhdai.com",
         port: "",
       },
+      {
+        protocol: "https",
+        hostname: "yash.reactopia.me",
+        port: "",
+      },
+      {
+        protocol: "https",
+        hostname: "ui-avatars.com",
+        port: "",
+      },
     ],
   },
   transpilePackages: ["next-mdx-remote"],
