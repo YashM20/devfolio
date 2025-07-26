@@ -9,25 +9,25 @@ import { Blob as GenAIBlob } from "@google/genai";
  * Encodes a byte array into a Base64 string.
  */
 export function encode(bytes: Uint8Array): string {
-  let binary = "";
-  const len = bytes.byteLength;
-  for (let i = 0; i < len; i++) {
-    binary += String.fromCharCode(bytes[i]);
+  // For Node.js environments or when Buffer is available
+  if (typeof Buffer !== "undefined") {
+    return Buffer.from(bytes).toString("base64");
   }
-  return btoa(binary);
+  // For browser environments
+  return btoa(String.fromCharCode.apply(null, Array.from(bytes)));
 }
 
 /**
  * Decodes a Base64 string into a byte array.
  */
 export function decode(base64: string): Uint8Array {
-  const binaryString = atob(base64);
-  const len = binaryString.length;
-  const bytes = new Uint8Array(len);
-  for (let i = 0; i < len; i++) {
-    bytes[i] = binaryString.charCodeAt(i);
+  // For Node.js environments or when Buffer is available
+  if (typeof Buffer !== "undefined") {
+    return new Uint8Array(Buffer.from(base64, "base64"));
   }
-  return bytes;
+  // For browser environments
+  const binaryString = atob(base64);
+  return Uint8Array.from(binaryString, (char) => char.charCodeAt(0));
 }
 
 /**
@@ -39,7 +39,9 @@ export function createBlob(data: Float32Array): GenAIBlob {
   const int16 = new Int16Array(l);
   for (let i = 0; i < l; i++) {
     // convert float32 -1 to 1 to int16 -32768 to 32767
-    int16[i] = data[i] * 32768;
+    // Clamp the value to prevent overflow
+    const clamped = Math.max(-1, Math.min(1, data[i]));
+    int16[i] = Math.round(clamped * 32767);
   }
 
   return {
@@ -98,7 +100,7 @@ export function initializeAudioContexts(): {
 } {
   const AudioContextClass =
     window.AudioContext || (window as any).webkitAudioContext;
-  
+
   const inputContext = new AudioContextClass({ sampleRate: 16000 });
   const outputContext = new AudioContextClass({ sampleRate: 24000 });
 
@@ -113,4 +115,4 @@ export function initializeAudioContexts(): {
     inputNode,
     outputNode,
   };
-} 
+}
