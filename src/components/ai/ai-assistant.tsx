@@ -124,17 +124,6 @@ export function AiAssistant() {
     }
   }, [input]);
 
-  // Auto-resize textarea
-  useEffect(() => {
-    const textarea = textareaRef.current;
-    if (textarea) {
-      textarea.style.height = "44px"; // Reset to min height
-      const scrollHeight = textarea.scrollHeight;
-      const maxHeight = 128; // max-h-32 = 128px
-      textarea.style.height = Math.min(scrollHeight, maxHeight) + "px";
-    }
-  }, [input]);
-
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {

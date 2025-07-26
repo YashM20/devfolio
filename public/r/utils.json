@@ -11,7 +11,7 @@
   "files": [
     {
       "path": "src/lib/utils.ts",
-      "content": "import { clsx, type ClassValue } from \"clsx\";\nimport { twMerge } from \"tailwind-merge\";\n\nexport function cn(...inputs: ClassValue[]) {\n  return twMerge(clsx(inputs));\n}\n",
+      "content": "import { clsx, type ClassValue } from \"clsx\";\nimport { twMerge } from \"tailwind-merge\";\n\nexport function cn(...inputs: ClassValue[]) {\n  return twMerge(clsx(inputs));\n}\n\nexport function validateImageUrl(url: string | undefined): string {\n  if (!url) return \"\";\n\n  if (process.env.NODE_ENV === \"development\") {\n    return url.replace(\"https://yash.reactopia.me\", \"http://localhost:3000\");\n  }\n\n  return url;\n}\n\nexport function validateHref(href: string | undefined): string {\n  if (!href) return \"#\";\n\n  if (process.env.NODE_ENV === \"development\") {\n    return href.replace(\"https://yash.reactopia.me\", \"http://localhost:3000\");\n  }\n\n  return href;\n}\n",
       "type": "registry:lib"
     }
   ]

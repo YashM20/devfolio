@@ -9,7 +9,7 @@ export default function manifest(): MetadataRoute.Manifest {
     description: SITE_INFO.description,
     icons: [
       {
-        src: "https://ui-avatars.com/api/?name=YM&size=32&background=111111&color=fff&bold=true&format=svg",
+        src: "https://ui-avatars.com/api/?name=YM&size=32&background=111111&color=fff&bold=true&format=png",
         type: "image/png",
         sizes: "16x16 32x32",
         purpose: "any",

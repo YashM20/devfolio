@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-import { cn } from "@/lib/utils";
+import { cn, validateImageUrl } from "@/lib/utils";
 import type { Post } from "@/types/blog";
 
 export function PostItem({
@@ -25,7 +25,7 @@ export function PostItem({
       {post.metadata.image && (
         <div className="[&_img]:aspect-1200/630 relative select-none [&_img]:rounded-xl">
           <Image
-            src={post.metadata.image}
+            src={validateImageUrl(post.metadata.image)}
             alt={post.metadata.title}
             width={1200}
             height={630}

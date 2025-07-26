@@ -160,7 +160,6 @@ export default async function Page({
     </>
   );
 }
-
 function getPostUrl(post: Post) {
   const isComponent = post.metadata.category === "components";
   return isComponent ? `/components/${post.slug}` : `/blog/${post.slug}`;

@@ -201,16 +201,21 @@ export function useGeminiLiveAudio(): UseGeminiLiveAudioReturn {
       sourceNodeRef.current = sourceNode;
       sourceNode.connect(inputNodeRef.current);
 
-      const bufferSize = 256;
+      const bufferSize = 4096;
       const scriptProcessorNode =
         inputAudioContextRef.current.createScriptProcessor(bufferSize, 1, 1);
       scriptProcessorNodeRef.current = scriptProcessorNode;
 
       scriptProcessorNode.onaudioprocess = (audioProcessingEvent) => {
-        if (!sessionRef.current) return;
-        const inputBuffer = audioProcessingEvent.inputBuffer;
-        const pcmData = inputBuffer.getChannelData(0);
-        sessionRef.current.sendRealtimeInput({ media: createBlob(pcmData) });
+        try {
+          if (!sessionRef.current) return;
+          const inputBuffer = audioProcessingEvent.inputBuffer;
+          const pcmData = inputBuffer.getChannelData(0);
+          sessionRef.current.sendRealtimeInput({ media: createBlob(pcmData) });
+        } catch (error) {
+          console.error("Error processing audio:", error);
+          handleError("Failed to process audio input", error);
+        }
       };
 
       sourceNode.connect(scriptProcessorNode);
