@@ -29,6 +29,7 @@ export const MAIN_NAV: NavItem[] = [
   },
 ];
 
+export const GITHUB_URL = "https://github.com/yashm20";
 export const SOURCE_CODE_GITHUB_URL = "https://github.com/ncdai/chanhdai.com";
 
 export const UTM_PARAMS = {

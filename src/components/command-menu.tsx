@@ -128,7 +128,10 @@ export function CommandMenu({ posts }: { posts: Post[] }) {
     document.addEventListener(
       "keydown",
       (e: KeyboardEvent) => {
-        if ((e.key === "k" && (e.metaKey || e.ctrlKey)) || e.key === "/") {
+        if (
+          (e.key === "k" && (e.metaKey || e.ctrlKey)) ||
+          (e.key === "/" && (e.metaKey || e.ctrlKey))
+        ) {
           if (
             (e.target instanceof HTMLElement && e.target.isContentEditable) ||
             e.target instanceof HTMLInputElement ||
@@ -438,7 +441,7 @@ function CommandMenuFooter() {
       <div className="flex h-10" />
 
       <div className="absolute inset-x-0 bottom-0 flex h-10 items-center justify-between gap-2 border-t bg-zinc-100/30 px-4 text-xs font-medium dark:bg-zinc-800/30">
-        <ChanhDaiMark className="text-muted-foreground size-6" aria-hidden />
+        <ChanhDaiMark className="text-muted-foreground h-6 w-8" aria-hidden />
 
         <div className="flex shrink-0 items-center gap-2">
           <span>{ENTER_ACTION_LABELS[selectedCommandKind]}</span>

@@ -2,12 +2,14 @@ import { RssIcon } from "lucide-react";
 
 import { SITE_INFO, SOURCE_CODE_GITHUB_URL } from "@/config/site";
 import { cn } from "@/lib/utils";
+import { showCookiePreferences } from "@/components/cookie-consent";
 
 import { Icons } from "./icons";
+import Script from "next/script";
 
 export function SiteFooter() {
   return (
-    <footer className="max-w-screen overflow-x-hidden px-2">
+    <footer className="max-w-screen overflow-x-hidden px-2 pb-20">
       <div className="screen-line-before border-edge mx-auto border-x pt-4 md:max-w-3xl">
         <p className="text-muted-foreground mb-1 text-balance text-center font-mono text-sm">
           Inspired by tailwindcss.com && ui.shadcn.com &&{" "}
@@ -58,9 +60,15 @@ export function SiteFooter() {
             >
               llms.txt
             </a>
-
             <Separator />
-
+            <button
+              className="text-muted-foreground hover:text-foreground flex font-mono text-xs font-medium transition-colors"
+              onClick={showCookiePreferences}
+              type="button"
+            >
+              Cookie Preferences
+            </button>
+            <Separator />
             <a
               className="text-muted-foreground hover:text-foreground flex items-center transition-colors"
               href={`${SITE_INFO.url}/rss`}
@@ -70,21 +78,28 @@ export function SiteFooter() {
               <RssIcon className="size-4" />
               <span className="sr-only">RSS</span>
             </a>
-
             <Separator />
-
-            <a
-              className="text-muted-foreground hover:text-foreground flex transition-colors"
-              href={
-                process.env.NEXT_PUBLIC_DMCA_URL ||
-                "https://www.dmca.com/ProtectionPro.aspx"
-              }
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Icons.dmca className="h-5 w-auto" />
-              <span className="sr-only">DMCA.com Protection Status</span>
-            </a>
+            {process.env.NODE_ENV === "production" && (
+              <>
+                <Script
+                  defer
+                  src="https://images.dmca.com/Badges/DMCABadgeHelper.min.js"
+                ></Script>
+                <a
+                  title="DMCA.com Protection Status"
+                  className="dmca-badge text-muted-foreground hover:text-foreground flex transition-colors"
+                  href={
+                    process.env.NEXT_PUBLIC_DMCA_URL ||
+                    "https://www.dmca.com/ProtectionPro.aspx"
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Icons.dmca className="h-5 w-auto" />
+                  <span className="sr-only">DMCA.com Protection Status</span>
+                </a>
+              </>
+            )}
           </div>
         </div>
       </div>

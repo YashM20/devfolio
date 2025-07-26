@@ -2,7 +2,8 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { useChat } from "ai/react";
+import { useChat } from "@ai-sdk/react";
+import { useQueryState, parseAsBoolean } from "nuqs";
 import {
   Send,
   MessageCircle,
@@ -14,54 +15,45 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { RealismButton } from "@/components/common";
+import { RealismButton, Markdown } from "@/components/common";
 import { USER } from "@/data/user";
 import { cn } from "@/lib/utils";
-import posthog from "posthog-js";
+import { posthogEvents, generateAIChatSessionId } from "@/lib/posthog-events";
+
+const MAX_INPUT_LENGTH = 1024;
+const WARNING_THRESHOLD = MAX_INPUT_LENGTH - 128;
 
 export function AiAssistant() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useQueryState(
+    "ai",
+    parseAsBoolean.withDefault(false)
+  );
   const [isTyping, setIsTyping] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [sessionId] = useState(() => generateAIChatSessionId());
+  const messageStartTimeRef = useRef<number | null>(null);
 
-  console.log(
-    "🔍 AiAssistant render - isOpen:",
-    isOpen,
-    "isTyping:",
-    isTyping,
-    "error:",
-    error
-  );
+  const [input, setInput] = useState("");
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const {
-    messages,
-    input,
-    handleInputChange,
-    handleSubmit,
-    isLoading,
-    setMessages,
-  } = useChat({
-    api: "/api/chat",
+  const { messages, sendMessage, setMessages } = useChat({
     onFinish: () => {
       console.log("✅ Chat onFinish called");
       setIsTyping(false);
       setError(null);
+
+      // Track response received
+      if (messageStartTimeRef.current) {
+        const responseTime = Date.now() - messageStartTimeRef.current;
+        posthogEvents.ai.responseReceived(responseTime, undefined, sessionId);
+        messageStartTimeRef.current = null;
+      }
     },
-    onResponse: () => {
-      console.log("📨 Chat onResponse called");
-      posthog.capture("chat_on_response", {
-        is_open: isOpen,
-        is_typing: isTyping,
-        error: error,
-      });
-      setIsTyping(true);
-      setError(null);
-    },
-    onError: async (error) => {
+    onError: (error: any) => {
       console.log("❌ Chat onError called:", error);
       setIsTyping(false);
 
@@ -97,17 +89,21 @@ export function AiAssistant() {
 
       setError(errorMessage);
       console.error("Chat error:", error);
+
+      // Track error
+      let errorType = "unknown_error";
+      if (errorMessage.includes("Daily message limit")) {
+        errorType = "daily_limit_reached";
+      } else if (errorMessage.includes("Daily global message limit")) {
+        errorType = "global_limit_reached";
+      } else if (errorMessage.includes("Rate limit")) {
+        errorType = "rate_limit";
+      }
+
+      posthogEvents.ai.responseError(errorType, sessionId);
+      messageStartTimeRef.current = null;
     },
   });
-
-  console.log(
-    "🔍 useChat state - messages:",
-    messages.length,
-    "input:",
-    input,
-    "isLoading:",
-    isLoading
-  );
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -117,11 +113,33 @@ export function AiAssistant() {
     scrollToBottom();
   }, [messages]);
 
+  // Auto-resize textarea
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = "44px"; // Reset to min height
+      const scrollHeight = textarea.scrollHeight;
+      const maxHeight = 128; // max-h-32 = 128px
+      textarea.style.height = Math.min(scrollHeight, maxHeight) + "px";
+    }
+  }, [input]);
+
+  // Auto-resize textarea
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = "44px"; // Reset to min height
+      const scrollHeight = textarea.scrollHeight;
+      const maxHeight = 128; // max-h-32 = 128px
+      textarea.style.height = Math.min(scrollHeight, maxHeight) + "px";
+    }
+  }, [input]);
+
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Open chat with Ctrl/Cmd + /
-      if ((e.ctrlKey || e.metaKey) && e.key === "/" && !isOpen) {
+      // Open chat with Ctrl/Cmd + I
+      if ((e.ctrlKey || e.metaKey) && e.key === "i" && !isOpen) {
         e.preventDefault();
         setIsOpen(true);
       }
@@ -135,13 +153,20 @@ export function AiAssistant() {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [isOpen]);
 
+  // Track chat open/close events
+  useEffect(() => {
+    if (isOpen) {
+      posthogEvents.ai.chatOpened({ session_id: sessionId });
+    } else if (!isOpen && messages.length > 0) {
+      posthogEvents.ai.chatClosed({
+        conversation_length: messages.length,
+        session_id: sessionId,
+      });
+    }
+  }, [isOpen, sessionId, messages.length]);
+
   const handleFormSubmit = (e: React.FormEvent) => {
-    console.log(
-      "🚀 Form submit triggered - input:",
-      input,
-      "isLoading:",
-      isLoading
-    );
+    console.log("🚀 Form submit triggered - input:", input);
     e.preventDefault();
 
     if (!input.trim()) {
@@ -149,42 +174,80 @@ export function AiAssistant() {
       return;
     }
 
-    if (isLoading) {
-      console.log("⚠️ Form submit blocked - already loading");
+    if (input.trim().length > MAX_INPUT_LENGTH) {
+      console.log("⚠️ Form submit blocked - input too long");
+      setError(
+        `Message is too long. Please keep it under ${MAX_INPUT_LENGTH} characters.`
+      );
       return;
     }
 
-    console.log("✅ Form submit proceeding - calling handleSubmit");
+    if (isTyping) {
+      console.log("⚠️ Form submit blocked - already typing");
+      return;
+    }
+
+    console.log("✅ Form submit proceeding - calling sendMessage");
     setError(null); // Clear any previous errors
     setIsTyping(true);
-    handleSubmit(e);
+    messageStartTimeRef.current = Date.now();
+
+    // Track message sent
+    posthogEvents.ai.messageSent(input.length, messages.length, sessionId);
+
+    sendMessage({
+      role: "user",
+      parts: [{ type: "text", text: input }],
+    });
+    setInput("");
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    // Submit on Enter (without Shift)
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleFormSubmit(e as any);
+    }
+    // Allow Shift+Enter for new lines (default behavior)
   };
 
   const handleClearChat = () => {
     console.log("🗑️ Clear chat triggered");
+
+    // Track chat cleared
+    posthogEvents.ai.chatCleared(messages.length, sessionId);
+
     setMessages([]);
     setError(null);
     setIsTyping(false);
   };
 
   const handleSuggestionClick = (suggestion: string) => {
-    // Simulate typing the suggestion
-    handleInputChange({ target: { value: suggestion } } as any);
-    // Auto-submit the suggestion
-    setTimeout(() => {
-      const syntheticEvent = new Event("submit", {
-        bubbles: true,
-        cancelable: true,
-      });
-      handleFormSubmit(syntheticEvent as any);
-    }, 100);
+    if (isTyping) {
+      console.log("⚠️ Suggestion blocked - already typing");
+      return;
+    }
+
+    setError(null);
+    setIsTyping(true);
+    messageStartTimeRef.current = Date.now();
+
+    // Track suggestion clicked
+    posthogEvents.ai.suggestionClicked(suggestion, sessionId);
+
+    sendMessage({
+      role: "user",
+      parts: [{ type: "text", text: suggestion }],
+    });
   };
 
   const suggestions = [
     "What's Yash's experience?",
     "Tell me about his projects",
-    "What technologies does he use?",
-    "Show me his latest work",
+    "Show me his tech stack",
+    "Reveal project case studies",
+    "What are his key achievements?",
+    "Dive into his developer journey",
   ];
 
   return (
@@ -228,7 +291,7 @@ export function AiAssistant() {
             {/* Chat Container */}
             <motion.div
               className={cn(
-                "z-2 relative flex max-h-[90vh] w-full max-w-md flex-col",
+                "z-2 relative flex h-full max-h-[98vh] w-full max-w-[clamp(300px,800px,95vw)] flex-col",
                 "bg-background/95 border-border border backdrop-blur-md dark:border-white/10 dark:bg-[radial-gradient(circle_200px_at_50%_0%,#1a1a1a,#0a0a0a)]",
                 "overflow-hidden rounded-3xl shadow-2xl"
               )}
@@ -309,9 +372,9 @@ export function AiAssistant() {
               </div>
 
               {/* Messages */}
-              <div className="relative flex max-h-[100%] w-full overflow-hidden">
+              <div className="relative flex h-full max-h-full w-full overflow-hidden">
                 <ScrollArea className="w-full">
-                  <div className="space-y-4 p-4">
+                  <div className="w-full space-y-4 overflow-x-auto p-4">
                     {messages.length === 0 && (
                       <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -325,7 +388,7 @@ export function AiAssistant() {
                         </div>
 
                         <h3 className="text-foreground mb-2 text-lg font-semibold">
-                          Hi! I'm {USER.firstName}'s AI assistant
+                          Hi! I&apos;m {USER.firstName}&apos;s AI assistant
                         </h3>
                         <p className="text-muted-foreground mb-6 text-sm">
                           Ask me anything about his experience, projects, or
@@ -354,24 +417,29 @@ export function AiAssistant() {
                           </div>
                         </div>
 
-                        <p className="text-muted-foreground text-xs">
-                          💡 Tip: Press{" "}
-                          <kbd className="bg-muted border-border rounded border px-1.5 py-0.5 text-xs">
-                            Ctrl+/
-                          </kbd>{" "}
-                          to quickly open this chat
-                        </p>
+                        <div className="text-muted-foreground space-y-2 text-xs">
+                          <p>💡 Tips:</p>
+                          <div className="space-y-1 text-center">
+                            <p>
+                              • Press{" "}
+                              <kbd className="bg-muted border-border rounded border px-1.5 py-0.5 text-xs">
+                                Ctrl+I
+                              </kbd>{" "}
+                              to quickly open this chat
+                            </p>
+                          </div>
+                        </div>
                       </motion.div>
                     )}
 
-                    {messages.map((message, index) => (
+                    {messages.map((message: any, index: number) => (
                       <motion.div
                         key={message.id}
                         initial={{ opacity: 0, y: 20, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         transition={{ delay: index * 0.1 }}
                         className={cn(
-                          "flex gap-3",
+                          "flex w-full gap-3",
                           message.role === "user"
                             ? "justify-end"
                             : "justify-start"
@@ -387,15 +455,129 @@ export function AiAssistant() {
 
                         <div
                           className={cn(
-                            "max-w-[80%] rounded-2xl px-4 py-3 text-sm",
+                            "min-w-0 max-w-[85%] overflow-hidden rounded-2xl px-4 py-3 text-sm",
                             message.role === "user"
                               ? "from-primary/20 to-primary/10 text-foreground border-primary/30 border bg-gradient-to-r dark:border-cyan-400/30 dark:from-cyan-500/20 dark:to-blue-500/20"
                               : "bg-muted/50 text-foreground border-border border dark:border-white/10 dark:bg-gradient-to-r dark:from-white/10 dark:to-white/5"
                           )}
                         >
-                          <p className="whitespace-pre-wrap">
-                            {message.content}
-                          </p>
+                          {message.parts ? (
+                            message.parts
+                              .filter((part: any) => {
+                                // Filter out step-related parts and empty content
+                                if (typeof part === "object" && part.type) {
+                                  return (
+                                    !part.type.includes("step") &&
+                                    part.type !== "tool-result" &&
+                                    !part.type.startsWith("tool-")
+                                  );
+                                }
+                                return true;
+                              })
+                              .map((part: any, i: number) => {
+                                switch (part.type) {
+                                  case "text":
+                                    return message.role === "assistant" ? (
+                                      <div
+                                        key={i}
+                                        className="prose prose-sm dark:prose-invert min-w-0 max-w-none"
+                                        style={{
+                                          wordBreak: "break-word",
+                                          overflowWrap: "anywhere",
+                                        }}
+                                      >
+                                        <Markdown>{part.text}</Markdown>
+                                      </div>
+                                    ) : (
+                                      <p
+                                        key={i}
+                                        className="whitespace-pre-wrap"
+                                      >
+                                        {part.text}
+                                      </p>
+                                    );
+                                  case "tool-call":
+                                    return (
+                                      <div
+                                        key={i}
+                                        className="mb-1 mt-2 text-xs opacity-70"
+                                      >
+                                        <div className="flex items-center gap-1 text-blue-500 dark:text-blue-400">
+                                          <span className="animate-spin">
+                                            ⚙️
+                                          </span>
+                                          <span>Using {part.toolName}...</span>
+                                        </div>
+                                      </div>
+                                    );
+                                  case "tool-result":
+                                    // Don't show tool results in UI, they're used internally
+                                    return null;
+                                  case "tool-searchProjects":
+                                  case "tool-searchBlogPosts":
+                                  case "tool-getTechStack":
+                                  case "tool-getExperience":
+                                  case "tool-generateCodeSnippet":
+                                    return (
+                                      <div
+                                        key={i}
+                                        className="mt-2 text-xs opacity-70"
+                                      >
+                                        <details>
+                                          <summary>🔧 Tool Call</summary>
+                                          <pre className="mt-1 overflow-auto text-xs">
+                                            {JSON.stringify(part, null, 2)}
+                                          </pre>
+                                        </details>
+                                      </div>
+                                    );
+                                  case "step-start":
+                                  case "step-finish":
+                                    // Hide step markers from UI - they're used for internal processing
+                                    return null;
+                                  default:
+                                    // Only show non-step content to users
+                                    if (
+                                      typeof part === "object" &&
+                                      part.type &&
+                                      part.type.includes("step")
+                                    ) {
+                                      return null; // Hide any step-related content
+                                    }
+
+                                    return (
+                                      <div key={i}>
+                                        {typeof part === "string" ? (
+                                          message.role === "assistant" ? (
+                                            <div className="prose prose-sm dark:prose-invert max-w-none overflow-x-auto">
+                                              <Markdown>{part}</Markdown>
+                                            </div>
+                                          ) : (
+                                            <p className="whitespace-pre-wrap">
+                                              {part}
+                                            </p>
+                                          )
+                                        ) : (
+                                          // Only show non-step objects
+                                          !part.type?.includes("step") && (
+                                            <p className="whitespace-pre-wrap">
+                                              {JSON.stringify(part)}
+                                            </p>
+                                          )
+                                        )}
+                                      </div>
+                                    );
+                                }
+                              })
+                          ) : message.role === "assistant" ? (
+                            <div className="prose prose-sm dark:prose-invert max-w-none overflow-x-auto">
+                              <Markdown>{message.content}</Markdown>
+                            </div>
+                          ) : (
+                            <p className="whitespace-pre-wrap">
+                              {message.content}
+                            </p>
+                          )}
                         </div>
 
                         {message.role === "user" && (
@@ -460,30 +642,67 @@ export function AiAssistant() {
                 </ScrollArea>
 
                 {/* Progressive Blur Overlays */}
-                <div className="from-background/40 via-background/20 pointer-events-none absolute left-0 right-0 top-0 z-10 h-2 bg-gradient-to-bl to-transparent backdrop-blur-sm dark:from-black/40 dark:via-black/20 dark:to-transparent" />
-                <div className="from-background/40 via-background/20 pointer-events-none absolute bottom-0 left-0 right-0 z-10 h-2 bg-gradient-to-tr to-transparent backdrop-blur-sm dark:from-black/40 dark:via-black/20 dark:to-transparent" />
+                <div className="from-background/40 via-background/20 pointer-events-none absolute -top-1 left-0 right-0 z-10 h-2 bg-gradient-to-bl to-transparent backdrop-blur-sm dark:from-black/40 dark:via-black/20 dark:to-transparent" />
+                <div className="from-background/40 via-background/20 pointer-events-none absolute -bottom-1 left-0 right-0 z-10 h-2 bg-gradient-to-tr to-transparent backdrop-blur-sm dark:from-black/40 dark:via-black/20 dark:to-transparent" />
               </div>
 
               {/* Input */}
               <div className="border-border bg-muted/50 flex border-t p-4 dark:border-white/5 dark:bg-gradient-to-r dark:from-white/5 dark:to-transparent">
-                <form onSubmit={handleFormSubmit} className="flex w-full gap-2">
-                  <Input
-                    value={input}
-                    onChange={handleInputChange}
-                    placeholder="Ask me anything..."
-                    className={cn(
-                      "bg-background/50 border-border text-foreground placeholder:text-muted-foreground flex-1 dark:border-white/10 dark:bg-white/5 dark:placeholder:text-white/50",
-                      "focus:border-primary/20 focus:ring-0 dark:focus:border-white/20",
-                      "rounded-2xl transition-all duration-200"
+                <form
+                  onSubmit={handleFormSubmit}
+                  className="flex w-full items-end gap-2"
+                >
+                  <div className="relative flex-1">
+                    <Textarea
+                      ref={textareaRef}
+                      value={input}
+                      onChange={(e) => {
+                        const newValue = e.target.value;
+                        if (newValue.length <= MAX_INPUT_LENGTH) {
+                          setInput(newValue);
+                          if (error && error.includes("too long")) {
+                            setError(null);
+                          }
+                        }
+                      }}
+                      onKeyDown={handleKeyDown}
+                      placeholder="Ask me anything... "
+                      className={cn(
+                        "bg-background/50 border-border text-foreground placeholder:text-muted-foreground h-10 max-h-32 resize-none dark:border-white/10 dark:bg-white/5 dark:placeholder:text-white/50",
+                        "focus:border-primary/20 focus:ring-0 dark:focus:border-white/20",
+                        "rounded-2xl px-4 py-3 transition-all duration-200",
+                        input.length >= WARNING_THRESHOLD &&
+                          "border-yellow-400/50 dark:border-yellow-400/50",
+                        input.length >= MAX_INPUT_LENGTH &&
+                          "border-red-400/50 dark:border-red-400/50"
+                      )}
+                      disabled={isTyping}
+                      autoComplete="off"
+                      spellCheck="false"
+                      data-testid="chat-input"
+                      rows={1}
+                      maxLength={MAX_INPUT_LENGTH}
+                    />
+                    {input.trim() && input.length > WARNING_THRESHOLD / 1.5 && (
+                      <div
+                        className={cn(
+                          "absolute bottom-2 right-2 text-xs",
+                          input.length >= WARNING_THRESHOLD &&
+                            input.length < MAX_INPUT_LENGTH &&
+                            "text-yellow-500 dark:text-yellow-400",
+                          input.length >= MAX_INPUT_LENGTH &&
+                            "text-red-500 dark:text-red-400",
+                          input.length < WARNING_THRESHOLD &&
+                            "text-muted-foreground"
+                        )}
+                      >
+                        {input.length}/{MAX_INPUT_LENGTH}
+                      </div>
                     )}
-                    disabled={isLoading}
-                    autoComplete="off"
-                    spellCheck="false"
-                    data-testid="chat-input"
-                  />
+                  </div>
                   <button
                     type="submit"
-                    disabled={isLoading || !input.trim()}
+                    disabled={isTyping || !input.trim()}
                     className={cn(
                       "relative transform-gpu cursor-pointer rounded-full border-none p-[1.5px] text-[1rem]",
                       "bg-[radial-gradient(circle_40px_at_80%_-10%,#ffffff,#181b1b)] dark:bg-[radial-gradient(circle_40px_at_80%_-10%,#ffffff,#181b1b)]",

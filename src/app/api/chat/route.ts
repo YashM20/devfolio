@@ -1,5 +1,15 @@
 import { google } from "@ai-sdk/google";
-import { streamText, tool } from "ai";
+import {
+  streamText,
+  tool,
+  convertToModelMessages,
+  createUIMessageStream,
+  JsonToSseTransformStream,
+  stepCountIs,
+  UIMessageStreamWriter,
+  smoothStream,
+  generateId,
+} from "ai";
 import { z } from "zod";
 
 import { USER } from "@/data/user";
@@ -7,331 +17,329 @@ import { EXPERIENCES } from "@/features/profile/data/experiences";
 import { PROJECTS } from "@/features/profile/data/projects";
 import { TECH_STACK } from "@/features/profile/data/tech-stack";
 import { getAllPosts } from "@/data/blog";
+import { personalContext } from "@/components/ai/context";
+import { handleChatError } from "@/components/ai/error-handler";
+import { prepareChatRequest } from "@/components/ai/chat-handler";
+
+// Allow streaming responses up to 30 seconds
+export const maxDuration = 30;
 
 // Get all posts for context
 const allPosts = getAllPosts();
 
-// Rate limiting storage (in-memory)
-interface RateLimitData {
-  count: number;
-  date: string;
-}
+export async function POST(req: Request) {
+  try {
+    // Handle all validation, rate limiting, and setup in one place
+    const chatPreparation = await prepareChatRequest(req);
+    if (!chatPreparation.success) {
+      return chatPreparation.response!;
+    }
 
-const userRequests = new Map<string, RateLimitData>();
-const globalRequests = { count: 0, date: new Date().toDateString() };
+    const messages = chatPreparation.messages!;
 
-// Rate limiting constants
-const MAX_USER_REQUESTS_PER_DAY = 100;
-const MAX_GLOBAL_REQUESTS_PER_DAY = 10000;
+    console.log("🚀 Creating UI message stream with Gemini model...");
 
-// Helper functions for rate limiting
-function getClientIP(req: Request): string {
-  // Try to get real IP from various headers
-  const xForwardedFor = req.headers.get("x-forwarded-for");
-  const xRealIP = req.headers.get("x-real-ip");
-  const cfConnectingIP = req.headers.get("cf-connecting-ip");
+    const stream = createUIMessageStream({
+      execute: ({ writer: dataStream }) => {
+        const result = streamText({
+          model: google("gemini-2.5-flash"),
+          system: personalContext,
+          messages: convertToModelMessages(messages),
+          stopWhen: stepCountIs(5),
+          // experimental_transform: smoothStream({ chunking: "line" }),
+          tools: {
+            searchProjects: tool({
+              description:
+                "Search through projects based on technology or keyword",
+              inputSchema: z.object({
+                query: z.string().describe("The search query for projects"),
+              }),
+              execute: async ({ query }) => {
+                const filteredProjects = PROJECTS.filter(
+                  (project) =>
+                    project.title.toLowerCase().includes(query.toLowerCase()) ||
+                    project.description
+                      ?.toLowerCase()
+                      .includes(query.toLowerCase()) ||
+                    project.skills.some((skill) =>
+                      skill.toLowerCase().includes(query.toLowerCase())
+                    )
+                );
+                return {
+                  projects: filteredProjects.map((project) => ({
+                    title: project.title,
+                    period: `${project.period.start} - ${project.period.end || "Present"}`,
+                    skills: project.skills,
+                    description: project.description,
+                  })),
+                };
+              },
+            }),
+            searchBlogPosts: tool({
+              description:
+                "Search through blog posts based on title or content",
+              inputSchema: z.object({
+                query: z.string().describe("The search query for blog posts"),
+              }),
+              execute: async ({ query }) => {
+                const filteredPosts = allPosts.filter(
+                  (post) =>
+                    post.metadata.title
+                      .toLowerCase()
+                      .includes(query.toLowerCase()) ||
+                    post.metadata.description
+                      .toLowerCase()
+                      .includes(query.toLowerCase()) ||
+                    post.content.toLowerCase().includes(query.toLowerCase())
+                );
+                return {
+                  posts: filteredPosts.map((post) => ({
+                    title: post.metadata.title,
+                    description: post.metadata.description,
+                    createdAt: post.metadata.createdAt,
+                    slug: post.slug,
+                  })),
+                };
+              },
+            }),
+            getTechStack: tool({
+              description:
+                "Get information about technologies in the tech stack",
+              inputSchema: z.object({
+                category: z
+                  .string()
+                  .optional()
+                  .describe(
+                    "Filter by category (e.g., Framework, Library, etc.)"
+                  ),
+              }),
+              execute: async ({ category }) => {
+                const filteredTech = category
+                  ? TECH_STACK.filter((tech) =>
+                      tech.categories.includes(category)
+                    )
+                  : TECH_STACK;
 
-  if (xForwardedFor) {
-    return xForwardedFor.split(",")[0].trim();
-  }
-  if (xRealIP) {
-    return xRealIP.trim();
-  }
-  if (cfConnectingIP) {
-    return cfConnectingIP.trim();
-  }
+                return {
+                  technologies: filteredTech.map((tech) => ({
+                    title: tech.title,
+                    href: tech.href,
+                    categories: tech.categories,
+                  })),
+                };
+              },
+            }),
+            getExperience: tool({
+              description: "Get detailed information about work experience",
+              inputSchema: z.object({
+                company: z
+                  .string()
+                  .optional()
+                  .describe("Filter by company name"),
+              }),
+              execute: async ({ company }) => {
+                const filteredExp = company
+                  ? EXPERIENCES.filter((exp) =>
+                      exp.companyName
+                        .toLowerCase()
+                        .includes(company.toLowerCase())
+                    )
+                  : EXPERIENCES;
 
-  // Fallback to a default value
-  return "unknown-ip";
-}
+                return {
+                  experiences: filteredExp.map((exp) => ({
+                    company: exp.companyName,
+                    positions: exp.positions.map((pos) => ({
+                      title: pos.title,
+                      period: `${pos.employmentPeriod.start} - ${pos.employmentPeriod.end || "Present"}`,
+                      description: pos.description,
+                      skills: pos.skills,
+                    })),
+                  })),
+                };
+              },
+            }),
+            generateCodeSnippet: tool({
+              description:
+                "Generate portfolio-related code snippets ONLY for technologies and concepts that exist in the portfolio's tech stack. Do not generate code for unrelated topics.",
+              inputSchema: z.object({
+                topic: z
+                  .string()
+                  .describe(
+                    "MUST be a technology or concept from the portfolio tech stack (React, TypeScript, Next.js, etc.). Will reject topics not related to the portfolio."
+                  ),
+                language: z
+                  .string()
+                  .optional()
+                  .describe(
+                    "Preferred programming language from the portfolio stack"
+                  ),
+                complexity: z
+                  .enum(["beginner", "intermediate", "advanced"])
+                  .optional()
+                  .describe(
+                    "Complexity level of the snippet (default: intermediate)"
+                  ),
+              }),
+              execute: async ({
+                topic,
+                language = "auto",
+                complexity = "intermediate",
+              }) => {
+                // Validate topic is portfolio-related
+                const portfolioTechnologies = TECH_STACK.map((tech) =>
+                  tech.title.toLowerCase()
+                );
+                const portfolioSkills = [
+                  ...USER.flipSentences,
+                  ...PROJECTS.flatMap((p) => p.skills),
+                ].map((s) => s.toLowerCase());
+                const topicLower = topic.toLowerCase();
 
-function isNewDay(date: string): boolean {
-  return date !== new Date().toDateString();
-}
+                // Check if topic is related to portfolio technologies
+                const isPortfolioRelated =
+                  portfolioTechnologies.some(
+                    (tech) =>
+                      topicLower.includes(tech.toLowerCase()) ||
+                      tech.toLowerCase().includes(topicLower)
+                  ) ||
+                  portfolioSkills.some(
+                    (skill) =>
+                      topicLower.includes(skill.toLowerCase()) ||
+                      skill.toLowerCase().includes(topicLower)
+                  ) ||
+                  [
+                    "react",
+                    "javascript",
+                    "typescript",
+                    "nextjs",
+                    "next.js",
+                    "node",
+                    "css",
+                    "html",
+                    "web development",
+                    "frontend",
+                    "backend",
+                    "component",
+                    "hook",
+                    "api",
+                  ].some((keyword) => topicLower.includes(keyword));
 
-function checkAndUpdateRateLimit(clientIP: string): {
-  allowed: boolean;
-  message?: string;
-} {
-  const today = new Date().toDateString();
+                if (!isPortfolioRelated) {
+                  return {
+                    error: `Sorry, I can only provide code snippets for technologies and concepts related to ${USER.firstName}'s portfolio and tech stack. The topic "${topic}" is outside the scope of the portfolio. Please ask about: ${portfolioTechnologies.join(", ")}.`,
+                  };
+                }
 
-  // Reset global counter if new day
-  if (isNewDay(globalRequests.date)) {
-    globalRequests.count = 0;
-    globalRequests.date = today;
-  }
+                // Determine the best language based on the topic and portfolio tech stack
+                const getLanguageForTopic = (
+                  topic: string,
+                  preferredLang?: string
+                ) => {
+                  if (preferredLang && preferredLang !== "auto")
+                    return preferredLang;
 
-  // Check global limit
-  if (globalRequests.count >= MAX_GLOBAL_REQUESTS_PER_DAY) {
-    return {
-      allowed: false,
-      message: "Daily global message limit reached. Please try again tomorrow.",
-    };
-  }
+                  const topicLower = topic.toLowerCase();
 
-  // Get or initialize user data
-  let userData = userRequests.get(clientIP);
-  if (!userData || isNewDay(userData.date)) {
-    userData = { count: 0, date: today };
-    userRequests.set(clientIP, userData);
-  }
+                  // Frontend/React related
+                  if (
+                    topicLower.includes("react") ||
+                    topicLower.includes("jsx") ||
+                    topicLower.includes("component")
+                  )
+                    return "javascript";
+                  if (
+                    topicLower.includes("typescript") ||
+                    topicLower.includes("types")
+                  )
+                    return "typescript";
+                  if (
+                    topicLower.includes("css") ||
+                    topicLower.includes("styling")
+                  )
+                    return "css";
 
-  // Check user limit
-  if (userData.count >= MAX_USER_REQUESTS_PER_DAY) {
-    return {
-      allowed: false,
-      message:
-        "Daily message limit reached (100 messages per day). Please try again tomorrow.",
-    };
-  }
+                  // Backend related
+                  if (
+                    topicLower.includes("node") ||
+                    topicLower.includes("express") ||
+                    topicLower.includes("api")
+                  )
+                    return "javascript";
+                  if (
+                    topicLower.includes("python") ||
+                    topicLower.includes("django") ||
+                    topicLower.includes("flask")
+                  )
+                    return "python";
 
-  // Update counters
-  userData.count++;
-  globalRequests.count++;
+                  // Default to JavaScript for web development topics
+                  return "javascript";
+                };
 
-  return { allowed: true };
-}
+                const selectedLanguage = getLanguageForTopic(topic, language);
 
-// Personal context for the AI assistant
-const personalContext = `
-You are an AI assistant for ${USER.displayName}'s portfolio website. Here's key information about ${USER.firstName}:
+                // Generate snippet guidelines
+                const snippetGuidelines = `
+PORTFOLIO CODE SNIPPET GUIDELINES:
+1. Each snippet should be complete and runnable on its own
+2. Include helpful comments explaining the code
+3. Keep snippets concise (generally under 20 lines)
+4. Use modern best practices relevant to ${USER.firstName}'s tech stack
+5. Handle potential errors gracefully when applicable
+6. Return meaningful output that demonstrates functionality
+7. Focus on practical, real-world examples
+8. Relate to technologies and concepts from the portfolio when possible
+9. For web examples, use modern ES6+ syntax
+10. Include console.log() or appropriate output methods
 
-PERSONAL INFO:
-- Name: ${USER.displayName}
-- Job Title: ${USER.jobTitle}
-- Location: ${USER.address}
-- Bio: ${USER.bio}
-- About: ${USER.about}
-- Website: ${USER.website}
-- Skills: ${USER.flipSentences.join(", ")}
+COMPLEXITY LEVELS:
+- beginner: Basic concepts, simple examples
+- intermediate: Practical examples with some advanced features
+- advanced: Complex patterns, optimizations, architectural concepts
 
-CURRENT POSITIONS:
-${USER.jobs.map((job) => `- ${job.title} at ${job.company} (${job.website})`).join("\n")}
+TOPIC: ${topic}
+LANGUAGE: ${selectedLanguage}
+COMPLEXITY: ${complexity}
 
-EXPERIENCE:
-${EXPERIENCES.map(
-  (exp) => `
-Company: ${exp.companyName}
-Positions: ${exp.positions.map((pos) => `${pos.title} (${pos.employmentPeriod.start} - ${pos.employmentPeriod.end || "Present"})`).join(", ")}
-`
-).join("\n")}
-
-PROJECTS:
-${PROJECTS.map(
-  (project) => `
-- ${project.title} (${project.period.start} - ${project.period.end || "Present"})
-  Skills: ${project.skills.join(", ")}
-  Description: ${project.description}
-`
-).join("\n")}
-
-TECH STACK:
-${TECH_STACK.map((tech) => `- ${tech.title}: ${tech.href}`).join("\n")}
-
-BLOG POSTS:
-${allPosts.map((post) => `- ${post.metadata.title}: ${post.metadata.description}`).join("\n")}
-
-Instructions:
-- Answer questions about ${USER.firstName}'s experience, projects, skills, and background
-- Be helpful and informative
-- Speak in first person when representing ${USER.firstName}
-- If asked about contact information, direct them to use the contact methods on the website
-- If you don't know something specific, be honest about it
-- Keep responses conversational and professional
+Generate a practical code snippet that demonstrates ${topic} using ${selectedLanguage}, suitable for ${complexity} level.
+Include a brief explanation of what the code does and how it relates to modern web development practices.
 `;
 
-export async function POST(req: Request) {
-  console.log("🔍 API Route called - /api/chat");
-
-  try {
-    // Rate limiting check
-    const clientIP = getClientIP(req);
-    console.log("🔒 Rate limiting check for IP:", clientIP);
-
-    const rateLimitResult = checkAndUpdateRateLimit(clientIP);
-    if (!rateLimitResult.allowed) {
-      console.log("❌ Rate limit exceeded for IP:", clientIP);
-      return Response.json({ error: rateLimitResult.message }, { status: 429 });
-    }
-
-    console.log("✅ Rate limit check passed for IP:", clientIP);
-
-    // Check if API key is configured
-    console.log(
-      "🔑 Checking API key - exists:",
-      !!process.env.GOOGLE_GENERATIVE_AI_API_KEY
-    );
-    if (!process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
-      console.log("❌ API key not found");
-      return Response.json(
-        {
-          error:
-            "Google Gemini API key is not configured. Please add GOOGLE_GENERATIVE_AI_API_KEY to your environment variables.",
-        },
-        { status: 500 }
-      );
-    }
-
-    console.log("📥 Parsing request body...");
-    const { messages } = await req.json();
-    console.log("📝 Messages received:", messages?.length || 0, "messages");
-
-    // Validate request
-    if (!messages || !Array.isArray(messages)) {
-      console.log("❌ Invalid request format");
-      return Response.json(
-        { error: "Invalid request format" },
-        { status: 400 }
-      );
-    }
-
-    console.log("🚀 Calling streamText with Gemini model...");
-    const result = await streamText({
-      model: google("gemini-1.5-flash"),
-      system: personalContext,
-      messages,
-      tools: {
-        searchProjects: tool({
-          description: "Search through projects based on technology or keyword",
-          parameters: z.object({
-            query: z.string().describe("The search query for projects"),
-          }),
-          execute: async ({ query }) => {
-            const filteredProjects = PROJECTS.filter(
-              (project) =>
-                project.title.toLowerCase().includes(query.toLowerCase()) ||
-                project.description
-                  ?.toLowerCase()
-                  .includes(query.toLowerCase()) ||
-                project.skills.some((skill) =>
-                  skill.toLowerCase().includes(query.toLowerCase())
-                )
-            );
-            return {
-              projects: filteredProjects.map((project) => ({
-                title: project.title,
-                period: `${project.period.start} - ${project.period.end || "Present"}`,
-                skills: project.skills,
-                description: project.description,
-              })),
-            };
+                return {
+                  snippet: {
+                    topic,
+                    language: selectedLanguage,
+                    complexity,
+                    guidelines: snippetGuidelines,
+                    portfolioContext: `This snippet relates to ${USER.firstName}'s experience with ${TECH_STACK.map((tech) => tech.title).join(", ")} and modern web development practices.`,
+                  },
+                };
+              },
+            }),
           },
-        }),
-        searchBlogPosts: tool({
-          description: "Search through blog posts based on title or content",
-          parameters: z.object({
-            query: z.string().describe("The search query for blog posts"),
-          }),
-          execute: async ({ query }) => {
-            const filteredPosts = allPosts.filter(
-              (post) =>
-                post.metadata.title
-                  .toLowerCase()
-                  .includes(query.toLowerCase()) ||
-                post.metadata.description
-                  .toLowerCase()
-                  .includes(query.toLowerCase()) ||
-                post.content.toLowerCase().includes(query.toLowerCase())
-            );
-            return {
-              posts: filteredPosts.map((post) => ({
-                title: post.metadata.title,
-                description: post.metadata.description,
-                createdAt: post.metadata.createdAt,
-                slug: post.slug,
-              })),
-            };
-          },
-        }),
-        getTechStack: tool({
-          description: "Get information about technologies in the tech stack",
-          parameters: z.object({
-            category: z
-              .string()
-              .optional()
-              .describe("Filter by category (e.g., Framework, Library, etc.)"),
-          }),
-          execute: async ({ category }) => {
-            const filteredTech = category
-              ? TECH_STACK.filter((tech) => tech.categories.includes(category))
-              : TECH_STACK;
+        });
 
-            return {
-              technologies: filteredTech.map((tech) => ({
-                title: tech.title,
-                href: tech.href,
-                categories: tech.categories,
-              })),
-            };
-          },
-        }),
-        getExperience: tool({
-          description: "Get detailed information about work experience",
-          parameters: z.object({
-            company: z.string().optional().describe("Filter by company name"),
-          }),
-          execute: async ({ company }) => {
-            const filteredExp = company
-              ? EXPERIENCES.filter((exp) =>
-                  exp.companyName.toLowerCase().includes(company.toLowerCase())
-                )
-              : EXPERIENCES;
+        result.consumeStream();
 
-            return {
-              experiences: filteredExp.map((exp) => ({
-                company: exp.companyName,
-                positions: exp.positions.map((pos) => ({
-                  title: pos.title,
-                  period: `${pos.employmentPeriod.start} - ${pos.employmentPeriod.end || "Present"}`,
-                  description: pos.description,
-                  skills: pos.skills,
-                })),
-              })),
-            };
-          },
-        }),
+        dataStream.merge(
+          result.toUIMessageStream({
+            sendReasoning: false,
+          })
+        );
       },
-      maxSteps: 3,
+      generateId: () => generateId(),
+      onFinish: async ({ messages }) => {
+        console.log("✅ Chat completed with", messages.length, "messages");
+      },
+      onError: () => {
+        return "Oops, an error occurred!";
+      },
     });
 
-    console.log("✅ streamText completed, returning response...");
-    return result.toDataStreamResponse();
+    console.log("✅ UI message stream created, returning response...");
+    return new Response(stream.pipeThrough(new JsonToSseTransformStream()));
   } catch (error) {
-    console.error("Error in chat API:", error);
-
-    // Provide more specific error messages
-    if (error instanceof Error) {
-      if (error.message.includes("API key")) {
-        return Response.json(
-          {
-            error:
-              "Invalid or missing API key. Please check your Google Gemini API configuration.",
-          },
-          { status: 401 }
-        );
-      }
-      if (error.message.includes("quota") || error.message.includes("limit")) {
-        return Response.json(
-          { error: "API quota exceeded. Please try again later." },
-          { status: 429 }
-        );
-      }
-      if (
-        error.message.includes("network") ||
-        error.message.includes("timeout")
-      ) {
-        return Response.json(
-          {
-            error: "Network error. Please check your connection and try again.",
-          },
-          { status: 503 }
-        );
-      }
-    }
-
-    return Response.json(
-      { error: "An unexpected error occurred. Please try again." },
-      { status: 500 }
-    );
+    return handleChatError(error);
   }
 }

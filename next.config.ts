@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
   /* config options here */
   experimental: {
     reactCompiler: true,
+    viewTransition: true,
   },
   images: {
     remotePatterns: [
@@ -19,7 +20,6 @@ const nextConfig: NextConfig = {
     ],
   },
   transpilePackages: ["next-mdx-remote"],
-  allowedDevOrigins: ["chanhdai-macbook.local"],
   async rewrites() {
     return [
       {
