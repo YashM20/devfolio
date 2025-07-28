@@ -313,7 +313,12 @@ export function AiAssistant() {
                 <div className="flex items-center gap-3">
                   <div className="relative">
                     <Avatar className="border-primary/30 h-10 w-10 border-2 dark:border-cyan-400/30">
-                      <AvatarImage src={USER.avatar} alt={USER.displayName} />
+                      <AvatarImage
+                        src={USER.avatar}
+                        alt={USER.displayName}
+                        width={40}
+                        height={40}
+                      />
                       <AvatarFallback className="from-primary to-primary/80 text-primary-foreground bg-gradient-to-br dark:from-cyan-500 dark:to-blue-500">
                         {USER.displayName
                           .split(" ")

@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import { Suspense } from "react";
 import type { ProfilePage as PageSchema, WithContext } from "schema-dts";
 
 import { USER } from "@/data/user";
@@ -14,16 +15,17 @@ import { Projects } from "@/features/profile/components/projects";
 import { SocialLinks } from "@/features/profile/components/social-links";
 import { TeckStack } from "@/features/profile/components/teck-stack";
 import { cn } from "@/lib/utils";
+import { DynamicDate } from "@/components/dynamic-date";
+
+// Enable PPR for this route
+export const experimental_ppr = true;
 
 export default function Page() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(getPageJsonLd()).replace(/</g, "\\u003c"),
-        }}
-      />
+      <Suspense fallback={null}>
+        <DynamicJsonLd />
+      </Suspense>
 
       <div className="mx-auto md:max-w-3xl">
         <ProfileCover />
@@ -61,12 +63,14 @@ export default function Page() {
   );
 }
 
-function getPageJsonLd(): WithContext<PageSchema> {
-  return {
+async function DynamicJsonLd() {
+  const currentDate = await DynamicDate();
+
+  const jsonLd: WithContext<PageSchema> = {
     "@context": "https://schema.org",
     "@type": "ProfilePage",
     dateCreated: dayjs(USER.dateCreated).toISOString(),
-    dateModified: dayjs().toISOString(),
+    dateModified: currentDate,
     mainEntity: {
       "@type": "Person",
       name: USER.displayName,
@@ -74,6 +78,15 @@ function getPageJsonLd(): WithContext<PageSchema> {
       image: USER.avatar,
     },
   };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+      }}
+    />
+  );
 }
 
 function Separator({ className }: { className?: string }) {
