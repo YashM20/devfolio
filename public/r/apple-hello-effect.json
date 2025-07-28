@@ -3,13 +3,13 @@
   "name": "apple-hello-effect",
   "type": "registry:component",
   "title": "Apple Hello Effect",
-  "author": "ncdai <dai@chanhdai.com>",
+  "author": "yash_mhj",
   "description": "Create a Xin chào and Hello writing effect inspired by Apple using Motion for React.",
   "dependencies": [
     "motion"
   ],
   "registryDependencies": [
-    "https://chanhdai.com/r/utils.json"
+    "https://yash.reactopia.me/r/utils.json"
   ],
   "files": [
     {
@@ -18,5 +18,5 @@
       "type": "registry:component"
     }
   ],
-  "docs": "https://chanhdai.com/components/writing-effect-inspired-by-apple"
+  "docs": "https://yash.reactopia.me/components/writing-effect-inspired-by-apple"
 }

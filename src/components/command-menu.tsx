@@ -7,6 +7,7 @@ import {
   CircleUserIcon,
   CornerDownLeftIcon,
   DownloadIcon,
+  Home,
   LetterTextIcon,
   MoonStarIcon,
   RssIcon,
@@ -53,9 +54,9 @@ type CommandLinkItem = {
 
 const MENU_LINKS: CommandLinkItem[] = [
   {
-    title: "Daifolio",
+    title: "Devfolio",
     href: "/",
-    icon: ChanhDaiMark,
+    icon: Home,
   },
   {
     title: "Blog",
@@ -69,7 +70,7 @@ const MENU_LINKS: CommandLinkItem[] = [
   },
 ];
 
-const DAIFOLIO_LINKS: CommandLinkItem[] = [
+const DEVFOLIO_LINKS: CommandLinkItem[] = [
   {
     title: "About",
     href: "/#about",
@@ -90,20 +91,15 @@ const DAIFOLIO_LINKS: CommandLinkItem[] = [
     href: "/#projects",
     icon: Icons.project,
   },
-  {
-    title: "Honors & Awards",
-    href: "/#awards",
-    icon: Icons.award,
-  },
+  // {
+  //   title: "Honors & Awards",
+  //   href: "/#awards",
+  //   icon: Icons.award,
+  // },
   {
     title: "Certifications",
     href: "/#certs",
     icon: Icons.certificate,
-  },
-  {
-    title: "Download vCard",
-    href: "/vcard",
-    icon: CircleUserIcon,
   },
 ];
 
@@ -238,8 +234,8 @@ export function CommandMenu({ posts }: { posts: Post[] }) {
           <CommandSeparator />
 
           <CommandLinkGroup
-            heading="Daifolio"
-            links={DAIFOLIO_LINKS}
+            heading="Devfolio"
+            links={DEVFOLIO_LINKS}
             onLinkSelect={handleOpenLink}
           />
 
@@ -254,12 +250,14 @@ export function CommandMenu({ posts }: { posts: Post[] }) {
 
           <CommandSeparator />
 
-          <CommandLinkGroup
-            heading="Components"
-            links={componentLinks}
-            fallbackIcon={Icons.react}
-            onLinkSelect={handleOpenLink}
-          />
+          {componentLinks?.length > 0 && (
+            <CommandLinkGroup
+              heading="Components"
+              links={componentLinks}
+              fallbackIcon={Icons.react}
+              onLinkSelect={handleOpenLink}
+            />
+          )}
 
           <CommandSeparator />
 
@@ -268,48 +266,6 @@ export function CommandMenu({ posts }: { posts: Post[] }) {
             links={SOCIAL_LINK_ITEMS}
             onLinkSelect={handleOpenLink}
           />
-
-          <CommandSeparator />
-
-          <CommandGroup heading="Brand Assets">
-            <CommandItem
-              onSelect={() => {
-                handleCopyText(
-                  getMarkSVG(resolvedTheme === "light" ? "#000" : "#fff"),
-                  "Copied Mark as SVG"
-                );
-              }}
-            >
-              <ChanhDaiMark />
-              Copy Mark as SVG
-            </CommandItem>
-
-            <CommandItem
-              onSelect={() => {
-                handleCopyText(
-                  getWordmarkSVG(resolvedTheme === "light" ? "#000" : "#fff"),
-                  "Copied Logotype as SVG"
-                );
-              }}
-            >
-              <TypeIcon />
-              Copy Logotype as SVG
-            </CommandItem>
-
-            <CommandItem
-              onSelect={() => handleOpenLink("/blog/chanhdai-brand")}
-            >
-              <TriangleDashedIcon />
-              Brand Guidelines
-            </CommandItem>
-
-            <CommandItem asChild>
-              <a href="https://assets.chanhdai.com/chanhdai-brand.zip" download>
-                <DownloadIcon />
-                Download Brand Assets
-              </a>
-            </CommandItem>
-          </CommandGroup>
 
           <CommandSeparator />
 

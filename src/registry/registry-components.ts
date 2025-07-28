@@ -7,7 +7,7 @@ export const components: Registry["items"] = [
     description:
       "A theme switcher component for Next.js apps with next-themes and Tailwind CSS, supporting system, light, and dark modes.",
     title: "Theme Switcher",
-    author: "ncdai <dai@chanhdai.com>",
+    author: "yash_mhj",
     dependencies: ["next-themes", "lucide-react", "motion"],
     registryDependencies: ["<registryBaseUrl>/utils.json"],
     files: [
@@ -16,13 +16,13 @@ export const components: Registry["items"] = [
         type: "registry:component",
       },
     ],
-    docs: "https://chanhdai.com/components/theme-switcher-component",
+    docs: "https://yash.reactopia.me/components/theme-switcher-component",
   },
   {
     name: "flip-sentences",
     type: "registry:component",
     title: "Flip Sentences",
-    author: "ncdai <dai@chanhdai.com>",
+    author: "yash_mhj",
     dependencies: ["motion"],
     registryDependencies: ["<registryBaseUrl>/utils.json"],
     files: [
@@ -38,7 +38,7 @@ export const components: Registry["items"] = [
     description:
       "Create a Xin chào and Hello writing effect inspired by Apple using Motion for React.",
     title: "Apple Hello Effect",
-    author: "ncdai <dai@chanhdai.com>",
+    author: "yash_mhj",
     dependencies: ["motion"],
     registryDependencies: ["<registryBaseUrl>/utils.json"],
     files: [
@@ -47,7 +47,7 @@ export const components: Registry["items"] = [
         type: "registry:component",
       },
     ],
-    docs: "https://chanhdai.com/components/writing-effect-inspired-by-apple",
+    docs: "https://yash.reactopia.me/components/writing-effect-inspired-by-apple",
   },
   {
     name: "wheel-picker",
@@ -55,7 +55,7 @@ export const components: Registry["items"] = [
     description:
       "iOS-like wheel picker for React with smooth inertia scrolling and infinite loop support.",
     title: "Wheel Picker",
-    author: "ncdai <dai@chanhdai.com>",
+    author: "yash_mhj",
     dependencies: ["@ncdai/react-wheel-picker"],
     registryDependencies: ["<registryBaseUrl>/utils.json"],
     files: [
@@ -64,7 +64,7 @@ export const components: Registry["items"] = [
         type: "registry:component",
       },
     ],
-    docs: "https://chanhdai.com/components/react-wheel-picker",
+    docs: "https://yash.reactopia.me/components/react-wheel-picker",
   },
   {
     name: "work-experience",
@@ -72,7 +72,7 @@ export const components: Registry["items"] = [
     description:
       "Displays a list of work experiences with role details and durations.",
     title: "Work Experience",
-    author: "ncdai <dai@chanhdai.com>",
+    author: "yash_mhj",
     dependencies: ["react-markdown", "lucide-react"],
     devDependencies: ["@tailwindcss/typography"],
     registryDependencies: [
@@ -100,6 +100,6 @@ export const components: Registry["items"] = [
         border: "oklch(0.274 0.006 286.033)",
       },
     },
-    docs: "https://chanhdai.com/components/work-experience-component",
+    docs: "https://yash.reactopia.me/components/work-experience-component",
   },
 ];
