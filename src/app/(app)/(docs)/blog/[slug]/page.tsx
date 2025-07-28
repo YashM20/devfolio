@@ -4,16 +4,21 @@ import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import type { BlogPosting as PageSchema, WithContext } from "schema-dts";
 
 import { InlineTOC } from "@/components/inline-toc";
 import { MDX } from "@/components/mdx";
 import { Button } from "@/components/ui/button";
 import { Prose } from "@/components/ui/typography";
+import { Skeleton } from "@/components/ui/skeleton";
 import { SITE_INFO } from "@/config/site";
 import { findNeighbour, getAllPosts, getPostBySlug } from "@/data/blog";
 import { USER } from "@/data/user";
 import type { Post } from "@/types/blog";
+
+// Enable PPR for this route
+export const experimental_ppr = true;
 
 export async function generateStaticParams() {
   const posts = getAllPosts();
@@ -85,13 +90,8 @@ function getPageJsonLd(post: Post): WithContext<PageSchema> {
   };
 }
 
-export default async function Page({
-  params,
-}: {
-  params: Promise<{
-    slug: string;
-  }>;
-}) {
+// Create a component for the dynamic blog content
+async function BlogContent({ params }: { params: Promise<{ slug: string }> }) {
   const slug = (await params).slug;
   const post = getPostBySlug(slug);
 
@@ -100,7 +100,6 @@ export default async function Page({
   }
 
   const toc = getTableOfContents(post.content);
-
   const allPosts = getAllPosts();
   const { previous, next } = findNeighbour(allPosts, slug);
 
@@ -158,6 +157,56 @@ export default async function Page({
 
       <div className="screen-line-before h-4 w-full" />
     </>
+  );
+}
+
+// Fallback component for loading state
+function BlogContentSkeleton() {
+  return (
+    <>
+      <div className="flex items-center justify-between p-2 pl-4">
+        <Button className="text-muted-foreground px-0" variant="link" asChild>
+          <Link href="/blog">
+            <ArrowLeftIcon />
+            Blog
+          </Link>
+        </Button>
+
+        <div className="flex items-center gap-2">
+          <Skeleton className="h-9 w-9" />
+          <Skeleton className="h-9 w-9" />
+        </div>
+      </div>
+
+      <Prose className="px-4">
+        <Skeleton className="mb-6 h-8 w-3/4" />
+        <Skeleton className="mb-2 h-4 w-full" />
+        <Skeleton className="mb-6 h-4 w-5/6" />
+
+        <div className="space-y-4">
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-4/5" />
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-32 w-full" />
+        </div>
+      </Prose>
+
+      <div className="screen-line-before h-4 w-full" />
+    </>
+  );
+}
+
+export default async function Page({
+  params,
+}: {
+  params: Promise<{
+    slug: string;
+  }>;
+}) {
+  return (
+    <Suspense fallback={<BlogContentSkeleton />}>
+      <BlogContent params={params} />
+    </Suspense>
   );
 }
 function getPostUrl(post: Post) {

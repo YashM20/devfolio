@@ -2,13 +2,26 @@
 
 import { motion, useMotionValueEvent, useScroll } from "motion/react";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, Suspense } from "react";
 
 import { ChanhDaiMark } from "./chanhdai-mark";
 
-export function SiteHeaderMark() {
+function SiteHeaderMarkContent() {
   const pathname = usePathname();
   return pathname === "/" ? <ChanhDaiMarkMotion /> : <ChanhDaiMark />;
+}
+
+function SiteHeaderMarkFallback() {
+  // Return a simple fallback that doesn't depend on pathname
+  return <ChanhDaiMark />;
+}
+
+export function SiteHeaderMark() {
+  return (
+    <Suspense fallback={<SiteHeaderMarkFallback />}>
+      <SiteHeaderMarkContent />
+    </Suspense>
+  );
 }
 
 function ChanhDaiMarkMotion() {

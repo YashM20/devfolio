@@ -5,8 +5,17 @@ const nextConfig: NextConfig = {
   experimental: {
     reactCompiler: true,
     viewTransition: true,
+    ppr: true,
+    cacheComponents: true,
+    browserDebugInfoInTerminal: true,
+    clientSegmentCache: true,
+    devtoolSegmentExplorer: true,
+    mdxRs: true,
+    turbopackPersistentCaching: true,
+    optimizeRouterScrolling: true,
   },
   images: {
+    qualities: [25, 50, 75, 100],
     remotePatterns: [
       {
         protocol: "https",
@@ -26,6 +35,11 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "ui-avatars.com",
         port: "",
+      },
+      {
+        protocol: "https",
+        hostname: "github.com",
+        pathname: "/yashm20.png",
       },
     ],
   },

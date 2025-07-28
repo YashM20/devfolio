@@ -111,6 +111,7 @@ export default function RootLayout({
       lang="en"
       className={`${fontSans.variable} ${fontMono.variable}`}
       suppressHydrationWarning
+      data-scroll-behavior="smooth"
     >
       <head>
         <meta
