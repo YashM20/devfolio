@@ -20,6 +20,21 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Todo
+
+- [ ] Add project listing page & full details page.
+- [ ] Add a way to display card view or list view. (blog/components/projects)
+- [x] Add blog engagement features (reading time, progress indicators, social sharing)
+- [ ] Add a copy button in ai chat,
+- [ ] Add audio output in ai chat,
+- [ ] add a like counter in blog/components
+- [ ] add a way to return resume as JSON in ai chat
+- [ ] add download resume button.
+- [ ] add changelog & featured sites in components.
+- [ ] add db chat traking to get more info
+- [ ] add reporting feature in ai chat and in blog.
+- [ ] add general feedback feature.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

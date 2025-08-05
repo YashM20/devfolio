@@ -2,6 +2,7 @@ import fs from "fs";
 import matter from "gray-matter";
 import path from "path";
 
+import { calculateReadingTime } from "@/lib/blog-utils";
 import type { Post, PostMetadata } from "@/types/blog";
 
 function parseFrontmatter(fileContent: string) {
@@ -29,9 +30,13 @@ function getMDXData(dir: string) {
     const { metadata, content } = readMDXFile(path.join(dir, file));
 
     const slug = path.basename(file, path.extname(file));
+    const readingTime = calculateReadingTime(content);
 
     return {
-      metadata,
+      metadata: {
+        ...metadata,
+        readingTime,
+      },
       slug,
       content,
     };

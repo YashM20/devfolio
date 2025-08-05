@@ -1,0 +1,207 @@
+---
+title: AI Assistant Component
+description: A clean, configurable AI chat component that anyone can easily integrate and customize for their needs.
+image: https://yash.reactopia.me/images/ss/ai-assistant-thumbnail.webp
+category: components
+new: true
+createdAt: 2025-01-20
+updatedAt: 2025-01-20
+---
+
+<ComponentPreview name="minimal-ai-assistant-demo" codeCollapsible />
+
+## About
+
+The AI Assistant component is built with shadcn/ui patterns for maximum composability and customization.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">shadcn CLI</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add https://yash.reactopia.me/r/minimal-ai-assistant.json
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Install dependencies</Step>
+
+```bash
+npm install @ai-sdk/react lucide-react motion tailwind-merge clsx class-variance-authority @radix-ui/react-slot
+```
+
+<Step>Add the component</Step>
+
+Copy the component code below and add it to your project.
+
+<Step>Configure your AI provider</Step>
+
+Set up your API route and configure your preferred AI provider.
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  AiAssistantProvider,
+  AiAssistantTrigger,
+  AiAssistantChat,
+  AiAssistantHeader,
+  AiAssistantHeaderTitle,
+  AiAssistantHeaderActions,
+  AiAssistantMessages,
+  AiAssistantEmptyState,
+  AiAssistantMessageList,
+  AiAssistantInput,
+} from "@/components/ai-assistant";
+```
+
+```tsx
+export function AiAssistantDemo() {
+  return (
+    <AiAssistantProvider
+      onMessageSent={(msg) => console.log("Sent:", msg)}
+      onResponse={(response) => console.log("Response:", response)}
+      onError={(error) => console.error("Error:", error)}
+    >
+      <div className="flex gap-4">
+        <AiAssistantTrigger
+          variant="secondary"
+          size="lg"
+          position="bottom-right"
+        >
+          Chat with AI
+        </AiAssistantTrigger>
+
+        <AiAssistantTrigger variant="outline" position="static" asChild>
+          <button className="border-primary/50 hover:bg-primary/5 rounded-lg border-2 border-dashed px-4 py-2 text-sm font-medium transition-colors">
+            Custom Button
+          </button>
+        </AiAssistantTrigger>
+      </div>
+
+      <AiAssistantChat position="bottom-center" variant="default" size="lg">
+        <AiAssistantHeader>
+          <AiAssistantHeaderTitle>🤖 AI Assistant</AiAssistantHeaderTitle>
+          <AiAssistantHeaderActions />
+        </AiAssistantHeader>
+
+        <AiAssistantMessages>
+          <AiAssistantEmptyState
+            suggestions={[
+              "What can you do?",
+              "Tell me about this component",
+              "How do I customize it?",
+            ]}
+          />
+          <AiAssistantMessageList />
+        </AiAssistantMessages>
+
+        <AiAssistantInput placeholder="Ask me anything..." maxLength={1000} />
+      </AiAssistantChat>
+    </AiAssistantProvider>
+  );
+}
+```
+
+## API Route Setup
+
+<ComponentSource name="simple-chat-api-route">
+
+```tsx
+// app/api/chat/route.ts
+import { google } from "@ai-sdk/google";
+import {
+  streamText,
+  convertToModelMessages,
+  createUIMessageStream,
+  JsonToSseTransformStream,
+  generateId,
+} from "ai";
+
+// Allow streaming responses up to 30 seconds
+export const maxDuration = 30;
+
+export async function POST(req: Request) {
+  try {
+    const { messages } = await req.json();
+
+    // Using createUIMessageStream for better streaming experience
+    const stream = createUIMessageStream({
+      execute: ({ writer: dataStream }) => {
+        const result = streamText({
+          model: google("gemini-2.5-flash"),
+          system: "You are a helpful assistant. Be concise and friendly.",
+          messages: convertToModelMessages(messages),
+        });
+
+        result.consumeStream();
+
+        writer.merge(
+          result.toUIMessageStream({
+            sendReasoning: false,
+          })
+        );
+      },
+      generateId: () => generateId(),
+      onFinish: async ({ messages }) => {
+        console.log("✅ Chat completed with", messages.length, "messages");
+      },
+      onError: () => {
+        return "Oops, an error occurred!";
+      },
+    });
+
+    return new Response(stream.pipeThrough(new JsonToSseTransformStream()));
+  } catch (error) {
+    console.error("Chat API error:", error);
+    return new Response("Error processing request", { status: 500 });
+  }
+}
+```
+
+</ComponentSource>
+
+## Examples
+
+### Basic Usage
+
+<ComponentPreview name="minimal-ai-assistant-demo" codeCollapsible />
+
+### Custom Composition
+
+```tsx
+<AiAssistantProvider>
+  <AiAssistantTrigger variant="outline">Custom Chat</AiAssistantTrigger>
+
+  <AiAssistantChat>
+    <AiAssistantHeader>
+      <AiAssistantHeaderTitle>My Assistant</AiAssistantHeaderTitle>
+      <AiAssistantHeaderActions />
+    </AiAssistantHeader>
+
+    <AiAssistantMessages>
+      <AiAssistantEmptyState suggestions={["Hello", "Help"]} />
+      <AiAssistantMessageList />
+    </AiAssistantMessages>
+
+    <AiAssistantInput placeholder="Custom placeholder..." />
+  </AiAssistantChat>
+</AiAssistantProvider>
+```

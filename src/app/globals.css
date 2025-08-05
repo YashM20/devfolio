@@ -38,7 +38,7 @@
   --font-mono: var(--font-mono);
 
   --shadow-popover: var(--shadow-popover);
-  
+
   /* --font-mono: var(--font-geist-mono); */
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -74,17 +74,17 @@
 }
 
 @utility screen-line-before {
-  @apply relative before:absolute before:top-0 before:-left-[100vw] before:-z-1 before:h-px before:w-[200vw] before:bg-edge;
+  @apply before:-z-1 before:bg-edge relative before:absolute before:-left-[100vw] before:top-0 before:h-px before:w-[200vw];
 }
 
 @utility screen-line-after {
-  @apply relative after:absolute after:bottom-0 after:-left-[100vw] after:-z-1 after:h-px after:w-[200vw] after:bg-edge;
+  @apply after:-z-1 after:bg-edge relative after:absolute after:-left-[100vw] after:bottom-0 after:h-px after:w-[200vw];
 }
 
 @utility step {
   counter-increment: step;
   &::before {
-    @apply mr-2 inline-flex size-7 items-center justify-center rounded-full bg-muted text-center -indent-px text-sm font-medium text-muted-foreground md:absolute md:-mt-0.5 md:-ml-11.5 md:size-8;
+    @apply bg-muted text-muted-foreground md:-ml-11.5 mr-2 inline-flex size-7 items-center justify-center rounded-full text-center -indent-px text-sm font-medium md:absolute md:-mt-0.5 md:size-8;
     content: counter(step);
   }
 }
@@ -189,7 +189,7 @@
   }
 
   body {
-    @apply overscroll-y-none bg-background font-sans text-foreground antialiased;
+    @apply bg-background text-foreground overscroll-y-none font-sans antialiased;
     font-synthesis-weight: none;
     text-rendering: optimizeLegibility;
   }
@@ -213,14 +213,21 @@
   [id] {
     @apply scroll-mt-22;
   }
+
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
 }
 
 @layer components {
   [data-rehype-pretty-code-figure] {
-    @apply relative my-6 rounded-lg bg-code text-code-foreground;
+    @apply bg-code text-code-foreground relative my-6 rounded-lg;
 
     pre {
-      @apply overflow-x-auto px-4 py-4 has-data-line-numbers:px-0;
+      @apply has-data-line-numbers:px-0 overflow-x-auto px-4 py-4;
     }
 
     code {
@@ -237,7 +244,7 @@
   }
 
   [data-rehype-pretty-code-title] {
-    @apply flex items-center gap-2 border-b px-4 py-2.5 text-sm text-muted-foreground [&_svg]:size-4 [&_svg]:text-muted-foreground;
+    @apply text-muted-foreground [&_svg]:text-muted-foreground flex items-center gap-2 border-b px-4 py-2.5 text-sm [&_svg]:size-4;
   }
 
   [data-line-numbers] {
@@ -247,7 +254,7 @@
   [data-line-numbers] > [data-line]::before {
     counter-increment: line;
     content: counter(line);
-    @apply sticky left-0 inline-block w-16 bg-code pr-6 text-right text-sm text-code-number;
+    @apply bg-code text-code-number sticky left-0 inline-block w-16 pr-6 text-right text-sm;
   }
 
   [data-line-numbers] [data-highlighted-line][data-line]::before {

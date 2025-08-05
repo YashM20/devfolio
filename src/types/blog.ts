@@ -6,6 +6,11 @@ export type PostMetadata = {
   new?: boolean;
   createdAt: string;
   updatedAt: string;
+  readingTime?: {
+    minutes: number;
+    words: number;
+    text: string;
+  };
 };
 
 export type Post = {

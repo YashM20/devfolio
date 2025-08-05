@@ -146,6 +146,72 @@ async function captureScreenshot({
   await page.close();
 }
 
+async function captureAIAssistantThumbnail({
+  browser,
+  baseUrl,
+}: {
+  browser: Browser;
+  baseUrl: string;
+}) {
+  const aiUrl = `${baseUrl}/?ai=true`;
+  const page = await browser.newPage();
+
+  // Use desktop size for the AI assistant thumbnail
+  const { width, height } = SIZE.desktop;
+  await page.setViewport({ width, height });
+
+  // Set localStorage to simulate cookie consent before loading the page
+  await page.evaluateOnNewDocument(() => {
+    localStorage.setItem(
+      "cookie-consent-preferences",
+      JSON.stringify({
+        necessary: true,
+        analytics: true,
+        marketing: true,
+      })
+    );
+    localStorage.setItem("cookie-banner-shown", "true");
+  });
+
+  await page.goto(aiUrl, { waitUntil: "networkidle2" });
+
+  // Additional safety: hide any cookie banners that might still appear
+  await page.addStyleTag({
+    content: `
+      /* Hide cookie consent banners */
+      [class*="cookie"], [id*="cookie"], 
+      [class*="consent"], [id*="consent"],
+      .fixed.bottom-4.left-4.right-4.z-50,
+      .fixed.bottom-4.z-50 {
+        display: none !important;
+      }
+    `,
+  });
+
+  // Set dark theme for the AI assistant thumbnail
+  await page.emulateMediaFeatures([
+    { name: "prefers-color-scheme", value: "dark" },
+  ]);
+
+  // Wait a bit for any animations to settle
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
+  const filePath = path.join(outputDir, "ai-assistant-thumbnail.webp") as
+    | `${string}.webp`
+    | `${string}.png`
+    | `${string}.jpeg`;
+
+  await page.screenshot({
+    path: filePath,
+    type: "webp",
+    quality: 90,
+  });
+
+  console.log(`✅ AI Assistant thumbnail saved:`, filePath);
+
+  await page.close();
+}
+
 async function main() {
   // Move old screenshots before capturing new ones
   await moveOldScreenshots();
@@ -175,6 +241,12 @@ async function main() {
       size: "og-image",
       themes: ["dark"],
       type: "png",
+    });
+
+    // Capture AI Assistant thumbnail
+    await captureAIAssistantThumbnail({
+      browser,
+      baseUrl: url,
     });
 
     console.log("✅ All screenshots captured successfully.");

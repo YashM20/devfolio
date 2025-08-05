@@ -37,6 +37,6 @@ export const USER = {
     "Software Engineer with 4+ years of experience.  I have been developing web and mobile applications using JavaScript frameworks and libraries, including Next.js, React JS, React Native & expo cli. I'm passionate about staying up to date with the modern frontend development trends & React Community.",
   avatar: "https://github.com/yashm20.png",
   ogImage: "https://yash.reactopia.me/images/ss/screenshot-og-image-dark.png",
-  keywords: "yash, mahajan, yashmahajan, mahajanyash, yash_mhj, yashmhj",
+  keywords: "yash, mahajan, yashmahajan, mahajanyash, yash_mhj, yashmhj, reactopia",
   dateCreated: "2025-07-01", // YYYY-MM-DD
 };

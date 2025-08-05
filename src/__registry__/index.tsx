@@ -55,6 +55,15 @@ export const Index: Record<string, any> = {
       type: "registry:component",
     }],
   },
+  "minimal-ai-assistant": {
+    name: "minimal-ai-assistant",
+    description: "A minimal, customizable AI assistant component with multiple themes and chat functionality.",
+    type: "registry:component",
+    files: [{
+      path: "src/registry/minimal-ai-assistant/ai-assistant.tsx",
+      type: "registry:component",
+    }],
+  },
   "wheel-picker": {
     name: "wheel-picker",
     description: "iOS-like wheel picker for React with smooth inertia scrolling and infinite loop support.",
@@ -92,6 +101,26 @@ export const Index: Record<string, any> = {
       type: "registry:example",
     }],
     component: React.lazy(() => import("@/registry/examples/apple-hello-effect-en-demo.tsx")),
+  },
+  "minimal-ai-assistant-demo": {
+    name: "minimal-ai-assistant-demo",
+    description: "",
+    type: "registry:example",
+    files: [{
+      path: "src/registry/examples/minimal-ai-assistant-demo.tsx",
+      type: "registry:example",
+    }],
+    component: React.lazy(() => import("@/registry/examples/minimal-ai-assistant-demo.tsx")),
+  },
+  "simple-chat-api-route": {
+    name: "simple-chat-api-route",
+    description: "",
+    type: "registry:example",
+    files: [{
+      path: "src/registry/examples/simple-chat-api-route.ts",
+      type: "registry:example",
+    }],
+    component: React.lazy(() => import("@/registry/examples/simple-chat-api-route.ts")),
   },
   "theme-switcher-demo": {
     name: "theme-switcher-demo",
