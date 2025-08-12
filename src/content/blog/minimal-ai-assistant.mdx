@@ -57,6 +57,14 @@ Set up your API route and configure your preferred AI provider.
 
 ## Usage
 
+<Tabs defaultValue="code">
+
+<TabsList>
+  <TabsTrigger value="code">Code</TabsTrigger>
+  <TabsTrigger value="route">Route</TabsTrigger>
+</TabsList>
+
+<TabsContent value="code">
 ```tsx
 import {
   AiAssistantProvider,
@@ -120,10 +128,33 @@ export function AiAssistantDemo() {
 }
 ```
 
-## API Route Setup
+### Simplified Usage
 
-<ComponentSource name="simple-chat-api-route">
+```tsx
+import { AiAssistant } from "@/components/ai-assistant";
 
+export function App() {
+  return (
+    <AiAssistant
+      title="My AI Assistant"
+      placeholder="Ask me anything..."
+      suggestions={[
+        "What can you help with?",
+        "Tell me a joke",
+        "How does this work?",
+      ]}
+      maxInputLength={1000}
+      onMessageSent={(msg) => console.log("Message sent:", msg)}
+      onResponse={(response) => console.log("Response:", response)}
+      onError={(error) => console.error("Error:", error)}
+    />
+  );
+}
+```
+
+</TabsContent>
+
+<TabsContent value="route">
 ```tsx
 // app/api/chat/route.ts
 import { google } from "@ai-sdk/google";
@@ -176,7 +207,82 @@ export async function POST(req: Request) {
 }
 ```
 
-</ComponentSource>
+### Environment Variables
+
+Add your AI provider API key to your environment variables:
+
+```bash
+# .env.local
+GOOGLE_GENERATIVE_AI_API_KEY=your_api_key_here
+```
+
+### Advanced Route with Rate Limiting
+
+```tsx
+// app/api/chat/route.ts
+import { google } from "@ai-sdk/google";
+import { streamText, convertToModelMessages } from "ai";
+
+// Rate limiting (simple in-memory store)
+const userRequests = new Map();
+const MAX_REQUESTS_PER_HOUR = 100;
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const userHistory = userRequests.get(ip) || [];
+  
+  // Remove requests older than 1 hour
+  const recentRequests = userHistory.filter(
+    (time: number) => now - time < 60 * 60 * 1000
+  );
+  
+  if (recentRequests.length >= MAX_REQUESTS_PER_HOUR) {
+    return false;
+  }
+  
+  recentRequests.push(now);
+  userRequests.set(ip, recentRequests);
+  return true;
+}
+
+export async function POST(req: Request) {
+  try {
+    // Get client IP
+    const ip = req.headers.get("x-forwarded-for") || "unknown";
+    
+    // Check rate limit
+    if (!checkRateLimit(ip)) {
+      return new Response("Rate limit exceeded", { status: 429 });
+    }
+
+    const { messages } = await req.json();
+
+    // Validate messages
+    if (!messages || !Array.isArray(messages)) {
+      return new Response("Invalid messages", { status: 400 });
+    }
+
+    const result = streamText({
+      model: google("gemini-2.5-flash"),
+      system: `You are a helpful AI assistant. 
+        Be concise, friendly, and professional.
+        If asked about harmful content, politely decline.`,
+      messages: convertToModelMessages(messages),
+      maxTokens: 1000,
+      temperature: 0.7,
+    });
+
+    return result.toDataStreamResponse();
+  } catch (error) {
+    console.error("Chat API error:", error);
+    return new Response("Internal server error", { status: 500 });
+  }
+}
+```
+
+</TabsContent>
+
+</Tabs>
 
 ## Examples
 

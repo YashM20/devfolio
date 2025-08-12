@@ -18,6 +18,7 @@ import { findNeighbour, getAllPosts, getPostBySlug } from "@/data/blog";
 import { cn } from "@/lib/utils";
 import { USER } from "@/data/user";
 import type { Post } from "@/types/blog";
+import { connection } from "next/server";
 
 // Enable PPR for this route
 export const experimental_ppr = true;
@@ -71,7 +72,8 @@ export async function generateMetadata({
   };
 }
 
-function getPageJsonLd(post: Post): WithContext<PageSchema> {
+async function getPageJsonLd(post: Post): Promise<WithContext<PageSchema>> {
+  await connection();
   return {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
@@ -112,7 +114,7 @@ async function BlogContent({ params }: { params: Promise<{ slug: string }> }) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(getPageJsonLd(post)).replace(/</g, "\\u003c"),
+          __html: JSON.stringify(await getPageJsonLd(post)).replace(/</g, "\\u003c"),
         }}
       />
 

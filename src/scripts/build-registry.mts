@@ -5,8 +5,19 @@ import { rimraf } from "rimraf";
 import type { Registry } from "shadcn/registry";
 import { registrySchema } from "shadcn/registry";
 
-import { registryConfig } from "../config/registry";
-import { registry } from "../registry";
+import * as configModule from "../config/registry";
+import * as registryModule from "../registry/index";
+
+const registryConfig = (configModule as any).default?.registryConfig || (configModule as any).registryConfig;
+const registry = (registryModule as any).default?.registry || (registryModule as any).registry;
+
+if (!registryConfig) {
+  throw new Error("Could not load registryConfig from ../config/registry");
+}
+
+if (!registry) {
+  throw new Error("Could not load registry from ../registry/index");
+}
 
 const REGISTRY_PATH = path.join(process.cwd(), "src/__registry__");
 
