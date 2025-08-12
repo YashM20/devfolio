@@ -51,14 +51,14 @@ export function PostItem({
         </h3>
 
         <div className="flex items-center justify-between">
-          <div>
+          <dl>
             <dt className="sr-only">Published on</dt>
             <dd className="text-muted-foreground text-sm">
               <time dateTime={dayjs(post.metadata.createdAt).toISOString()}>
-                {dayjs(post.metadata.createdAt).format("DD.MM.YYYY")}
+                {dayjs(post.metadata.createdAt).format('DD.MM.YYYY')}
               </time>
             </dd>
-          </div>
+          </dl>
 
           <ReadingTime
             content={post.content}
