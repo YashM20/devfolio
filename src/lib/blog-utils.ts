@@ -71,7 +71,9 @@ export function getReadingProgress(element: HTMLElement | null): number {
   if (!element) return 0;
 
   const { scrollTop, scrollHeight, clientHeight } = element;
-  const progress = scrollTop / (scrollHeight - clientHeight);
+  const denominator = scrollHeight - clientHeight;
+  if (denominator <= 0) return 0;
+  const progress = scrollTop / denominator;
 
   return Math.min(Math.max(progress, 0), 1);
 }
