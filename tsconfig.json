@@ -39,7 +39,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "./src/scripts/**/*.ts"
+    "./src/scripts/**/*.ts",
+    "src/scripts/build-registry.mts"
   ],
   "exclude": [
     "node_modules",

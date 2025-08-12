@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
+import { ReadingTime } from "@/components/blog";
 import { cn, validateImageUrl } from "@/lib/utils";
 import type { Post } from "@/types/blog";
 
@@ -49,13 +50,21 @@ export function PostItem({
           {post.metadata.title}
         </h3>
 
-        <div>
-          <dt className="sr-only">Published on</dt>
-          <dd className="text-muted-foreground text-sm">
-            <time dateTime={dayjs(post.metadata.createdAt).toISOString()}>
-              {dayjs(post.metadata.createdAt).format("DD.MM.YYYY")}
-            </time>
-          </dd>
+        <div className="flex items-center justify-between">
+          <dl>
+            <dt className="sr-only">Published on</dt>
+            <dd className="text-muted-foreground text-sm">
+              <time dateTime={dayjs(post.metadata.createdAt).toISOString()}>
+                {dayjs(post.metadata.createdAt).format('DD.MM.YYYY')}
+              </time>
+            </dd>
+          </dl>
+
+          <ReadingTime
+            content={post.content}
+            showIcon={false}
+            className="text-xs"
+          />
         </div>
       </div>
     </Link>

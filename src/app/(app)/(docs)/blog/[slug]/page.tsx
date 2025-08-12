@@ -7,6 +7,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import type { BlogPosting as PageSchema, WithContext } from "schema-dts";
 
+import { ReadingTime, RelatedPosts, ShareButtons } from "@/components/blog";
 import { InlineTOC } from "@/components/inline-toc";
 import { MDX } from "@/components/mdx";
 import { Button } from "@/components/ui/button";
@@ -14,8 +15,10 @@ import { Prose } from "@/components/ui/typography";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SITE_INFO } from "@/config/site";
 import { findNeighbour, getAllPosts, getPostBySlug } from "@/data/blog";
+import { cn } from "@/lib/utils";
 import { USER } from "@/data/user";
 import type { Post } from "@/types/blog";
+import { connection } from "next/server";
 
 // Enable PPR for this route
 export const experimental_ppr = true;
@@ -69,7 +72,8 @@ export async function generateMetadata({
   };
 }
 
-function getPageJsonLd(post: Post): WithContext<PageSchema> {
+async function getPageJsonLd(post: Post): Promise<WithContext<PageSchema>> {
+  await connection();
   return {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
@@ -103,12 +107,14 @@ async function BlogContent({ params }: { params: Promise<{ slug: string }> }) {
   const allPosts = getAllPosts();
   const { previous, next } = findNeighbour(allPosts, slug);
 
+  const postUrl = `${SITE_INFO.url}/blog/${post.slug}`;
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(getPageJsonLd(post)).replace(/</g, "\\u003c"),
+          __html: JSON.stringify(await getPageJsonLd(post)).replace(/</g, "\\u003c"),
         }}
       />
 
@@ -121,6 +127,13 @@ async function BlogContent({ params }: { params: Promise<{ slug: string }> }) {
         </Button>
 
         <div className="flex items-center gap-2">
+          <ShareButtons
+            url={postUrl}
+            title={post.metadata.title}
+            description={post.metadata.description}
+            size="sm"
+          />
+
           {previous && (
             <Button variant="secondary" size="icon" asChild>
               <Link href={`/blog/${previous.slug}`}>
@@ -146,7 +159,21 @@ async function BlogContent({ params }: { params: Promise<{ slug: string }> }) {
           {post.metadata.title}
         </h1>
 
-        <p className="lead mb-6 mt-6">{post.metadata.description}</p>
+        <div className="mb-6 flex items-center justify-between">
+          <p className="text-muted-foreground text-sm">
+            <time dateTime={dayjs(post.metadata.createdAt).toISOString()}>
+              {dayjs(post.metadata.createdAt).format("MMMM DD, YYYY")}
+            </time>
+          </p>
+
+          <ReadingTime
+            content={post.content}
+            showWords={true}
+            className="text-sm"
+          />
+        </div>
+
+        <p className="lead mb-6">{post.metadata.description}</p>
 
         <InlineTOC items={toc} />
 
@@ -155,7 +182,9 @@ async function BlogContent({ params }: { params: Promise<{ slug: string }> }) {
         </div>
       </Prose>
 
-      <div className="screen-line-before h-4 w-full" />
+      <div className="screen-line-after h-8 px-2" />
+      <Separator className="screen-line-after" />
+      <RelatedPosts currentPost={post} />
     </>
   );
 }
@@ -180,6 +209,12 @@ function BlogContentSkeleton() {
 
       <Prose className="px-4">
         <Skeleton className="mb-6 h-8 w-3/4" />
+
+        <div className="mb-6 flex items-center justify-between">
+          <Skeleton className="h-4 w-24" />
+          <Skeleton className="h-4 w-20" />
+        </div>
+
         <Skeleton className="mb-2 h-4 w-full" />
         <Skeleton className="mb-6 h-4 w-5/6" />
 
@@ -212,4 +247,17 @@ export default async function Page({
 function getPostUrl(post: Post) {
   const isComponent = post.metadata.category === "components";
   return isComponent ? `/components/${post.slug}` : `/blog/${post.slug}`;
+}
+
+function Separator({ className }: { className?: string }) {
+  return (
+    <div
+      className={cn(
+        "border-edge relative flex h-8 w-full border-x",
+        "before:-z-1 before:absolute before:-left-[100vw] before:h-8 before:w-[200vw]",
+        "before:bg-size-[10px_10px] before:[--pattern-foreground:var(--color-edge)]/56 before:bg-[repeating-linear-gradient(315deg,var(--pattern-foreground)_0,var(--pattern-foreground)_1px,transparent_0,transparent_50%)]",
+        className
+      )}
+    />
+  );
 }

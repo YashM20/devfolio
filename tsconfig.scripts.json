@@ -6,13 +6,19 @@
     "module": "ESNext",
     "moduleResolution": "node",
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "isolatedModules": false,
-    "allowImportingTsExtensions": true
+    "allowImportingTsExtensions": true,
+    "noEmit": false,
+    "outDir": "./dist"
   },
   "include": [
-    "./src/scripts/**/*.{ts,mts}"
+    "./src/scripts/**/*.{ts,mts}",
+    "./src/registry/**/*.ts",
+    "./src/config/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "./src/__registry__"
   ]
 }
