@@ -1,0 +1,38 @@
+---
+title: AI Code at Scale - Avoiding the Hidden Pitfalls
+description: Battle-tested advice for managing AI-assisted programming in distributed teams, legacy systems, and multi-cloud environments while avoiding technical debt.
+image: https://yash.reactopia.me/images/blog/ai-code-at-scale.png
+category: blog
+new: true
+createdAt: 2025-09-16
+updatedAt: 2025-09-16
+---
+
+We're in a phase where AI-assisted programming is everywhere; diffs fly by, code ships sooner, everyone's excited about the possibilities. In low-stakes side projects, it works. But the second you go distributed, different teams, legacy code, multi-cloud you're deep in the trenches. That "vibe coding" energy from quick hacks doesn't cut it anymore.
+
+Here's what I keep seeing:
+
+Legacy builds up, fast. It's easy to push an MVP, but maintaining multiple systems with different workflows means version drift and duplicated logic sneak in immediately.
+
+Debugging gets nasty. If the AI wrote half the code, and nobody reviewed the output, you're stuck reverse-engineering mystery implementations. You lose flow, and the “ownership” of the codebase disappears.
+
+Security's a moving target. AI loves introducing hidden vulnerabilities and dependency risks even when it looks secure. Distributed teams need shared guardrails, manual and automated.
+
+## Some advice, battle-tested:
+
+- Treat AI code like any other contributor, it gets full code review, no exceptions. Slack discussion, inline comments, serious diff checking. “Ship it” is not enough.
+- Set the rule: nobody merges something they can't explain. It has to be maintainable next quarter, not just today.
+- Watch for duplication. As portals scale, everyone's solving the same problems. Set up shared modules, track for forked logic, and refactor aggressively.
+- Integrate monitoring right into each workflow, guardrails, error logging, output inspection. Build the habit while you scale, don't patch it onto legacy systems later.
+
+Technical debt triggered by fast-moving AI integration is real, especially when distributed teams are involved. The best teams I've worked with use containerized workflows, rigorous CI/CD, and lean hard into automation, not just for deployment, but for code review and governance too.
+
+On a good day, these tools empower everyone. Engineers jump in, experiment, move quickly. On a bad day, it feels like fighting against mystery logic with no ownership.
+
+With the right boundaries, AI can empower teams and unlock creativity. But scaling means doubling down on ownership and review, so the pace keeps up.
+
+My take: scale boldly, but take responsibility for every line. AI is a tool, not a teammate. Don't let “vibe” kill velocity.
+
+---
+
+#AI #Technology #Innovation #SoftwareEngineering #TechLeadership
