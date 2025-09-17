@@ -23,7 +23,7 @@ export const USER = {
   jobTitle: "Software Developer",
   jobs: [
     {
-      title: "Senior Frontend Developer",
+      title: "Software Developer",
       company: "PromeTechAi Innovations pvt. ltd.",
       website: "https://www.prometheanz.com/",
     },
