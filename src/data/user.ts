@@ -4,7 +4,7 @@ export const USER = {
   displayName: "Yash Mahajan",
   username: "yash_mhj",
   gender: "male",
-  bio: "Transforming complex ideas into elegant web and mobile applications.",
+  bio: "Turning complex ideas into scalable solutions across web, mobile, and backend platforms.",
   flipSentences: [
     "Software Developer",
     "Open Source Contributor",
@@ -34,9 +34,14 @@ export const USER = {
     },
   ],
   about:
-    "Software Engineer with 4+ years of experience.  I have been developing web and mobile applications using JavaScript frameworks and libraries, including Next.js, React JS, React Native & expo cli. I'm passionate about staying up to date with the modern frontend development trends & React Community.",
+    `    I’m a Software Engineer with 4+ years of experience building frontend interfaces, backend services, and mobile applications using JavaScript frameworks and libraries like Next.js, React, React Native, Expo, and Node.js.
+  
+    I build frontends that are not only easy to use but also thoughtfully designed with user experience in mind, along with strong backend systems that work well at scale.
+
+    I also have experience building AI-powered applications, including intelligent agents and retrieval-augmented generation (RAG) systems. I enjoy learning new technologies and applying them to solve real problems.`,
   avatar: "https://github.com/yashm20.png",
   ogImage: "https://yash.reactopia.me/images/ss/screenshot-og-image-dark.png",
-  keywords: "yash, mahajan, yashmahajan, mahajanyash, yash_mhj, yashmhj, reactopia",
+  keywords:
+    "yash, mahajan, yashmahajan, mahajanyash, yash_mhj, yashmhj, reactopia",
   dateCreated: "2025-07-01", // YYYY-MM-DD
 };

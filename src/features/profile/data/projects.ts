@@ -2,6 +2,30 @@ import type { Project } from "../types/projects";
 
 export const PROJECTS: Project[] = [
   {
+    id: "dexai",
+    title: "DexAI",
+    period: {
+      start: "2025",
+      end: "2025",
+    },
+    skills: [
+      "Ai SDK",
+      "Next.js",
+      "Layout Parsing",
+      "Multilingual Processing",
+      "OCR",
+      "Python",
+      "JSON Processing",
+      "Bounding Box Detection",
+      "Image Processing",
+    ],
+    logo: "https://assets.chanhdai.com/images/project-logos/quaricdotcom.svg",
+    link: "",
+    isExpanded: false,
+    description:
+      "Intelligent Multilingual Document Understanding. Developed advanced AI systems for intelligent multilingual document understanding, addressing challenges in extracting and interpreting information from diverse document formats (DOC, PDF, PPT, JPEG, PNG, handwritten) with mixed scripts (English, Hindi, Arabic, etc.). The solution focuses on accurate layout-aware parsing, preserving visual hierarchy, semantic grouping, and embedded elements like tables, images, maps, and charts. Implemented models to generate structured JSON outputs, including natural language descriptions of complex elements and line-wise bounding box coordinates for text.",
+  },
+  {
     id: "wally-consumer-app",
     title: "Wally - Consumer App",
     period: {
@@ -39,7 +63,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "video-live-streaming-platform",
-    title: "Video Live Streaming Platform",
+    title: "LivCast",
     period: {
       start: "2022",
       end: "2023",

@@ -1,4 +1,4 @@
-import { Markdown } from "@/components/markdown";
+import ReactMarkdown from "react-markdown";
 import { Prose } from "@/components/ui/typography";
 import { USER } from "@/data/user";
 
@@ -13,7 +13,7 @@ export function About() {
 
       <PanelContent>
         <Prose>
-          <Markdown>{USER.about}</Markdown>
+          <div className="whitespace-pre-line">{USER.about}</div>
         </Prose>
       </PanelContent>
     </Panel>
