@@ -110,7 +110,7 @@ export function AiAssistant() {
   };
 
   useEffect(() => {
-    scrollToBottom();
+    // scrollToBottom();
   }, [messages]);
 
   // Auto-resize textarea

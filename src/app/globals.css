@@ -57,6 +57,8 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --color-selection: var(--selection);
+  --color-selection-foreground: var(--selection-foreground);
 }
 
 @utility no-scrollbar {
@@ -132,6 +134,8 @@
   --sidebar-border: oklch(0.92 0.004 286.32);
   --sidebar-ring: oklch(0.705 0.015 286.067);
   --radius: 0.625rem;
+  --selection: oklch(0.141 0.005 285.823);
+  --selection-foreground: oklch(0.985 0 0);
 }
 
 .dark {
@@ -173,6 +177,8 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.552 0.016 285.938);
+  --selection: oklch(0.985 0 0);
+  --selection-foreground: oklch(0.141 0.005 285.823);
 }
 
 @layer base {
@@ -183,6 +189,11 @@
   ::file-selector-button {
     @apply border-border outline-ring/50;
   }
+
+  ::selection {
+    @apply bg-selection text-selection-foreground;
+  }
+
 
   html {
     @apply motion-safe:scroll-smooth;

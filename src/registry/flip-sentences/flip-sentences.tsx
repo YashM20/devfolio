@@ -19,7 +19,7 @@ export function FlipSentences({
   const startAnimation = () => {
     intervalRef.current = setInterval(() => {
       setCurrentSentence((prev) => (prev + 1) % sentences.length);
-    }, 2500);
+    }, 3500);
   };
 
   useEffect(() => {

@@ -11,33 +11,34 @@ export const CERTIFICATIONS: Certification[] = [
   //   credentialURL:
   //     "https://drive.google.com/file/d/1x7YzlK1kyz16h28ux9k3KAwnZFAabsvq/view?usp=sharing",
   // },
-  // {
-  //   title: "Next.js SEO Fundamentals",
-  //   issuer: "Vercel",
-  //   issuerIconName: "vercel",
-  //   issueDate: "2025-04-26",
-  //   credentialID: "seo-47463-1745634751873",
-  //   credentialURL:
-  //     "https://nextjs.org/learn/certificate?course=seo&user=47463&certId=seo-47463-1745634751873",
-  // },
-  // {
-  //   title: "Next.js App Router Fundamentals",
-  //   issuer: "Vercel",
-  //   issuerIconName: "vercel",
-  //   issueDate: "2025-04-26",
-  //   credentialID: "dashboard-app-47463-1745633258744",
-  //   credentialURL:
-  //     "https://nextjs.org/learn/certificate?course=dashboard-app&user=47463&certId=dashboard-app-47463-1745633258744",
-  // },
-  // {
-  //   title: "React Foundations for Next.js",
-  //   issuer: "Vercel",
-  //   issuerIconName: "vercel",
-  //   issueDate: "2025-04-26",
-  //   credentialID: "react-foundations-47463-1745634245158",
-  //   credentialURL:
-  //     "https://nextjs.org/learn/certificate?course=react-foundations&user=47463&certId=react-foundations-47463-1745634245158",
-  // },
+
+  {
+    title: "Next.js App Router Fundamentals",
+    issuer: "Vercel",
+    issuerIconName: "vercel",
+    issueDate: "2025-04-29",
+    credentialID: "dashboard-app-49103-1758087486279",
+    credentialURL:
+      "https://nextjs.org/learn/certificate?course=dashboard-app&user=49103&certId=dashboard-app-49103-1758087486279",
+  },
+  {
+    title: "Next.js SEO Fundamentals",
+    issuer: "Vercel",
+    issuerIconName: "vercel",
+    issueDate: "2025-09-17",
+    credentialID: "seo-49103-1758088906695",
+    credentialURL:
+      "https://nextjs.org/learn/certificate?course=seo&user=49103&certId=seo-49103-1758088906695",
+  },
+  {
+    title: "React Foundations for Next.js",
+    issuer: "Vercel",
+    issuerIconName: "vercel",
+    issueDate: "2025-09-17",
+    credentialID: "react-foundations-49103-1758087193786",
+    credentialURL:
+      "https://nextjs.org/learn/certificate?course=react-foundations&user=49103&certId=react-foundations-49103-1758087193786",
+  },
   // {
   //   title: "Certificate of Copyright Registration No. 0040/2025/QTG",
   //   issuer: "Copyright Office of Viet Nam",
