@@ -4,8 +4,6 @@ import VCard from "vcard-creator";
 import { USER } from "@/data/user";
 import { decodeEmail, decodePhoneNumber } from "@/utils/string";
 
-export const dynamic = "force-static";
-
 export async function GET() {
   const card = new VCard();
 

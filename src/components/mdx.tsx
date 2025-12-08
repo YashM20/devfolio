@@ -147,7 +147,7 @@ const options: MDXRemoteProps["options"] = {
       rehypeSlug,
       rehypeComponent,
       () => (tree) => {
-        visit(tree, (node) => {
+        visit(tree as any, (node) => {
           if (node?.type === "element" && node?.tagName === "pre") {
             const [codeEl] = node.children;
             if (codeEl.tagName !== "code") {
@@ -176,7 +176,7 @@ const options: MDXRemoteProps["options"] = {
         },
       ],
       () => (tree) => {
-        visit(tree, (node) => {
+        visit(tree as any, (node) => {
           if (node?.type === "element" && node?.tagName === "figure") {
             if (!("data-rehype-pretty-code-figure" in node.properties)) {
               return;

@@ -2,17 +2,15 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
+  reactCompiler: true,
   experimental: {
-    reactCompiler: true,
     viewTransition: true,
     ppr: true,
     cacheComponents: true,
     browserDebugInfoInTerminal: true,
     clientSegmentCache: true,
-    devtoolSegmentExplorer: true,
     mdxRs: true,
-    turbopackPersistentCaching: true,
-    optimizeRouterScrolling: true,
+    turbopackFileSystemCacheForDev: true,
   },
   images: {
     qualities: [25, 50, 75, 100],
