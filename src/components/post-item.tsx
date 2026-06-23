@@ -46,7 +46,10 @@ export function PostItem({
       )}
 
       <div className="flex flex-col gap-1 p-2">
-        <h3 className="text-balance text-lg font-medium leading-snug underline-offset-4 group-hover/post:underline">
+        <h3 
+          className="text-balance text-lg font-medium leading-snug underline-offset-4 group-hover/post:underline"
+          style={{ viewTransitionName: `blog-title-${post.slug}` }}
+        >
           {post.metadata.title}
         </h3>
 

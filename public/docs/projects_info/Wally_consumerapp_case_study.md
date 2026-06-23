@@ -1,0 +1,117 @@
+## 1. Project Name - Internal or generic project name
+
+Wally - Consumer App
+
+## 2. Employee Name - Name of the person filling the form
+
+Yash Mahajan
+
+## 3. Role - Frontend / Backend / DevOps
+
+Frontend Developer (Next JS)
+
+## 4. Project Duration - Timeline of project
+
+May 2023 - May 2024
+
+## 5. Industry - SaaS, Fintech, Healthcare, etc.
+
+Retail / Consumer Tech / E-commerce
+
+## 6. Client Name Allowed - Yes or No (NDA)
+
+PIPLI TECHNOLOGIES PRIVATE LIMITED
+
+## 7. Problem Statement - Client's core problem
+
+Retail consumers lacked a unified, digital-first touchpoint to discover personalized local offers, manage transactions digitally, book store-specific events, and review e-bills. Malls and multi-store retailers needed a way to consolidate loyalty cards, paper receipts, and fragmented promotional efforts into a single branded portal.
+
+## 8. Project Objective - Expected outcome
+
+Develop a highly responsive Consumer Application (PWA) using Next.js to provide a robust digital wallet, geolocation-based live deals, interactive event booking mechanics, multi-tenant branding support, and offline capabilities. The platform must feel like a native mobile app strictly from the web browser.
+
+## 9. Solution Summary - What was built (simple terms)
+
+Built a comprehensive Next.js web application functioning as a native-like PWA. It handles complex state architecture using a combination of Redux (with persistence) and Zustand, while utilizing TanStack React Query for efficient server-state caching. The platform bridges full-stack boundaries natively inside Next.js. It successfully aggregates geolocation integration, secure wallet padding via the BillDesk SDK, and dynamically styled UI environments spanning multiple tenants.
+
+## 10. Key Features - Main functionalities
+
+* Multi-tenant dynamic theming mapping color variables across CSS and component states.
+* Secure OTP-based authentication fallback and session tracking.
+* Real-time geolocation algorithms serving proximity-based retail campaigns.
+* Comprehensive digital wallet handling (UPI/Credit/Debit) top-ups and ledger tracking.
+* Interactive Event Booking engine bundled with real-time Coupon redemption validation.
+* E-bill review system with PDF downloading and file generation.
+* PWA manifests yielding native iOS/Android installation behaviors.
+
+## 11. Frontend Tech - React, Angular, etc.
+
+Next.js 14, React 18, Tailwind CSS, Styled Components, Framer Motion, Redux + Redux-Persist, Zustand, TanStack React Query, Next-PWA, Formik + Yup.
+
+## 12. Backend Tech - Node.js, Java, Python, etc.
+
+Next.js API Routes (BFF proxy layers & core logic handling), Node.js.
+
+## 13. Database - MongoDB, PostgreSQL, etc.
+
+Client-side: Redux-Persist targeting local storage, Zustand stores, Cookie registries.
+Server-side: MySQL
+
+## 14. Cloud Platform - AWS, Azure, GCP
+
+AWS
+
+## 15. DevOps Tools - Docker, Kubernetes, CI/CD
+
+N/A
+
+## 16. AI/ML Used - Yes or No
+
+No
+
+## 17. AI/ML Details - Explain AI/ML usage
+
+N/A
+
+## 18. Individual Contribution - Your exact work
+
+* Engineered the core visual foundations utilizing Tailwind CSS paired with StyledComponents and component-level SCSS modules.
+* Formulated the entire architectural state mapping; segregating ephemeral thematic data to Zustand, durable transactional states to Redux Persist, and background-synchronization to React Query.
+* Built the complex digital checkout pipelines interacting with external SDKs like BillDesk for wallet top-ups.
+* Successfully implemented PWA caching strategies allowing offline resilience in spotty retail network connections.
+* Migrated legacy implementations directly to Next.js API Routes
+
+## 19. Challenges - Problems faced
+
+* Architecting a single-source codebase that dynamically reshapes its entire frontend aesthetics (CSS properties, manifest details, logos) based upon real-time tenant detection.
+* Optimizing hydration crashes when combining Next.js Server-Side Rendering arrays against durably synced local persistent keys under Redux Persist.
+* Validating external payment workflows efficiently through custom SDK interactions wrapped within React hooks without blocking thread concurrency.
+
+## 20. Solutions - How challenges were solved
+
+* Orchestrated a powerful unified Zustand `useThemeCart` hook directly at the `app.js` entry root. On startup, the service fetches domain/tenant specifics, injects the parameters into the global application, and immediately recalculates the active CSS tokens.
+* Deployed specialized `PersistGate` boundaries specifically tailored around hydration blocks, gracefully presenting loaders before painting complex client metrics.
+* Utilized robust caching systems inside `TanStack React Query`, decoupling standard RESTful HTTP fetch calls from the UI components directly, maintaining smooth 60fps renders.
+
+## 21. Measurable Results - Performance improvements (%)
+
+* Massively decreased UI "jank" and component pop-in artifacts by standardizing hydration chains correctly using Server-Side Rendering optimizations.
+* Facilitated paperless receipts effectively, replacing hard-copy invoices with digitally cached PDFs integrated through the `/bill-invoice` subsystems.
+
+## 22. Business Impact - Client-side benefits
+
+* Accelerated active marketing traction because location-specific push notifications drove foot traffic directly to proximity retailers.
+* Cut internal infrastructure friction; rather than spinning up distinct applications per tenant, the singular application successfully acts as a white-labeled powerhouse for varied enterprise customers.
+* Achieved a sticky user journey merging loyalty privileges, event discovery, and transaction ledgers together, yielding massive brand retention in participating retail locations.
+
+## 23. Architecture Summary - High-level system design
+
+A Hybrid SSR/CSR Next.js Web App configured to emit service-workers behaving as a PWA. State lives across a triad: Redux handling durable application data, Zustand tackling high-frequency/ephemeral layout toggles, and React Query handling asynchronous cache validity. The frontend interacts directly with Next.js specific Serverless API routes.
+
+## 24. Scalability Improvements - Scaling/performance enhancements
+
+* Segmenting fetching constraints directly into React Query automatically solves standard data deduping and invalidation complexities without requiring manual React lifecycle refactors.
+* Built heavily atomized components (BannerCards, Modals, Accordions) that receive styles strictly via theme-store properties, allowing infinite new tenants without rewriting JSX structures.
+* Migrating API dependencies directly into Next.js routes effectively scales endpoints dynamically alongside page generation logic without requiring standalone API web-servers.
+
+---

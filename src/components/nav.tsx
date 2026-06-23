@@ -20,7 +20,7 @@ export function Nav({
           activeId === href || (href !== "/" && activeId?.startsWith(href));
 
         return (
-          <NavItem key={href} href={href} active={active}>
+          <NavItem key={href} href={href as any} active={active}>
             {title}
           </NavItem>
         );

@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { getTableOfContents } from "fumadocs-core/server";
+import { getTableOfContents } from "fumadocs-core/content/toc";
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -19,9 +19,6 @@ import { cn } from "@/lib/utils";
 import { USER } from "@/data/user";
 import type { Post } from "@/types/blog";
 import { connection } from "next/server";
-
-// Enable PPR for this route
-export const experimental_ppr = true;
 
 export async function generateStaticParams() {
   const posts = getAllPosts();
@@ -117,7 +114,6 @@ async function BlogContent({ params }: { params: Promise<{ slug: string }> }) {
           __html: JSON.stringify(await getPageJsonLd(post)).replace(/</g, "\\u003c"),
         }}
       />
-
       <div className="flex items-center justify-between p-2 pl-4">
         <Button className="text-muted-foreground px-0" variant="link" asChild>
           <Link href="/blog">
@@ -153,9 +149,11 @@ async function BlogContent({ params }: { params: Promise<{ slug: string }> }) {
           )}
         </div>
       </div>
-
       <Prose className="px-4">
-        <h1 className="screen-line-before screen-line-after mb-6 font-semibold">
+        <h1 
+          className="screen-line-before screen-line-after mb-6 font-semibold"
+          style={{ viewTransitionName: `blog-title-${post.slug}` }}
+        >
           {post.metadata.title}
         </h1>
 
@@ -181,7 +179,6 @@ async function BlogContent({ params }: { params: Promise<{ slug: string }> }) {
           <MDX code={post.content} />
         </div>
       </Prose>
-
       <div className="screen-line-after h-8 px-2" />
       <Separator className="screen-line-after" />
       <RelatedPosts currentPost={post} />

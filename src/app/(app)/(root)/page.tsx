@@ -13,12 +13,11 @@ import { ProfileCover } from "@/features/profile/components/profile-cover";
 import { ProfileHeader } from "@/features/profile/components/profile-header";
 import { Projects } from "@/features/profile/components/projects";
 import { SocialLinks } from "@/features/profile/components/social-links";
-import { TeckStack } from "@/features/profile/components/teck-stack";
+import { TechStack } from "@/features/profile/components/tech-stack";
+import { GitHubContributions } from "@/features/profile/components/github-contributions";
+import { Insights } from "@/features/profile/components/insights";
 import { cn } from "@/lib/utils";
 import { DynamicDate } from "@/components/dynamic-date";
-
-// Enable PPR for this route
-export const experimental_ppr = true;
 
 export default function Page() {
   return (
@@ -41,7 +40,10 @@ export default function Page() {
         <About />
         <Separator />
 
-        <TeckStack />
+        <GitHubContributions />
+        <Separator />
+
+        <TechStack />
         <Separator />
 
         <Experiences />
@@ -57,6 +59,9 @@ export default function Page() {
         <Separator /> */}
 
         <Certifications />
+        <Separator />
+
+        <Insights />
         <Separator />
       </div>
     </>

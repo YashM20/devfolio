@@ -136,6 +136,7 @@
   --radius: 0.625rem;
   --selection: oklch(0.141 0.005 285.823);
   --selection-foreground: oklch(0.985 0 0);
+  --fade-bottom-height: 6rem;
 }
 
 .dark {
@@ -179,6 +180,7 @@
   --sidebar-ring: oklch(0.552 0.016 285.938);
   --selection: oklch(0.985 0 0);
   --selection-foreground: oklch(0.141 0.005 285.823);
+  --fade-bottom-height: 6rem;
 }
 
 @layer base {
@@ -194,6 +196,9 @@
     @apply bg-selection text-selection-foreground;
   }
 
+  @view-transition {
+    navigation: auto;
+  }
 
   html {
     @apply motion-safe:scroll-smooth;
@@ -276,3 +281,19 @@
     @apply bg-code-highlight;
   }
 }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@utility animate-fade-in-up {
+  animation: fadeInUp 400ms cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+

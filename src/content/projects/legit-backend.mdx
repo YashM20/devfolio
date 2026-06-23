@@ -1,0 +1,128 @@
+---
+title: "Legit (News Platform - Backend)"
+description: "A secure and scalable Node.js/Express news platform backend featuring automated RSS ingestion, auto-categorization, and an AI-powered conversational fact-checking chatbot."
+role: "Backend Developer (Node.js)"
+duration: "Apr 2024 - May 2024"
+industry: "Digital Media / News"
+client: "Legit (Naij.com Media Limited)"
+skills: ["Node.js", "Express.js", "MongoDB", "jsonwebtoken", "bcrypt", "OpenAI SDK", "Docker", "node-cron", "AWS"]
+createdAt: "2024-04-01"
+updatedAt: "2024-05-31"
+---
+
+## Problem Statement
+
+The spread of misinformation across digital platforms has created a major trust gap in online news consumption. Users often rely on multiple sources to verify claims, compare narratives, and identify credible reporting, making the process fragmented and time-consuming. Existing news applications primarily focus on content aggregation, while fact-checking platforms operate separately with limited real-time accessibility.
+
+The client required a unified, scalable backend platform that could automatically ingest news from multiple trusted sources, intelligently categorize articles, deliver personalized feeds, and provide an AI-powered conversational interface for instant claim verification. The platform also needed secure authentication with both email/password and Google OAuth support.
+
+---
+
+## Project Objective
+
+Build a production-ready Node.js REST API backend to power the Legit mobile application with an intelligent, secure, and scalable news ecosystem:
+- Automated hourly ingestion of news from multiple RSS sources
+- Smart article categorization through configurable keyword intelligence
+- AI-powered fact-checking chatbot using GPT-3.5 Turbo
+- JWT-based authentication with access and refresh token architecture
+- OTP-driven password recovery through email workflows
+- Personalized and paginated news feed APIs with category filters
+- Dockerized deployment for reliable cloud hosting and portability
+
+---
+
+## Solution Summary
+
+Developed a robust Express.js REST API backend powered by MongoDB (Mongoose ODM), supporting authentication, news delivery, and AI services.
+
+Implemented dual automated ingestion pipelines using `node-cron` that fetch, parse, deduplicate, categorize, and store articles from multiple RSS feeds every hour. Integrated OpenAI GPT-3.5 Turbo to enable a conversational fact-checking chatbot for real-time claim verification.
+
+Designed a secure authentication system using JWT access/refresh tokens, bcrypt password hashing, Google OAuth support, and OTP-based password recovery via Office365 SMTP. Built a dynamic category engine that classifies content using configurable keyword mappings, and containerized the entire application with Docker using non-root security practices.
+
+---
+
+## Key Features
+
+- **Dual RSS news ingestion pipelines** with hourly automated scheduling (`node-cron`).
+- **AI-powered fact-checking chatbot** using OpenAI GPT-3.5 Turbo Chat Completions API.
+- **Keyword-based article auto-categorization engine** with 13 default categories and database-configurable tags.
+- **JWT authentication** with configurable access token expiry and 30-day refresh tokens.
+- **Dual login method support**: email/password (\"legit\") and Google OAuth (\"google\").
+- **Password recovery workflow**: OTP generation → email delivery → OTP verification → password reset.
+- **Bcrypt password hashing** with auto-generated salts.
+- **Paginated news feed API** with category-based filtering.
+- **Trending news pipeline** from Google News RSS with IST timezone conversion.
+- **Image extraction** from article HTML content via regex with fallback thumbnails.
+- **Structured JSON logging** with Pino.
+- **Docker containerization** with non-root user execution.
+
+---
+
+## Individual Contribution
+
+- Designed and built complete REST API architecture from scratch.
+- Implemented dual RSS ingestion pipelines.
+- Built the categorization engine.
+- Developed JWT authentication system.
+- Built password recovery flow.
+- Integrated OpenAI chatbot.
+- Designed MongoDB schemas and models.
+- Implemented pagination and filtering APIs.
+- Configured logging and Docker deployment.
+
+---
+
+## Challenges & Solutions
+
+### Challenges
+- Concurrent RSS pipelines creating duplicates.
+- Designing a flexible categorization engine.
+- Missing article images in RSS feeds.
+- JWT lifecycle management.
+- OTP recovery flow complexity.
+- Parsing inconsistent RSS HTML.
+- Date consistency across pipelines.
+
+### Solutions
+- GUID-based deduplication checks before database write.
+- Two-tier category fallback system.
+- Random image fallback mechanism for posts without images.
+- DB-driven token expiry configuration.
+- Login method aware auth branching.
+- Regex-based image extraction from description blocks.
+- Timezone conversion handling.
+
+---
+
+## Measurable Results
+
+- Automated hourly ingestion with zero manual effort.
+- 13 production-ready REST APIs delivered.
+- Reliable duplicate prevention.
+- Auto-classified articles into 13 categories.
+- Real-time AI fact-checking enabled.
+- Dockerized deployment consistency.
+
+---
+
+## Business Impact
+
+- Differentiated platform with AI fact-checking capability.
+- Removed manual content curation overhead.
+- Increased trust and engagement through transparent source comparison.
+- Reduced onboarding friction.
+- Scalable backend foundation created.
+
+---
+
+## Architecture & Scalability
+
+### Architecture Summary
+Monolithic Express.js REST API with modular routes, MongoDB data layer, cron-based ingestion pipelines, JWT auth, OpenAI integration, SMTP recovery flow, structured logging, and Dockerized deployment.
+
+### Scalability Improvements
+- Database-driven categories and prompts.
+- Runtime configurable token expiry.
+- Modular route architecture.
+- Centralized error handling.
+- Docker portability across environments.

@@ -66,7 +66,10 @@ export default function Page() {
             />
 
             <div className="border-edge border-l border-dashed p-4">
-              <h2 className="text-balance font-medium leading-snug underline-offset-4 group-hover/post:underline">
+              <h2 
+                className="text-balance font-medium leading-snug underline-offset-4 group-hover/post:underline"
+                style={{ viewTransitionName: `component-title-${post.slug}` }}
+              >
                 {post.metadata.title}
               </h2>
             </div>

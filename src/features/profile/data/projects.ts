@@ -22,8 +22,22 @@ export const PROJECTS: Project[] = [
     logo: "https://assets.chanhdai.com/images/project-logos/quaricdotcom.svg",
     link: "",
     isExpanded: false,
+    hasCaseStudy: true,
     description:
       "Intelligent Multilingual Document Understanding. Developed advanced AI systems for intelligent multilingual document understanding, addressing challenges in extracting and interpreting information from diverse document formats (DOC, PDF, PPT, JPEG, PNG, handwritten) with mixed scripts (English, Hindi, Arabic, etc.). The solution focuses on accurate layout-aware parsing, preserving visual hierarchy, semantic grouping, and embedded elements like tables, images, maps, and charts. Implemented models to generate structured JSON outputs, including natural language descriptions of complex elements and line-wise bounding box coordinates for text.",
+  },
+  {
+    id: "uam",
+    title: "User Access Management (UAM)",
+    period: {
+      start: "2024",
+    },
+    skills: ["Angular", "Angular Material", "PrimeNG", "RxJS", "TypeScript"],
+    description:
+      "Developed a scalable frontend-driven User Access Management (UAM) system using Angular to manage roles and permissions across complex financial hierarchies. Supports dynamic permission mapping, hierarchical access control, bulk user creation queues, and real-time status notifications.",
+    link: "",
+    isExpanded: false,
+    hasCaseStudy: true,
   },
   {
     id: "wally-consumer-app",
@@ -38,6 +52,30 @@ export const PROJECTS: Project[] = [
     logo: "https://assets.chanhdai.com/images/project-logos/quaricdotcom.svg",
     link: "",
     isExpanded: false,
+    hasCaseStudy: true,
+  },
+  {
+    id: "legit-backend",
+    title: "Legit (News Platform - Backend)",
+    period: {
+      start: "2024",
+      end: "2024",
+    },
+    skills: [
+      "Node.js",
+      "Express.js",
+      "MongoDB",
+      "jsonwebtoken",
+      "bcrypt",
+      "OpenAI SDK",
+      "Docker",
+      "node-cron",
+    ],
+    description:
+      "Developed a robust Express.js REST API backend powered by MongoDB, supporting authentication, news delivery, and AI services. Implemented dual automated RSS ingestion pipelines with hourly schedules and integrated OpenAI GPT-3.5 Turbo for a conversational fact-checking chatbot.",
+    link: "",
+    isExpanded: false,
+    hasCaseStudy: true,
   },
   {
     id: "pipli-retailer-portal",
@@ -60,6 +98,7 @@ export const PROJECTS: Project[] = [
     logo: "https://assets.chanhdai.com/images/project-logos/quaricdotcom.svg",
     link: "",
     isExpanded: false,
+    hasCaseStudy: true,
   },
   {
     id: "video-live-streaming-platform",
@@ -84,6 +123,7 @@ export const PROJECTS: Project[] = [
     logo: "https://assets.chanhdai.com/images/project-logos/quaricdotcom.svg",
     link: "",
     isExpanded: false,
+    hasCaseStudy: true,
   },
   {
     id: "webstories-backend",
@@ -134,6 +174,7 @@ export const PROJECTS: Project[] = [
     logo: "https://assets.chanhdai.com/images/project-logos/quaricdotcom.svg",
     link: "",
     isExpanded: false,
+    hasCaseStudy: true,
   },
   {
     id: "file-converter-application",

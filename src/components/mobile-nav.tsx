@@ -36,7 +36,7 @@ export function MobileNav({
       <DropdownMenuContent className="w-64" align="end" sideOffset={8}>
         {items.map((link) => (
           <DropdownMenuItem key={link.href} asChild>
-            <Link href={link.href}>{link.title}</Link>
+            <Link href={link.href as any}>{link.title}</Link>
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
