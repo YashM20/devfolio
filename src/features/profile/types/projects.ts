@@ -10,4 +10,5 @@ export type Project = {
   description?: string;
   logo?: string;
   isExpanded?: boolean;
+  hasCaseStudy?: boolean;
 };

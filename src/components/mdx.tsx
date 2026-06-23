@@ -32,8 +32,20 @@ import { CodeBlockCommand } from "./code-block-command";
 import { CodeTabs } from "./code-tabs";
 import { CopyButton } from "./copy-button";
 import { getIconForLanguageExtension, Icons } from "./icons";
+import {
+  ProjectImage,
+  ProjectVideo,
+  ProjectIframe,
+  ProjectGrid,
+  ProjectSlider,
+} from "./project-media";
 
 const components: MDXRemoteProps["components"] = {
+  ProjectImage,
+  ProjectVideo,
+  ProjectIframe,
+  ProjectGrid,
+  ProjectSlider,
   h1: (props: React.ComponentProps<"h1">) => <Heading as="h1" {...props} />,
   h2: (props: React.ComponentProps<"h2">) => <Heading as="h2" {...props} />,
   h3: (props: React.ComponentProps<"h3">) => <Heading as="h3" {...props} />,

@@ -150,7 +150,10 @@ async function BlogContent({ params }: { params: Promise<{ slug: string }> }) {
         </div>
       </div>
       <Prose className="px-4">
-        <h1 className="screen-line-before screen-line-after mb-6 font-semibold">
+        <h1 
+          className="screen-line-before screen-line-after mb-6 font-semibold"
+          style={{ viewTransitionName: `blog-title-${post.slug}` }}
+        >
           {post.metadata.title}
         </h1>
 

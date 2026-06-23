@@ -43,7 +43,7 @@ const components: Partial<Components> = {
         target="_blank"
         rel="noreferrer"
         {...props}
-        href={props.href || "#"}
+        href={(props.href || "#") as any}
       >
         {children}
       </Link>

@@ -154,7 +154,7 @@ export function CommandMenu({ posts }: { posts: Post[] }) {
       if (openInNewTab) {
         window.open(href, "_blank", "noopener");
       } else {
-        router.push(href);
+        router.push(href as any);
       }
     },
     [router]
