@@ -2,16 +2,26 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
-  reactCompiler: true,
+  typedRoutes: true,
+  transpilePackages: ["next-mdx-remote"],
+  // This is required to support PostHog trailing slash API requests
+  skipTrailingSlashRedirect: true,
+  cacheComponents: true,
   experimental: {
     viewTransition: true,
-    ppr: true,
-    cacheComponents: true,
-    browserDebugInfoInTerminal: true,
-    clientSegmentCache: true,
     mdxRs: true,
-    turbopackFileSystemCacheForDev: true,
   },
+  logging: {
+    browserToTerminal: true
+  },
+  compiler:
+      process.env.NODE_ENV === "production"
+        ? {
+            removeConsole: {
+              exclude: ["error"],
+            },
+          }
+        : undefined,
   images: {
     qualities: [25, 50, 75, 100],
     remotePatterns: [
@@ -41,7 +51,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  transpilePackages: ["next-mdx-remote"],
   async rewrites() {
     return [
       {
@@ -62,8 +71,7 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  // This is required to support PostHog trailing slash API requests
-  skipTrailingSlashRedirect: true,
+
 };
 
 export default nextConfig;

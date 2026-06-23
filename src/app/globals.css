@@ -136,6 +136,7 @@
   --radius: 0.625rem;
   --selection: oklch(0.141 0.005 285.823);
   --selection-foreground: oklch(0.985 0 0);
+  --fade-bottom-height: 6rem;
 }
 
 .dark {
@@ -179,6 +180,7 @@
   --sidebar-ring: oklch(0.552 0.016 285.938);
   --selection: oklch(0.985 0 0);
   --selection-foreground: oklch(0.141 0.005 285.823);
+  --fade-bottom-height: 6rem;
 }
 
 @layer base {
