@@ -23,21 +23,34 @@ function parseImagesProp(images: string[] | string | undefined): string[] {
   return [];
 }
 
+const aspectMap = {
+  video: "aspect-video w-full",
+  portrait: "aspect-[9/16] w-full max-w-[320px] mx-auto",
+  square: "aspect-square w-full max-w-[480px] mx-auto",
+  auto: "aspect-auto w-full",
+};
+
+export type AspectType = "video" | "portrait" | "square" | "auto";
+
 // 1. Image Component with Outlines & Captions
 export function ProjectImage({
   src,
   alt,
   caption,
   className,
+  aspect = "video",
 }: {
   src: string;
   alt: string;
   caption?: string;
   className?: string;
+  aspect?: AspectType;
 }) {
+  const aspectClass = aspectMap[aspect] || aspectMap.video;
+
   return (
-    <figure className={cn("my-6 overflow-hidden rounded-2xl border border-edge bg-muted/20 p-2", className)}>
-      <div className="relative aspect-video overflow-hidden rounded-lg bg-muted">
+    <figure className={cn("my-6 overflow-hidden rounded-2xl border border-edge bg-muted/20 p-2", aspect === "portrait" && "max-w-[336px] mx-auto", className)}>
+      <div className={cn("relative overflow-hidden rounded-lg bg-muted", aspectClass)}>
         <Image
           src={src}
           alt={alt}
@@ -61,14 +74,18 @@ export function ProjectVideo({
   src,
   caption,
   className,
+  aspect = "video",
 }: {
   src: string;
   caption?: string;
   className?: string;
+  aspect?: AspectType;
 }) {
+  const aspectClass = aspectMap[aspect] || aspectMap.video;
+
   return (
-    <figure className={cn("my-6 overflow-hidden rounded-2xl border border-edge bg-muted/20 p-2", className)}>
-      <div className="relative aspect-video overflow-hidden rounded-lg bg-muted">
+    <figure className={cn("my-6 overflow-hidden rounded-2xl border border-edge bg-muted/20 p-2", aspect === "portrait" && "max-w-[336px] mx-auto", className)}>
+      <div className={cn("relative overflow-hidden rounded-lg bg-muted", aspectClass)}>
         <video
           src={src}
           controls
@@ -135,8 +152,13 @@ export function ProjectGrid({
 }
 
 // 5. Image Carousel / Slider
-function SliderCarousel({ images }: { images?: string[] | string }) {
-  const imageList = parseImagesProp(images);
+function SliderCarousel({
+  images,
+  aspect = "video",
+}: {
+  images: string[];
+  aspect?: AspectType;
+}) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
 
   const scrollPrev = React.useCallback(() => {
@@ -147,12 +169,14 @@ function SliderCarousel({ images }: { images?: string[] | string }) {
     if (emblaApi) emblaApi.scrollNext();
   }, [emblaApi]);
 
+  const aspectClass = aspectMap[aspect] || aspectMap.video;
+
   return (
-    <div className="relative my-6 overflow-hidden rounded-2xl border border-edge bg-muted/20 p-2">
-      <div className="overflow-hidden rounded-lg" ref={emblaRef}>
-        <div className="flex">
-          {imageList.map((src, index) => (
-            <div className="relative aspect-video min-w-0 flex-[0_0_100%]" key={index}>
+    <div className={cn("relative my-6 overflow-hidden rounded-2xl border border-edge bg-muted/20 p-2", aspect === "portrait" && "max-w-[336px] mx-auto")}>
+      <div className={cn("overflow-hidden rounded-lg bg-muted", aspectClass)} ref={emblaRef}>
+        <div className="flex h-full w-full">
+          {images.map((src, index) => (
+            <div className="relative h-full w-full min-w-0 flex-[0_0_100%]" key={index}>
               <Image
                 src={src}
                 alt={`Slide ${index + 1}`}
@@ -185,23 +209,28 @@ function SliderCarousel({ images }: { images?: string[] | string }) {
   );
 }
 
-export function ProjectSlider({ images }: { images?: string[] | string }) {
+export function ProjectSlider({
+  images,
+  aspect = "video",
+}: {
+  images?: string[] | string;
+  aspect?: AspectType;
+}) {
   const imageList = parseImagesProp(images);
-  console.log("DEBUG [ProjectSlider] imageList parsed:", imageList);
   const [isMounted, setIsMounted] = React.useState(false);
 
   React.useEffect(() => {
     setIsMounted(true);
   }, []);
 
+  const aspectClass = aspectMap[aspect] || aspectMap.video;
+
   if (!isMounted) {
-    // Render static preview layout on server/SSR to avoid Layout Shift (CLS)
-    // and prevent executing Embla hooks before mounting on the client.
     return (
-      <div className="relative my-6 overflow-hidden rounded-2xl border border-edge bg-muted/20 p-2">
-        <div className="overflow-hidden rounded-lg">
-          <div className="flex">
-            <div className="relative aspect-video min-w-0 flex-[0_0_100%] bg-muted">
+      <div className={cn("relative my-6 overflow-hidden rounded-2xl border border-edge bg-muted/20 p-2", aspect === "portrait" && "max-w-[336px] mx-auto")}>
+        <div className={cn("overflow-hidden rounded-lg bg-muted", aspectClass)}>
+          <div className="flex h-full w-full">
+            <div className="relative w-full h-full bg-muted">
               {imageList[0] && (
                 <Image
                   src={imageList[0]}
@@ -227,5 +256,5 @@ export function ProjectSlider({ images }: { images?: string[] | string }) {
     );
   }
 
-  return <SliderCarousel images={imageList} />;
+  return <SliderCarousel images={imageList} aspect={aspect} />;
 }

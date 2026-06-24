@@ -143,12 +143,12 @@ async function ProjectContent({ params }: { params: Promise<{ slug: string }> })
               alt={`${project.title} logo`}
               width={36}
               height={36}
-              className="size-9 rounded-lg border bg-muted/30 object-cover"
+              className="m-0! size-9 rounded-lg border bg-muted/30 object-cover"
               unoptimized
             />
           )}
           <h1 
-            className="m-0 font-semibold text-balance text-2xl md:text-3xl border-none p-0 before:content-none after:content-none"
+            className="m-0! font-semibold text-balance text-2xl md:text-3xl border-none p-0 before:content-none after:content-none"
             style={{ viewTransitionName: `project-title-${post.slug}` }}
           >
             {post.metadata.title}
