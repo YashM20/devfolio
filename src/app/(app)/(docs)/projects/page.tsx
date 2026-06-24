@@ -98,6 +98,7 @@ function ProjectCard({ project, index }: { project: (typeof PROJECTS)[number]; i
         src={project.logo!}
         alt={project.title}
         fill
+        sizes="32px"
         className="object-cover grayscale select-none group-hover/project:grayscale-0 transition-[filter] duration-300"
         unoptimized
       />

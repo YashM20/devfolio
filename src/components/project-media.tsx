@@ -32,6 +32,16 @@ const aspectMap = {
 
 export type AspectType = "video" | "portrait" | "square" | "auto";
 
+function getAspectSizes(aspect: AspectType = "video"): string {
+  if (aspect === "portrait") {
+    return "(max-width: 360px) 100vw, 320px";
+  }
+  if (aspect === "square") {
+    return "(max-width: 520px) 100vw, 480px";
+  }
+  return "(max-width: 768px) 100vw, 768px";
+}
+
 // 1. Image Component with Outlines & Captions
 export function ProjectImage({
   src,
@@ -55,6 +65,7 @@ export function ProjectImage({
           src={src}
           alt={alt}
           fill
+          sizes={getAspectSizes(aspect)}
           className="object-cover"
           unoptimized
         />
@@ -181,6 +192,7 @@ function SliderCarousel({
                 src={src}
                 alt={`Slide ${index + 1}`}
                 fill
+                sizes={getAspectSizes(aspect)}
                 className="object-cover"
                 unoptimized
               />
@@ -236,6 +248,7 @@ export function ProjectSlider({
                   src={imageList[0]}
                   alt="Slide 1 Preview"
                   fill
+                  sizes={getAspectSizes(aspect)}
                   className="object-cover"
                   unoptimized
                 />
