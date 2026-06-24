@@ -22,6 +22,7 @@ import {
   RefreshCwIcon,
   SmartphoneIcon,
   BoxIcon,
+  SparklesIcon,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -102,8 +103,8 @@ export function ProjectItem({
                     {project.title}
                   </h3>
 
-                <div className="text-muted-foreground flex items-center gap-4 text-sm">
-                  <div className="flex items-center gap-1">
+                <div className="text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
+                  <div className="flex shrink-0 items-center gap-1 whitespace-nowrap">
                     <CalendarIcon className="size-3" />
                     <span>{start}</span>
                     <span className="font-mono">—</span>
@@ -120,7 +121,7 @@ export function ProjectItem({
                     )}
                   </div>
 
-                  <div className="flex items-center gap-1">
+                  <div className="flex shrink-0 items-center gap-1 whitespace-nowrap">
                     <CodeIcon className="size-3" />
                     <span>{project.skills.length} technologies</span>
                   </div>

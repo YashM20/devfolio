@@ -1,14 +1,9 @@
-import dynamic from "next/dynamic";
 import { ScrollTop } from "@/components/scroll-top";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { CookieConsent } from "@/components/cookie-consent";
-// import { AiAssistant } from "@/components/ai/ai-assistant";
+import { AiAssistantWrapper } from "@/components/ai/ai-assistant-wrapper";
 import { Suspense } from "react";
-
-const AiAssistant = dynamic(() => import("@/components/ai/ai-assistant").then((mod) => mod.AiAssistant), {
-  ssr: true,
-});
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -25,7 +20,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       </div>
       <ScrollTop />
       <Suspense fallback={null}>
-        <AiAssistant />
+        <AiAssistantWrapper />
       </Suspense>
       <CookieConsent />
     </div>

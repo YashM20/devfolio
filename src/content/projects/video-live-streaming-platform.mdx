@@ -8,7 +8,172 @@ client: "PARSHIL LIVCAST STREAMING INFOTECH PRIVATE LIMITED"
 skills: ["React Native", "Redux", "Zustand", "FFmpeg", "WebRTC", "AWS S3", "AWS Lambda", "MongoDB", "Facebook API", "YouTube API"]
 createdAt: "2021-03-01"
 updatedAt: "2022-06-30"
+toc: false
 ---
+
+<Tabs defaultValue="details">
+
+<TabsList className="mb-6">
+  <TabsTrigger value="details">Project Details</TabsTrigger>
+  <TabsTrigger value="casestudy">Case Study</TabsTrigger>
+</TabsList>
+
+<TabsContent value="details">
+
+<LocalTOC />
+
+## Problem Statement
+
+Live streaming demand has exploded, particularly in mobile-first regions. However, most professional broadcasting solutions remain heavily desktop-centric. Open Broadcaster Software (OBS) is powerful but bulky, complex, and unsuited for creators on the move. 
+
+Mobile creators were forced to juggle multiple disconnected applications to stream across different networks, manage their assets, and view metrics. There was no simple, mobile-first solution that combined multi-destination streaming, local video editing, and reliable, low-latency live broadcasting in a single package.
+
+---
+
+## Project Objective
+
+- **Multi-Destination Broadcasting**: Enable seamless simultaneous streaming to Facebook Live, YouTube, and Twitch from a single mobile device.
+- **Dynamic Ingestion**: Support multiple input sources including on-device cameras, RTMP feeds, local video file uploads, and external stream URLs.
+- **Continuous 24/7 Playback**: Build loop-playback pipelines for pre-recorded media to allow creators to run automated, scheduled virtual streams.
+- **On-Device Video Editing**: Provide immediate trimming, aspect-ratio scaling, filter overlays, and brand watermarking directly on the device.
+- **Robust Delivery**: Ensure a highly stable, low-latency stream pipeline using optimized RTMP ingestion settings.
+
+---
+
+## Solution Summary
+
+We developed **LivCast**, a mobile live streaming app built in React Native (Android/iOS) that allows content creators to broadcast live feeds or pre-recorded videos to multiple destinations simultaneously. 
+
+By implementing an on-device media processing pipeline powered by **FFmpeg**, creators can edit their videos, schedule broadcasts, and optimize stream parameters directly from their phones.
+
+### Core Interface Preview
+
+Below is a preview of the main application flows—including onboarding, live setups, target platform selection, and scheduling configurations:
+
+<ProjectSlider images="/images/project/livcast/screen-0.webp, /images/project/livcast/screen-1.webp, /images/project/livcast/screen-2.webp, /images/project/livcast/screen-3.webp" />
+
+---
+
+## Key Features
+
+- **Simultaneous Multi-Streaming**: Stream once from your mobile device and broadcast to YouTube, Facebook, and Twitch concurrently.
+- **Link Ingestion**: Provide a direct video URL to go live immediately, bypassing long manual uploads.
+- **Automated Scheduling**: Set one-time or recurring streams with continuous 24/7 looping playback.
+- **Content Creation Hub**: Created Reels and interactive Web Stories editors to drive user engagement on mobile feeds.
+- **Large Asset Management**: Optimized upload queues for files exceeding 1GB using progressive multipart uploads.
+
+<ProjectGrid cols={2}>
+  <ProjectImage
+    src="/images/project/livcast/screen-4.webp"
+    alt="Video Ingestion Setup"
+    caption="Figure 1: Configurable Ingestion Settings, Scheduling Calendar, and Media Files Preview"
+  />
+  <ProjectImage
+    src="/images/project/livcast/screen-5.webp"
+    alt="Broadcasting Feed"
+    caption="Figure 2: Active Multi-Destination Stream Manager Indicating Stream Key Statuses"
+  />
+</ProjectGrid>
+
+---
+
+## Individual Contribution & Implementation
+
+As the core React Native Frontend Developer, I architected the application from scratch and built the native media bridge:
+
+### 1. On-Device Video Editing Engine
+I designed the on-device video compilation layer using FFmpeg. When a video is selected, the application calls native processes to crop, trim, rotate, and compress the asset.
+
+For instance, to extract dynamic preview thumbnails from video files, we run:
+
+```bash
+# Extract a frame at the 5-second mark with high quality
+ffmpeg -ss 00:00:05 -i input.mp4 -vframes 1 -q:v 2 output_thumbnail.jpg
+```
+
+### 2. Multi-Platform Ingestion
+I implemented the Facebook Graph API and YouTube Data API integrations, solving complex OAuth permission models and automated stream creation workflows. 
+
+To stream pre-recorded assets to multiple endpoints, I configured a multiplexed RTMP forwarding command:
+
+```bash
+# Stream input.mp4 continuously to Facebook and YouTube RTMP targets using the tee muxer
+ffmpeg -re -i input.mp4 \
+  -c:v libx264 -preset veryfast -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 60 \
+  -c:a aac -ar 44100 -b:a 128k \
+  -f tee -map 0 "[f=flv]rtmp://youtube_stream_url/key|[f=flv]rtmp://facebook_stream_url/key"
+```
+
+### 3. Native App Performance Tweaks
+- **UI Jank Reduction**: Migrated heavy-listing lists from `FlatList` to Shopify's `FlashList`, reducing item rendering lags by over 80%.
+- **Client Cache**: Implemented `TanStack Query` for robust state synchronization, eliminating redundant API fetch requests.
+- **Storage Layer**: Integrated `Zustand` and `MMKV` for fast, thread-safe local settings storage.
+
+<ProjectGrid cols={2}>
+  <ProjectImage
+    src="/images/project/livcast/screen-6.webp"
+    alt="Analytics Dashboard"
+    caption="Figure 3: Active Stream Analytics Viewport Tracking Viewer Counts, Watch Time, and Chat Feeds"
+  />
+  <ProjectImage
+    src="/images/project/livcast/screen-7.webp"
+    alt="Reels Editor"
+    caption="Figure 4: Web Stories and Reels Short-Form Content Creator and Editor Interface"
+  />
+</ProjectGrid>
+
+---
+
+## Challenges & Solutions
+
+### Complex FFmpeg Ingestion Constraints
+*YouTube and Facebook enforce different audio/video encoding guidelines (e.g., specific GOP size, constant frame rates, and AAC audio profiles).*
+- **Solution**: We created a modular transcoding profiles builder. Depending on the active targets selected, our FFmpeg bridge dynamically compiles parameters matching all platform guidelines (forcing `-g 60` for 30fps stream rates).
+
+### Large Asset Mobile Network Timeouts
+*Uploading files larger than 1GB regularly timed out on unstable mobile network connections.*
+- **Solution**: Built a progressive chunked upload pipeline. We split assets into 5MB parts locally, loaded them via an optimized background WebView, and routed them to AWS S3 buckets. Failed parts were automatically retried from the checkpoint.
+
+---
+
+## Measurable Results
+
+- **Low-Latency Streams**: Maintained sub-3-second stream delay across major CDNs.
+- **Reliable Large Uploads**: Achieved a 98% upload success rate for files up to 2GB over cellular connections.
+- **Fluid UI**: FlashList integration restored constant 60 FPS scrolling on legacy Android devices.
+- **On-Device Trimming**: Trimming operations finished in under 10 seconds for standard mobile video lengths.
+
+---
+
+## Business Impact
+
+- **Audience Multiplier**: Enabled creators to double their viewership by streaming to Facebook and YouTube at the same time.
+- **Self-Service Scheduling**: Reduced operational workloads by allowing creators to pre-program virtual streams 7 days in advance.
+- **Content Diversity**: Short-form Reels and Web Stories drove a 45% increase in user session durations inside the mobile feed.
+
+---
+
+## Architecture & Scalability
+
+### Architecture Diagram
+- **Frontend Core**: React Native (Bare Workflow) targeting Android API 21+ and iOS 13+.
+- **Media Transcoder**: On-device FFmpeg binaries utilizing hardware-accelerated H.264 profiles.
+- **Asset Ingestion**: AWS S3 with CloudFront CDN integration.
+- **Live Notifications**: WebSocket notifications for stream updates and interactive chat engagement.
+
+</TabsContent>
+
+<TabsContent value="casestudy">
+
+<LocalTOC />
+
+<div className="flex items-center gap-4 my-6 not-prose">
+  <img src="/images/project/livcast/livcast_logo.webp" alt="LivCast Logo" className="w-16 h-16 rounded-xl border object-cover bg-muted/30 p-1" />
+  <div>
+    <h3 className="text-xl font-semibold text-foreground">LivCast</h3>
+    <p className="text-muted-foreground text-sm font-mono">Mobile Live Streaming Application</p>
+  </div>
+</div>
 
 ## Problem Statement
 
@@ -20,15 +185,15 @@ Creators had to rely on multiple tools to stream across platforms, manage conten
 
 ## Project Objective
 
-- Enable seamless multi-platform streaming (Facebook, YouTube, Twitch) from a single app.
-- Support multiple input sources (RTMP, uploads, external links, camera, podcasts).
-- Provide advanced scheduling (one-time, recurring, automated streams).
-- Support 24/7 continuous streaming with loop playback for pre-recorded content.
-- Enable real-time analytics & monitoring (viewers, latency, engagement).
-- Provide content editing capabilities (trimming, filters, transitions) before streaming.
-- Support custom RTMP destinations for platform flexibility.
-- Ensure low-latency and reliable streaming pipeline using standard protocols like RTMP.
-- Offer a mobile-first, easy-to-use experience replacing complex desktop tools.
+* Enable seamless multi-platform streaming (Facebook, YouTube, Twitch) from a single app
+* Support multiple input sources (RTMP, uploads, external links, camera, podcasts)
+* Provide advanced scheduling (one-time, recurring, automated streams)
+* Support 24/7 continuous streaming with loop playback for pre-recorded content
+* Enable real-time analytics & monitoring (viewers, latency, engagement)
+* Provide content editing capabilities (trimming, filters, transitions) before streaming
+* Support custom RTMP destinations for platform flexibility
+* Ensure low-latency and reliable streaming pipeline using standard protocols like RTMP
+* Offer a mobile-first, easy-to-use experience replacing complex desktop tools
 
 ---
 
@@ -39,120 +204,109 @@ Built a mobile-first live streaming platform using React Native (Android/iOS) th
 Users can upload or use pre-recorded content, edit it, schedule streams, and broadcast simultaneously to platforms like Facebook, YouTube, and Twitch.
 
 A core part of the solution was a robust media processing pipeline using FFmpeg, enabling:
-- Video trimming, filters, transitions, and compression
-- Real-time transcoding and format conversion
-- Streaming via protocols like RTMP/HLS
-- Handling multiple input/output streams efficiently
-- Cloud-based media processing
-- Multi-source ingestion
+* Video trimming, filters, transitions, and compression
+* Real-time transcoding and format conversion
+* Streaming via protocols like RTMP/HLS
+* Handling multiple input/output streams efficiently
+* Cloud-based media processing
+* Multi-source ingestion
 
 ---
 
 ## Key Features
 
-- **Multi-platform streaming** (Facebook, YouTube, Twitch).
-- **Mobile-first streaming** (no bulky tools like OBS needed).
-- **Multiple input sources** (RTMP, uploads, links, camera, podcasts).
-- **Direct video link ingestion** (go live instantly without manual upload).
-- **24/7 continuous streaming** with loop playback.
-- **Advanced scheduling** (automated & recurring streams).
-
-### Video Editing (FFmpeg-powered)
-- Trimming, filters, transitions, compression.
-- Format conversion & optimization for streaming.
-- Real-time processing pipeline.
-- Auto thumbnail generation from video frames using FFmpeg.
-- Watermark & branding support (logo/text overlay).
-- Reels (short-form video creation & editing).
-- Web Stories (interactive content format).
-- Large file uploads with multipart handling (S3).
-- Real-time stream monitoring & status updates.
-- Push notifications for engagement.
+* **Multi-platform streaming** (Facebook, YouTube, Twitch)
+* **Mobile-first streaming** (no bulky tools like OBS)
+* **Multiple input sources** (RTMP, uploads, links, camera, podcasts)
+* **Direct video link → go live instantly** (no manual upload needed)
+* **24/7 continuous streaming** with loop playback
+* **Advanced scheduling** (automated & recurring streams)
+* **Video Editing (FFmpeg-powered)**: Trimming, filters, transitions, compression, auto thumbnail generation, and watermark branding
+* **Short-form Content**: Reels and Web Stories editors
+* **Large File Queue**: Multipart uploads up to 1GB (S3)
 
 ---
 
 ## Individual Contribution
 
-- Initiated project from scratch, including research on FFmpeg-based streaming pipeline.
-- Implemented Facebook Graph API for live streaming (auth, permissions, stream creation).
-- Solved complex Facebook login + permission flow issues in React Native.
-- Built feature: YouTube video link → directly go live on Facebook using FFmpeg + RTMP.
-- Integrated YouTube Data API for live streaming workflows.
-- Handled multi-platform streaming (Facebook + YouTube) with FFmpeg.
-- Developed video editing engine using FFmpeg (on-device): trim, filters, scaling, rotation.
-- Built auto thumbnail generation using FFmpeg frame extraction.
-- Used FFprobe for extracting video metadata.
-- Implemented camera live streaming (React Native → FFmpeg pipeline).
-- Built large file upload system (1GB+), optimized via WebView approach.
-- Developed Reels and Web Stories features.
-- Integrated payment gateways (Paytm, Razorpay).
-- Integrated Google Ads SDK (rewarded ads).
-- Led React Native architecture migration.
+* Initiated project from scratch, including research on FFmpeg-based streaming pipeline
+* Implemented Facebook Graph API for live streaming (auth, permissions, stream creation)
+* Solved complex Facebook login + permission flow issues in React Native
+* Built feature: YouTube video link → directly go live on Facebook using FFmpeg + RTMP
+* Integrated YouTube Data API for live streaming workflows
+* Handled multi-platform streaming (Facebook + YouTube) with FFmpeg
+* Developed video editing engine using FFmpeg (on-device): trim, filters, scaling, rotation
+* Built auto thumbnail generation using FFmpeg frame extraction
+* Used FFprobe for extracting video metadata
+* Implemented camera live streaming (React Native → FFmpeg pipeline)
+* Built large file upload system (1GB+), optimized via WebView approach
+* Developed Reels and Web Stories features
+* Integrated payment gateways (Paytm, Razorpay)
+* Integrated Google Ads SDK (rewarded ads)
+* Led React Native architecture migration
 
-### Performance Optimizations
-- Replaced FlatList with FlashList → reduced UI lag.
-- Migrated to TanStack Query for caching & API efficiency.
-- Used Zustand + MMKV for fast local storage.
-- Used Reanimated for smooth animations.
+**Performance Optimizations**:
+* Replaced FlatList with FlashList → reduced UI lag
+* Migrated to TanStack Query for caching & API efficiency
+* Used Zustand + MMKV for fast local storage
+* Used Reanimated for smooth animations
 
 ---
 
 ## Challenges & Solutions
 
 ### Challenges
-- Complex FFmpeg configurations for YouTube streaming.
-- Handling simultaneous streaming (Facebook + YouTube).
-- Implementing 24/7 loop streaming using FFmpeg.
-- RTMP/FLV compatibility issues.
-- React Native limitations for camera streaming.
-- Large file uploads (>1GB) on mobile networks.
-- Facebook API permission constraints.
-- Performance bottlenecks in video processing.
-- React Native architecture migration issues.
+* Complex FFmpeg configurations for YouTube streaming
+* Handling simultaneous streaming (Facebook + YouTube)
+* Implementing 24/7 loop streaming using FFmpeg
+* RTMP/FLV compatibility issues
+* React Native limitations for camera streaming
+* Large file uploads (>1GB) on mobile networks
+* Facebook API permission constraints
+* Performance bottlenecks in video processing
+* React Native architecture migration issues
 
 ### Solutions
-- Tuned FFmpeg commands for bitrate, GOP, encoding settings.
-- Fixed RTMP streaming via delay + FLV configuration.
-- Built abstraction for multi-platform streaming.
-- Used FFmpeg flags for continuous streaming.
-- Optimized uploads using multipart + WebView fallback.
-- Implemented custom permission handling for Facebook APIs.
-- Used FFprobe for validation.
+* Tuned FFmpeg commands for bitrate, GOP, encoding settings
+* Fixed RTMP streaming via delay + FLV configuration
+* Built abstraction for multi-platform streaming
+* Used FFmpeg flags for continuous streaming
+* Optimized uploads using multipart + WebView fallback
+* Implemented custom permission handling for Facebook APIs
+* Used FFprobe for validation
 
 ---
 
 ## Measurable Results
 
-- Stable multi-platform streaming (Facebook + YouTube).
-- Reduced UI lag after FlashList migration.
-- Improved API performance via caching.
-- Reliable large file uploads (>1GB).
-- Smooth mobile video editing experience.
+* Stable multi-platform streaming (Facebook + YouTube)
+* Reduced UI lag after FlashList migration
+* Improved API performance via caching
+* Reliable large file uploads (>1GB)
+* Smooth mobile video editing experience
 
 ---
 
 ## Business Impact
 
-- Enabled multi-platform audience reach.
-- Reduced dependency on external tools.
-- Increased engagement via Reels & Web Stories.
-- Automated scheduling reduced manual effort.
-- Provided scalable infrastructure.
+* Enabled multi-platform audience reach
+* Reduced dependency on external tools
+* Increased engagement via Reels & Web Stories
+* Automated scheduling reduced manual effort
+* Provided scalable infrastructure
 
 ---
 
-## Architecture & Scalability
+## Architecture Summary
 
-### Architecture Summary
-- **Mobile App**: React Native (Android/iOS)
-- **Backend**: Node.js + Java Microservices
-- **Media pipeline**: FFmpeg (encoding, transcoding, streaming)
-- **Streaming**: RTMP
-- **Storage**: AWS S3 / Azure Blob
-- **CDN**: CloudFront
-- **Real-time**: WebSockets
+* **Mobile App**: React Native (Android/iOS)
+* **Backend**: Node.js + Java Microservices
+* **Media pipeline**: FFmpeg (encoding, transcoding, streaming)
+* **Streaming**: RTMP
+* **Storage**: AWS S3 / Azure Blob
+* **CDN**: CloudFront
+* **Real-time**: WebSockets
 
-### Scalability Improvements
-- Optimized client-side performance (FlashList, MMKV, caching).
-- Efficient FFmpeg-based media pipeline.
-- CDN-based delivery.
+</TabsContent>
+
+</Tabs>

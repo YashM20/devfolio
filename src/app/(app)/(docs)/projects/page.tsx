@@ -15,6 +15,7 @@ import {
   CreditCard,
   RefreshCw,
   Smartphone,
+  Sparkles,
 } from "lucide-react";
 
 import { PROJECTS } from "@/features/profile/data/projects";

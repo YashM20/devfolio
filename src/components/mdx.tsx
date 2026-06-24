@@ -39,6 +39,7 @@ import {
   ProjectGrid,
   ProjectSlider,
 } from "./project-media";
+import { LocalTOC } from "./local-toc";
 
 const components: MDXRemoteProps["components"] = {
   ProjectImage,
@@ -46,6 +47,7 @@ const components: MDXRemoteProps["components"] = {
   ProjectIframe,
   ProjectGrid,
   ProjectSlider,
+  LocalTOC,
   h1: (props: React.ComponentProps<"h1">) => <Heading as="h1" {...props} />,
   h2: (props: React.ComponentProps<"h2">) => <Heading as="h2" {...props} />,
   h3: (props: React.ComponentProps<"h3">) => <Heading as="h3" {...props} />,

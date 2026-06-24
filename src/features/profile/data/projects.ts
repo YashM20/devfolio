@@ -1,6 +1,31 @@
 import type { Project } from "../types/projects";
 
 export const PROJECTS: Project[] = [
+    {
+    id: "video-live-streaming-platform",
+    title: "LivCast",
+    period: {
+      start: "2022",
+      end: "2023",
+    },
+    skills: [
+      "React",
+      "React Native",
+      "Node.js",
+      "FFmpeg",
+      "WebRTC",
+      "AWS S3",
+      "AWS Lambda",
+      "Facebook API",
+      "YouTube API",
+    ],
+    description:
+      "As a Full-Stack Developer, I built a live streaming platform for web and mobile using React and React Native. It supports multi-streaming to Facebook, YouTube, and Twitch. I integrated FFmpeg for video processing, WebRTC for real-time communication, and various APIs for broadcasting and cloud storage.",
+    logo: "/images/project/livcast/livcast_logo.webp",
+    link: "",
+    isExpanded: false,
+    hasCaseStudy: true,
+  },
   {
     id: "dexai",
     title: "DexAI",
@@ -95,31 +120,6 @@ export const PROJECTS: Project[] = [
     ],
     description:
       "Developed a responsive retailer portal using React and Next.js, enabling retailers to manage feedback, e-bills, and promotions. I implemented analytics, customized bill designs, and integrated authentication with OAuth/JWT for secure access.",
-    logo: "https://assets.chanhdai.com/images/project-logos/quaricdotcom.svg",
-    link: "",
-    isExpanded: false,
-    hasCaseStudy: true,
-  },
-  {
-    id: "video-live-streaming-platform",
-    title: "LivCast",
-    period: {
-      start: "2022",
-      end: "2023",
-    },
-    skills: [
-      "React",
-      "React Native",
-      "Node.js",
-      "FFmpeg",
-      "WebRTC",
-      "AWS S3",
-      "AWS Lambda",
-      "Facebook API",
-      "YouTube API",
-    ],
-    description:
-      "As a Full-Stack Developer, I built a live streaming platform for web and mobile using React and React Native. It supports multi-streaming to Facebook, YouTube, and Twitch. I integrated FFmpeg for video processing, WebRTC for real-time communication, and various APIs for broadcasting and cloud storage.",
     logo: "https://assets.chanhdai.com/images/project-logos/quaricdotcom.svg",
     link: "",
     isExpanded: false,
