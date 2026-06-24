@@ -15,6 +15,7 @@ export type ProjectPostMetadata = {
   createdAt: string;
   updatedAt: string;
   image?: string;
+  toc?: boolean;
   readingTime?: {
     minutes: number;
     words: number;

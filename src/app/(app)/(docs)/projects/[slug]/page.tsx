@@ -2,6 +2,7 @@ import { getTableOfContents } from "fumadocs-core/content/toc";
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import type { TechArticle as PageSchema, WithContext } from "schema-dts";
@@ -15,9 +16,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { ReadingTime } from "@/components/blog";
 import { getAllProjectPosts, getProjectPostBySlug, findNeighbourProject } from "@/data/projects";
+import { PROJECTS } from "@/features/profile/data/projects";
 import { SITE_INFO } from "@/config/site";
 import { USER } from "@/data/user";
 import { cn } from "@/lib/utils";
+import { connection } from "next/server";
 
 export async function generateStaticParams() {
   const posts = getAllProjectPosts();
@@ -56,20 +59,11 @@ export async function generateMetadata({
   };
 }
 
-// Create a component for the dynamic project content
-async function ProjectContent({ params }: { params: Promise<{ slug: string }> }) {
-  const slug = (await params).slug;
-  const post = getProjectPostBySlug(slug);
+import type { ProjectPost } from "@/data/projects";
 
-  if (!post) {
-    notFound();
-  }
-
-  const toc = getTableOfContents(post.content);
-  const allPosts = getAllProjectPosts();
-  const { previous, next } = findNeighbourProject(allPosts, slug);
-
-  const jsonLd: WithContext<PageSchema> = {
+async function getPageJsonLd(post: ProjectPost): Promise<WithContext<PageSchema>> {
+  await connection();
+  return {
     "@context": "https://schema.org",
     "@type": "TechArticle",
     headline: post.metadata.title,
@@ -85,6 +79,24 @@ async function ProjectContent({ params }: { params: Promise<{ slug: string }> })
       image: USER.avatar,
     },
   };
+}
+
+// Create a component for the dynamic project content
+async function ProjectContent({ params }: { params: Promise<{ slug: string }> }) {
+  const slug = (await params).slug;
+  const post = getProjectPostBySlug(slug);
+
+  if (!post) {
+    notFound();
+  }
+
+  const project = PROJECTS.find((p) => p.id === post.slug);
+
+  const toc = getTableOfContents(post.content);
+  const allPosts = getAllProjectPosts();
+  const { previous, next } = findNeighbourProject(allPosts, slug);
+
+  const jsonLd = await getPageJsonLd(post);
 
   return (
     <>
@@ -124,12 +136,24 @@ async function ProjectContent({ params }: { params: Promise<{ slug: string }> })
       </div>
 
       <Prose className="px-4">
-        <h1 
-          className="screen-line-before screen-line-after mb-4 font-semibold text-balance"
-          style={{ viewTransitionName: `project-title-${post.slug}` }}
-        >
-          {post.metadata.title}
-        </h1>
+        <div className="screen-line-before screen-line-after mb-4 flex items-center gap-3 py-2">
+          {project?.logo && !project.logo.includes("quaricdotcom.svg") && (
+            <Image
+              src={project.logo}
+              alt={`${project.title} logo`}
+              width={36}
+              height={36}
+              className="size-9 rounded-lg border bg-muted/30 object-cover"
+              unoptimized
+            />
+          )}
+          <h1 
+            className="m-0 font-semibold text-balance text-2xl md:text-3xl border-none p-0 before:content-none after:content-none"
+            style={{ viewTransitionName: `project-title-${post.slug}` }}
+          >
+            {post.metadata.title}
+          </h1>
+        </div>
 
         <div className="mb-6 flex items-center justify-between">
           <p className="text-muted-foreground text-sm font-mono uppercase tracking-wider">
@@ -177,7 +201,7 @@ async function ProjectContent({ params }: { params: Promise<{ slug: string }> })
           </div>
         </div>
 
-        <InlineTOC items={toc} />
+        {post.metadata.toc !== false && <InlineTOC items={toc} />}
 
         <div className="mt-8 text-pretty">
           <MDX code={post.content} />

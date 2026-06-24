@@ -51,10 +51,10 @@ export function ExperiencePositionItem({
             </div>
           </div>
 
-          <div className="text-muted-foreground flex items-center gap-2 pl-9 text-sm">
+          <div className="text-muted-foreground flex flex-wrap items-center gap-x-2 gap-y-1 pl-9 text-sm">
             {position.employmentType && (
               <>
-                <div>
+                <div className="whitespace-nowrap">
                   <dt className="sr-only">Employment Type</dt>
                   <dd>{position.employmentType}</dd>
                 </div>
@@ -66,7 +66,7 @@ export function ExperiencePositionItem({
               </>
             )}
 
-            <div>
+            <div className="whitespace-nowrap">
               <dt className="sr-only">Employment Period</dt>
               <dd className="flex items-center gap-0.5">
                 <span>{start}</span>
