@@ -14,10 +14,10 @@ export function Overview() {
       <h2 className="sr-only">Overview</h2>
 
       <PanelContent className="space-y-2">
-        {USER.jobs.map((job, index) => {
+        {USER.jobs.map((job) => {
           return (
             <JobItem
-              key={index}
+              key={`${job.company}-${job.title}`}
               title={job.title}
               company={job.company}
               website={job.website}

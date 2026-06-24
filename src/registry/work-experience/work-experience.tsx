@@ -191,8 +191,8 @@ export function ExperiencePositionItem({
 
           {Array.isArray(position.skills) && position.skills.length > 0 && (
             <ul className="not-prose flex flex-wrap gap-1.5 pl-9 pt-2">
-              {position.skills.map((skill, index) => (
-                <li key={index} className="flex">
+              {position.skills.map((skill) => (
+                <li key={skill} className="flex">
                   <Skill>{skill}</Skill>
                 </li>
               ))}
@@ -209,7 +209,7 @@ function Prose({ className, ...props }: React.ComponentProps<"div">) {
     <div
       className={cn(
         "prose prose-sm text-foreground prose-zinc dark:prose-invert max-w-none font-mono",
-        "prose-a:font-medium prose-a:break-words prose-a:text-foreground prose-a:underline prose-a:underline-offset-4",
+        "prose-a:font-medium prose-a:wrap-break-word prose-a:text-foreground prose-a:underline prose-a:underline-offset-4",
         "prose-code:rounded-md prose-code:border prose-code:bg-muted/50 prose-code:px-[0.3rem] prose-code:py-[0.2rem] prose-code:text-sm prose-code:font-normal prose-code:before:content-none prose-code:after:content-none",
         className
       )}

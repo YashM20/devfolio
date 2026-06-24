@@ -92,8 +92,11 @@ async function getPageJsonLd(post: Post): Promise<WithContext<PageSchema>> {
 }
 
 // Create a component for the dynamic blog content
-function sanitizeJsonLd(jsonStr: string): string {
-  return jsonStr.replace(/</g, "\\u003c");
+function escapeHtml(str: string): string {
+  return str
+    .replace(/</g, "\\u003c")
+    .replace(/>/g, "\\u003e")
+    .replace(/&/g, "\\u0026");
 }
 
 async function BlogContent({ params }: { params: Promise<{ slug: string }> }) {
@@ -115,7 +118,7 @@ async function BlogContent({ params }: { params: Promise<{ slug: string }> }) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: sanitizeJsonLd(JSON.stringify(await getPageJsonLd(post))),
+          __html: escapeHtml(JSON.stringify(await getPageJsonLd(post))),
         }}
       />
       <div className="flex items-center justify-between p-2 pl-4">

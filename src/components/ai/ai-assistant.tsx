@@ -473,7 +473,7 @@ export function AiAssistant() {
                                   case "text":
                                     return message.role === "assistant" ? (
                                       <div
-                                        key={i}
+                                        key={part.text}
                                         className="prose prose-sm dark:prose-invert min-w-0 max-w-none"
                                         style={{
                                           wordBreak: "break-word",
@@ -484,7 +484,7 @@ export function AiAssistant() {
                                       </div>
                                     ) : (
                                       <p
-                                        key={i}
+                                        key={part.text}
                                         className="whitespace-pre-wrap"
                                       >
                                         {part.text}
@@ -493,7 +493,7 @@ export function AiAssistant() {
                                   case "tool-call":
                                     return (
                                       <div
-                                        key={i}
+                                        key={part.toolCallId}
                                         className="mb-1 mt-2 text-xs opacity-70"
                                       >
                                         <div className="flex items-center gap-1 text-blue-500 dark:text-blue-400">
@@ -514,7 +514,7 @@ export function AiAssistant() {
                                   case "tool-generateCodeSnippet":
                                     return (
                                       <div
-                                        key={i}
+                                        key={part.toolCallId || JSON.stringify(part)}
                                         className="mt-2 text-xs opacity-70"
                                       >
                                         <details>
@@ -540,7 +540,7 @@ export function AiAssistant() {
                                     }
 
                                     return (
-                                      <div key={i}>
+                                      <div key={typeof part === "string" ? part : JSON.stringify(part)}>
                                         {typeof part === "string" ? (
                                           message.role === "assistant" ? (
                                             <div className="prose prose-sm dark:prose-invert max-w-none overflow-x-auto">

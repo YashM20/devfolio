@@ -328,7 +328,7 @@ function AiAssistantHeaderTitle({
 }: React.ComponentProps<"div">) {
   return (
     <div className={cn("flex items-center gap-3", className)} {...props}>
-      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-purple-500">
+      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-linear-to-r from-blue-500 to-purple-500">
         <Bot className="h-4 w-4 text-white" />
       </div>
       <h3 className="font-semibold">{children || "AI Assistant"}</h3>
@@ -444,9 +444,9 @@ function AiAssistantSuggestions({
   return (
     <div className={cn("space-y-2", className)} {...props}>
       <p className="text-muted-foreground mb-2 text-sm">Try asking:</p>
-      {suggestions.map((suggestion, index) => (
+      {suggestions.map((suggestion) => (
         <button
-          key={index}
+          key={suggestion}
           onClick={() => handleSuggestionClick(suggestion)}
           className="hover:bg-accent block w-full rounded border p-2 text-left text-sm transition-colors"
         >
@@ -486,8 +486,8 @@ function AiAssistantMessage({
     if (message.parts) {
       return message.parts
         .filter((part: any) => part.type === "text")
-        .map((part: any, i: number) => (
-          <div key={i} className="whitespace-pre-wrap">
+        .map((part: any) => (
+          <div key={part.text} className="whitespace-pre-wrap">
             {part.text}
           </div>
         ));
@@ -507,7 +507,7 @@ function AiAssistantMessage({
       {...props}
     >
       {message.role === "assistant" && (
-        <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-purple-500">
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-linear-to-r from-blue-500 to-purple-500">
           <Bot className="h-4 w-4 text-white" />
         </div>
       )}
@@ -524,7 +524,7 @@ function AiAssistantMessage({
       </div>
 
       {message.role === "user" && (
-        <div className="bg-muted flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full">
+        <div className="bg-muted flex h-8 w-8 shrink-0 items-center justify-center rounded-full">
           <User className="h-4 w-4" />
         </div>
       )}
@@ -540,7 +540,7 @@ function AiAssistantTypingIndicator({ className }: { className?: string }) {
       animate={{ opacity: 1 }}
       className={cn("flex gap-3", className)}
     >
-      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-purple-500">
+      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-linear-to-r from-blue-500 to-purple-500">
         <Bot className="h-4 w-4 text-white" />
       </div>
       <div className="bg-muted rounded-lg px-3 py-2">
@@ -639,7 +639,7 @@ function AiAssistantInput({
             onChange={(e) => setInput(e.target.value.slice(0, maxLength))}
             onKeyDown={handleKeyDown}
             placeholder={placeholder}
-            className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring max-h-[120px] min-h-[44px] w-full resize-none rounded-lg border p-3 pr-12 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring max-h-[120px] min-h-11 w-full resize-none rounded-lg border p-3 pr-12 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             disabled={isTyping}
             rows={1}
           />

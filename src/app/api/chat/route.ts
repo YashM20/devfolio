@@ -22,7 +22,7 @@ import { handleChatError } from "@/components/ai/error-handler";
 import { prepareChatRequest } from "@/components/ai/chat-handler";
 
 // Allow streaming responses up to 30 seconds
-export const maxDuration = 30;
+export const maxDuration = 120;
 
 // Get all posts for context
 const allPosts = getAllPosts();

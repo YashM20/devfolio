@@ -118,10 +118,9 @@ export default function RootLayout({
           name="dmca-site-verification"
           content="aXZTY21Pd2dNWXF0aDZWcTdMdG1EbTRET2xMTmZEM3hvdWFsRVA4R0RTVT01"
         />
-        <script
-          type="text/javascript"
-          dangerouslySetInnerHTML={{ __html: darkModeScript }}
-        />
+        <Script id="dark-mode-init" strategy="beforeInteractive">
+          {darkModeScript}
+        </Script>
         {/*
           Thanks @tailwindcss. We inject the script via the `<Script/>` tag again,
           since we found the regular `<script>` tag to not execute when rendering a not-found page.

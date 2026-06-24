@@ -148,9 +148,9 @@ function ProjectCard({ project, index }: { project: (typeof PROJECTS)[number]; i
 
       {/* Tech Stack Footer */}
       <div className="flex flex-wrap items-center gap-1.5 pt-2">
-        {project.skills.slice(0, 3).map((skill, index) => (
+        {project.skills.slice(0, 3).map((skill) => (
           <span
-            key={index}
+            key={skill}
             className="inline-flex items-center rounded-full border border-border bg-muted/30 px-2 py-0.5 font-mono text-[10px] text-muted-foreground select-none transition-colors duration-200 group-hover/project:bg-muted group-hover/project:text-foreground"
           >
             {skill}

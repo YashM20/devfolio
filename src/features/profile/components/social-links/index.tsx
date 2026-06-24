@@ -16,8 +16,8 @@ export function SocialLinks() {
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          {SOCIAL_LINKS.map((link, index) => {
-            return <SocialLinkItem key={index} {...link} />;
+          {SOCIAL_LINKS.map((link) => {
+            return <SocialLinkItem key={link.href} {...link} />;
           })}
         </div>
       </div>

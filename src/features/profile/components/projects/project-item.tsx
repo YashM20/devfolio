@@ -188,8 +188,8 @@ export function ProjectItem({
                 Technology Stack
               </h4>
               <div className="flex flex-wrap gap-1.5">
-                {project.skills.map((skill, index) => (
-                  <Badge key={index} variant="secondary" className="text-xs">
+                {project.skills.map((skill) => (
+                  <Badge key={skill} variant="secondary" className="text-xs">
                     {skill}
                   </Badge>
                 ))}

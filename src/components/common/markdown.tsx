@@ -50,7 +50,7 @@ const components: Partial<Components> = {
     );
   },
   img: ({ node, children, ...props }) => {
-    return <img data-mark {...props} />;
+    return <img data-mark alt="" {...props} />;
   },
   h1: ({ node, children, ...props }) => {
     return (

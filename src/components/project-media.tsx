@@ -186,11 +186,11 @@ function SliderCarousel({
     <div className={cn("relative my-6 overflow-hidden rounded-2xl border border-edge bg-muted/20 p-2", aspect === "portrait" && "max-w-[336px] mx-auto")}>
       <div className={cn("overflow-hidden rounded-lg bg-muted", aspectClass)} ref={emblaRef}>
         <div className="flex h-full w-full">
-          {images.map((src, index) => (
-            <div className="relative h-full w-full min-w-0 flex-[0_0_100%]" key={index}>
+          {images.map((src) => (
+            <div className="relative h-full w-full min-w-0 flex-[0_0_100%]" key={src}>
               <Image
                 src={src}
-                alt={`Slide ${index + 1}`}
+                alt="Slide"
                 fill
                 sizes={getAspectSizes(aspect)}
                 className="object-cover"
