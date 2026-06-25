@@ -1,7 +1,8 @@
 "use client";
 
 import { RepeatIcon } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence } from "motion/react";
+import * as m from "motion/react-m";;
 import React, { useCallback, useEffect, useState } from "react";
 
 import { ChanhDaiMark } from "@/components/chanhdai-mark";
@@ -56,14 +57,14 @@ export function Hello() {
           )} */}
 
           {layers[currentIndex] === "chanhdai-wordmark" && (
-            <motion.div
+            <m.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
               transition={{ duration: 0.5 }}
             >
               <ChanhDaiMark className="h-12 sm:h-16" />
-            </motion.div>
+            </m.div>
           )}
         </div>
       </AnimatePresence>

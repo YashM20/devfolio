@@ -3,6 +3,7 @@
 import React from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
+import { useIsClient } from "@/hooks/use-is-client";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -232,11 +233,7 @@ export function ProjectSlider({
   aspect?: AspectType;
 }) {
   const imageList = parseImagesProp(images);
-  const [isMounted, setIsMounted] = React.useState(false);
-
-  React.useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  const isMounted = useIsClient();
 
   const aspectClass = aspectMap[aspect] || aspectMap.video;
 

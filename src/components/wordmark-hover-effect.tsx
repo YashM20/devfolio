@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import * as m from "motion/react-m";;
 import React, { useEffect, useRef, useState } from "react";
 
 function WordmarkPaths() {
@@ -66,7 +66,7 @@ export function WordmarkHoverEffect() {
           )}
         </linearGradient>
 
-        <motion.radialGradient
+        <m.radialGradient
           id="revealMask"
           gradientUnits="userSpaceOnUse"
           r="15%"
@@ -76,7 +76,7 @@ export function WordmarkHoverEffect() {
         >
           <stop offset="0%" stopColor="white" />
           <stop offset="100%" stopColor="black" />
-        </motion.radialGradient>
+        </m.radialGradient>
 
         <mask
           id="logoMask"

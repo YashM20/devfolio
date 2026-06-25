@@ -1,6 +1,7 @@
 "use client"
 
-import { motion, useSpring } from "motion/react"
+import { useSpring } from "motion/react"
+import * as m from "motion/react-m"
 
 import { chartCssVars } from "../chart-context"
 
@@ -37,7 +38,7 @@ export function TooltipDot({
   }
 
   return (
-    <motion.circle
+    <m.circle
       cx={animatedX}
       cy={animatedY}
       fill={color}
@@ -49,5 +50,3 @@ export function TooltipDot({
 }
 
 TooltipDot.displayName = "TooltipDot"
-
-export default TooltipDot

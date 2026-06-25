@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useMotionValueEvent, useScroll } from "motion/react";
+import { useMotionValueEvent, useScroll } from "motion/react";
+import * as m from "motion/react-m";;
 import { useState } from "react";
 
 import { MobileNav } from "@/components/mobile-nav";
@@ -26,7 +27,7 @@ export function QuickActions() {
     <>
       <div className="h-14" />
 
-      <motion.div
+      <m.div
         className="bg-background fixed inset-x-0 bottom-0 z-50 pb-[calc(0.5rem+env(safe-area-inset-bottom,0px))]"
         initial={{ opacity: 1 }}
         animate={{
@@ -63,7 +64,7 @@ export function QuickActions() {
             </div>
           </div>
         </div>
-      </motion.div>
+      </m.div>
     </>
   );
 }

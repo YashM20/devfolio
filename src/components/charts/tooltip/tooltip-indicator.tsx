@@ -1,6 +1,7 @@
 "use client"
 
-import { motion, useSpring } from "motion/react"
+import { useSpring } from "motion/react"
+import * as m from "motion/react-m"
 
 import { chartCssVars } from "../chart-context"
 
@@ -105,7 +106,7 @@ export function TooltipIndicator({
           />
         </linearGradient>
       </defs>
-      <motion.rect
+      <m.rect
         fill={`url(#${gradientId})`}
         height={height}
         width={pixelWidth}
@@ -117,5 +118,3 @@ export function TooltipIndicator({
 }
 
 TooltipIndicator.displayName = "TooltipIndicator"
-
-export default TooltipIndicator

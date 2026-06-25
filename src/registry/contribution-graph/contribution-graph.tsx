@@ -5,7 +5,7 @@
 import {
   createContext,
   Fragment,
-  useContext,
+  use,
   useMemo,
   type CSSProperties,
   type HTMLAttributes,
@@ -82,6 +82,8 @@ const THEME = cn(
   'data-[level="4"]:fill-muted-foreground/80'
 )
 
+const DEFAULT_STYLE: CSSProperties = {}
+
 type ContributionGraphContextType = {
   data: Activity[]
   weeks: Week[]
@@ -103,7 +105,7 @@ const ContributionGraphContext =
   createContext<ContributionGraphContextType | null>(null)
 
 const useContributionGraph = () => {
-  const context = useContext(ContributionGraphContext)
+  const context = use(ContributionGraphContext)
 
   if (!context) {
     throw new Error(
@@ -120,7 +122,7 @@ const fillHoles = (activities: Activity[]): Activity[] => {
   }
 
   // Sort activities by date to ensure correct date range
-  const sortedActivities = [...activities].sort((a, b) =>
+  const sortedActivities = activities.toSorted((a, b) =>
     a.date.localeCompare(b.date)
   )
 
@@ -254,7 +256,7 @@ export const ContributionGraph = ({
   fontSize = 14,
   labels: labelsProp = undefined,
   maxLevel: maxLevelProp = 4,
-  style = {},
+  style = DEFAULT_STYLE,
   totalCount: totalCountProp = undefined,
   weekStart = 0,
   className,

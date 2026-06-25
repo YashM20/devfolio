@@ -3,8 +3,9 @@
 /* eslint-disable react-hooks/refs */
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
-import { motion, useSpring } from "motion/react"
+import { useMemo, useSyncExternalStore } from "react"
+import { useSpring } from "motion/react"
+import * as m from "motion/react-m"
 
 import { chartCssVars, useChart } from "../chart-context"
 import { DateTicker } from "./date-ticker"
@@ -71,12 +72,11 @@ export function ChartTooltip({
 
   const isHorizontal = orientation === "horizontal"
 
-  const [mounted, setMounted] = useState(false)
-
-  // Only render portals on client side after mount
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  )
 
   const visible = tooltipData !== null
   const x = tooltipData?.x ?? 0
@@ -225,7 +225,7 @@ export function ChartTooltip({
 
       {/* Date/Category Ticker - only show for vertical charts */}
       {showDatePill && dateLabels.length > 0 && visible && !isHorizontal && (
-        <motion.div
+        <m.div
           className="pointer-events-none absolute z-50"
           style={{
             left: animatedX,
@@ -238,7 +238,7 @@ export function ChartTooltip({
             labels={dateLabels}
             visible={visible}
           />
-        </motion.div>
+        </m.div>
       )}
     </>
   )
@@ -247,5 +247,3 @@ export function ChartTooltip({
 }
 
 ChartTooltip.displayName = "ChartTooltip"
-
-export default ChartTooltip

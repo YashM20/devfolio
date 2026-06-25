@@ -1,7 +1,7 @@
 "use client"
 
 import type { Transition } from "motion/react"
-import { motion } from "motion/react"
+import * as m from "motion/react-m";
 
 import { clipRevealTransition } from "./animation"
 
@@ -34,7 +34,7 @@ export function ChartRevealClip({
 
   return (
     <clipPath id={clipPathId}>
-      <motion.rect
+      <m.rect
         animate={{ width: paddedWidth }}
         height={paddedHeight}
         initial={{ width: 0 }}

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/refs */
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useMemo, useSyncExternalStore } from "react"
 
 import { cn } from "@/lib/utils"
 
@@ -88,12 +88,11 @@ export function XAxis({
     xAccessor,
     dateLabels,
   } = useChart()
-  const [mounted, setMounted] = useState(false)
-
-  // Only render on client side after mount
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  )
 
   // Generate tick labels: evenly spaced along the domain, or one per data row
   const labelsToShow = useMemo(() => {

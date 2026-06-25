@@ -145,6 +145,7 @@ export function CookieConsent() {
                       className="text-muted-foreground hover:underline"
                       target="_blank"
                       rel="noopener noreferrer"
+                      aria-label="Learn more about our cookie policy"
                     >
                       Learn more
                     </a>
@@ -289,7 +290,7 @@ export function CookieConsent() {
 }
 
 // Helper function to check if specific cookie types are allowed
-export function isCookieAllowed(type: keyof CookiePreferences): boolean {
+function isCookieAllowed(type: keyof CookiePreferences): boolean {
   if (typeof window === "undefined") return false;
 
   try {

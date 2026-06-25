@@ -3,7 +3,7 @@
 
 import {
   createContext,
-  useContext,
+  use,
   type Dispatch,
   type RefObject,
   type SetStateAction,
@@ -45,7 +45,7 @@ export const chartCssVars = {
 }
 
 /** Default scatter series colors from the chart palette (`--chart-1` … `--chart-5`). */
-export const defaultScatterColors = [
+const defaultScatterColors = [
   "var(--chart-1)",
   "var(--chart-2)",
   "var(--chart-3)",
@@ -183,7 +183,7 @@ export function ChartProvider({
 }
 
 export function useChart(): ChartContextValue {
-  const context = useContext(ChartContext)
+  const context = use(ChartContext)
   if (!context) {
     throw new Error(
       "useChart must be used within a ChartProvider. " +
@@ -192,5 +192,3 @@ export function useChart(): ChartContextValue {
   }
   return context
 }
-
-export default ChartContext

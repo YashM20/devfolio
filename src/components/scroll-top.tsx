@@ -1,12 +1,8 @@
 "use client";
 
 import { ChevronUpIcon } from "lucide-react";
-import {
-  AnimatePresence,
-  motion,
-  useMotionValueEvent,
-  useScroll,
-} from "motion/react";
+import { AnimatePresence, useMotionValueEvent, useScroll } from "motion/react";
+import * as m from "motion/react-m";;
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -45,7 +41,7 @@ export function ScrollTop({
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           {...props}
         >
-          <motion.button
+          <m.button
             initial={{ opacity: 0, transform: "translateY(16px)" }}
             animate={{
               opacity: scrollDirection === "up" ? 1 : 0.3,
@@ -56,7 +52,7 @@ export function ScrollTop({
           >
             <ChevronUpIcon className="size-6" />
             <span className="sr-only">Scroll to top</span>
-          </motion.button>
+          </m.button>
         </Button>
       )}
     </AnimatePresence>

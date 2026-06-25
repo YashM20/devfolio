@@ -4,8 +4,9 @@
 "use client"
 
 import type { RefObject } from "react"
-import { useEffect, useLayoutEffect, useRef, useState } from "react"
-import { motion, useSpring } from "motion/react"
+import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react"
+import { useSpring } from "motion/react"
+import * as m from "motion/react-m"
 
 import { cn } from "@/lib/utils"
 
@@ -56,11 +57,11 @@ export function TooltipBox({
   const tooltipRef = useRef<HTMLDivElement>(null)
   const tooltipWidthRef = useRef(180)
   const tooltipHeightRef = useRef(80)
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  )
 
   const animatedLeft = useSpring(x + offset, springConfig)
   const animatedTop = useSpring(y, springConfig)
@@ -148,7 +149,7 @@ export function TooltipBox({
   }
 
   return createPortal(
-    <motion.div
+    <m.div
       animate={{ opacity: 1 }}
       className={cn("pointer-events-none absolute z-50", className)}
       exit={{ opacity: 0 }}
@@ -157,7 +158,7 @@ export function TooltipBox({
       style={{ left: finalLeft, top: finalTop }}
       transition={{ duration: 0.1 }}
     >
-      <motion.div
+      <m.div
         animate={{ scale: 1, opacity: 1, x: 0 }}
         className="min-w-35 overflow-hidden rounded-lg bg-chart-tooltip-background text-chart-tooltip-foreground shadow-lg ring-1 ring-foreground/10 backdrop-blur-md dark:ring-foreground/15"
         initial={{ scale: 0.85, opacity: 0, x: isFlipped ? 20 : -20 }}
@@ -166,12 +167,10 @@ export function TooltipBox({
         transition={{ type: "spring", stiffness: 300, damping: 25 }}
       >
         {children}
-      </motion.div>
-    </motion.div>,
+      </m.div>
+    </m.div>,
     container
   )
 }
 
 TooltipBox.displayName = "TooltipBox"
-
-export default TooltipBox

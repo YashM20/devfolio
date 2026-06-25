@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { AnimatePresence } from "motion/react";
+import * as m from "motion/react-m";;
 import { useChat } from "@ai-sdk/react";
 import { useQueryState, parseAsBoolean } from "nuqs";
 import {
@@ -242,7 +243,7 @@ export function AiAssistant() {
   return (
     <>
       {/* Floating Chat Button - Bottom Center */}
-      <motion.div
+      <m.div
         className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 transform"
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -256,12 +257,12 @@ export function AiAssistant() {
         <div className={cn(isOpen && "hidden")}>
           <RealismButton onClick={() => setIsOpen(true)}>Ask Me</RealismButton>
         </div>
-      </motion.div>
+      </m.div>
 
       {/* Chat Modal */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div
+          <m.div
             className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-6"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -269,16 +270,16 @@ export function AiAssistant() {
             transition={{ duration: 0.2 }}
           >
             {/* Backdrop */}
-            <motion.div
+            <m.div
               className="z-1 absolute inset-0 bg-black/20 backdrop-blur-sm dark:bg-black/20"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsOpen(false)}
-            ></motion.div>
+            ></m.div>
 
             {/* Chat Container */}
-            <motion.div
+            <m.div
               className={cn(
                 "z-2 relative flex h-full max-h-[98vh] w-full max-w-[clamp(300px,800px,95vw)] flex-col",
                 "bg-background/95 border-border border backdrop-blur-md dark:border-white/10 dark:bg-[radial-gradient(circle_200px_at_50%_0%,#1a1a1a,#0a0a0a)]",
@@ -326,7 +327,7 @@ export function AiAssistant() {
                           .join("")}
                       </AvatarFallback>
                     </Avatar>
-                    <motion.div
+                    <m.div
                       className="border-background absolute -bottom-1 -right-1 h-4 w-4 rounded-full border-2 bg-green-500 dark:border-black dark:bg-cyan-400"
                       animate={{ scale: [1, 1.2, 1] }}
                       transition={{ duration: 2, repeat: Infinity }}
@@ -370,7 +371,7 @@ export function AiAssistant() {
                 <ScrollArea className="w-full">
                   <div className="w-full space-y-4 overflow-x-auto p-4">
                     {messages.length === 0 && (
-                      <motion.div
+                      <m.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2 }}
@@ -395,7 +396,7 @@ export function AiAssistant() {
                           </p>
                           <div className="flex flex-wrap justify-center gap-2">
                             {suggestions.map((suggestion, index) => (
-                              <motion.button
+                              <m.button
                                 key={suggestion}
                                 initial={{ opacity: 0, scale: 0.8 }}
                                 animate={{ opacity: 1, scale: 1 }}
@@ -406,7 +407,7 @@ export function AiAssistant() {
                                 className="from-primary/20 to-primary/10 border-primary/30 text-primary hover:from-primary/30 hover:to-primary/20 hover:border-primary/50 rounded-full border bg-gradient-to-r px-3 py-1.5 text-xs transition-all duration-200 hover:scale-105 dark:border-cyan-400/30 dark:from-cyan-500/20 dark:to-blue-500/20 dark:text-cyan-300 dark:hover:border-cyan-400/50 dark:hover:from-cyan-500/30 dark:hover:to-blue-500/30"
                               >
                                 {suggestion}
-                              </motion.button>
+                              </m.button>
                             ))}
                           </div>
                         </div>
@@ -423,11 +424,11 @@ export function AiAssistant() {
                             </p>
                           </div>
                         </div>
-                      </motion.div>
+                      </m.div>
                     )}
 
                     {messages.map((message: any, index: number) => (
-                      <motion.div
+                      <m.div
                         key={message.id}
                         initial={{ opacity: 0, y: 20, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -582,11 +583,11 @@ export function AiAssistant() {
                             </AvatarFallback>
                           </Avatar>
                         )}
-                      </motion.div>
+                      </m.div>
                     ))}
 
                     {isTyping && (
-                      <motion.div
+                      <m.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         className="flex gap-3"
@@ -597,7 +598,7 @@ export function AiAssistant() {
                           </AvatarFallback>
                         </Avatar>
                         <div className="bg-muted/50 text-foreground border-border rounded-2xl border px-4 py-3 dark:border-white/10 dark:bg-black/20">
-                          <motion.div
+                          <m.div
                             className="flex gap-1"
                             animate={{ opacity: [0.5, 1, 0.5] }}
                             transition={{ duration: 1.5, repeat: Infinity }}
@@ -605,13 +606,13 @@ export function AiAssistant() {
                             <span>●</span>
                             <span>●</span>
                             <span>●</span>
-                          </motion.div>
+                          </m.div>
                         </div>
-                      </motion.div>
+                      </m.div>
                     )}
 
                     {error && (
-                      <motion.div
+                      <m.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         className="flex gap-3"
@@ -630,7 +631,7 @@ export function AiAssistant() {
                             Dismiss
                           </button>
                         </div>
-                      </motion.div>
+                      </m.div>
                     )}
                   </div>
                   <div ref={messagesEndRef} />
@@ -719,8 +720,8 @@ export function AiAssistant() {
                   </button>
                 </form>
               </div>
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
         )}
       </AnimatePresence>
     </>

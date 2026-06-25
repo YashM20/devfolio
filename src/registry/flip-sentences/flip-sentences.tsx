@@ -1,6 +1,7 @@
 "use client";
 
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence } from "motion/react";
+import * as m from "motion/react-m";;
 import { useEffect, useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
@@ -53,7 +54,7 @@ export function FlipSentences({
 
   return (
     <AnimatePresence mode="wait" initial={false}>
-      <motion.p
+      <m.p
         key={`current-sentence-${currentSentence}`}
         className={cn(
           "text-muted-foreground select-none text-balance font-mono text-sm",
@@ -77,7 +78,7 @@ export function FlipSentences({
         }}
       >
         {sentences[currentSentence]}
-      </motion.p>
+      </m.p>
     </AnimatePresence>
   );
 }

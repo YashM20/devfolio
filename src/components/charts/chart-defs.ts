@@ -5,7 +5,7 @@ import {
   type ReactNode,
 } from "react"
 
-export function getChartChildComponentName(child: ReactElement): string {
+function getChartChildComponentName(child: ReactElement): string {
   const childType = child.type as { displayName?: string; name?: string }
   return typeof child.type === "function"
     ? childType.displayName || childType.name || ""
@@ -36,12 +36,12 @@ export function isGradientDefComponent(child: ReactElement): boolean {
   )
 }
 
-export function isChartDefsComponent(child: ReactElement): boolean {
+function isChartDefsComponent(child: ReactElement): boolean {
   return isPatternDefComponent(child) || isGradientDefComponent(child)
 }
 
 /** Split hoisted defs: @visx/pattern nodes already wrap `<defs>` and render at the svg root. */
-export function partitionChartDefNodes(defNodes: ReactElement[]): {
+function partitionChartDefNodes(defNodes: ReactElement[]): {
   patternDefNodes: ReactElement[]
   gradientDefNodes: ReactElement[]
 } {
@@ -59,7 +59,7 @@ export function partitionChartDefNodes(defNodes: ReactElement[]): {
   return { patternDefNodes, gradientDefNodes }
 }
 
-export function collectChartDefsChildren(children: ReactNode): ReactElement[] {
+function collectChartDefsChildren(children: ReactNode): ReactElement[] {
   const defNodes: ReactElement[] = []
 
   Children.forEach(children, (child) => {

@@ -6,7 +6,7 @@ import { AWARDS } from "../../data/awards";
 import { Panel, PanelHeader, PanelTitle } from "../panel";
 import { AwardItem } from "./award-item";
 
-const SORTED_AWARDS = [...AWARDS].sort((a, b) => {
+const SORTED_AWARDS = AWARDS.toSorted((a, b) => {
   return dayjs(b.date).diff(dayjs(a.date));
 });
 

@@ -20,7 +20,7 @@ import { isGradientDefComponent, isPatternDefComponent } from "./chart-defs"
 import { useChartInteraction } from "./use-chart-interaction"
 
 /** Markers render after the interaction overlay so they stay clickable. */
-export function isPostOverlayComponent(child: ReactElement): boolean {
+function isPostOverlayComponent(child: ReactElement): boolean {
   const childType = child.type as {
     displayName?: string
     name?: string

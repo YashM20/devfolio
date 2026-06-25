@@ -25,7 +25,7 @@ export interface AIEventProperties {
 export type EventProperties = AIEventProperties;
 
 // Utility function to safely capture events
-export function captureEvent(
+function captureEvent(
   eventName: PostHogEventName,
   properties?: EventProperties
 ) {

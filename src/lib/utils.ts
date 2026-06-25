@@ -10,6 +10,7 @@ export function validateImageUrl(url: string | undefined): string {
   return url;
 }
 
+// eslint-disable-next-line deslop/unused-export
 export function validateHref(href: string | undefined): string {
   if (!href) return "#";
 

@@ -3,7 +3,8 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
-import { motion, AnimatePresence } from "motion/react";
+import { AnimatePresence } from "motion/react";
+import * as m from "motion/react-m";
 import { useChat } from "@ai-sdk/react";
 import { Send, MessageCircle, X, Bot, User, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -27,8 +28,12 @@ const AiAssistantContext = React.createContext<AiAssistantContextProps | null>(
   null
 );
 
+const EMPTY_TRIGGER_PROPS = {};
+const EMPTY_CHAT_PROPS = {};
+const EMPTY_SUGGESTIONS: string[] = [];
+
 function useAiAssistant() {
-  const context = React.useContext(AiAssistantContext);
+  const context = React.use(AiAssistantContext);
   if (!context) {
     throw new Error(
       "useAiAssistant must be used within an AiAssistantProvider."
@@ -207,7 +212,7 @@ function AiAssistantTrigger({
   }
 
   return (
-    <motion.button
+    <m.button
       initial={{ scale: 0.95, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       exit={{ scale: 0.95, opacity: 0 }}
@@ -223,7 +228,7 @@ function AiAssistantTrigger({
           Chat
         </>
       )}
-    </motion.button>
+    </m.button>
   );
 }
 
@@ -263,7 +268,7 @@ const aiAssistantChatVariants = cva(
 
 // Chat container component
 interface AiAssistantChatProps
-  extends React.ComponentProps<typeof motion.div>,
+  extends React.ComponentProps<typeof m.div>,
     VariantProps<typeof aiAssistantChatVariants> {}
 
 function AiAssistantChat({
@@ -280,7 +285,7 @@ function AiAssistantChat({
 
   return (
     <AnimatePresence>
-      <motion.div
+      <m.div
         initial={{ opacity: 0, scale: 0.8, y: 20 }}
         animate={{
           opacity: 1,
@@ -295,7 +300,7 @@ function AiAssistantChat({
         {...props}
       >
         {children}
-      </motion.div>
+      </m.div>
     </AnimatePresence>
   );
 }
@@ -399,7 +404,7 @@ function AiAssistantMessages({
 function AiAssistantEmptyState({
   className,
   children,
-  suggestions = [],
+  suggestions = EMPTY_SUGGESTIONS,
   ...props
 }: React.ComponentProps<"div"> & { suggestions?: string[] }) {
   const { messages } = useAiAssistant();
@@ -495,10 +500,10 @@ function AiAssistantMessage({
   message,
   className,
   ...props
-}: React.ComponentProps<typeof motion.div> & { message: any }) {
+}: React.ComponentProps<typeof m.div> & { message: any }) {
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       className={cn(
@@ -530,14 +535,14 @@ function AiAssistantMessage({
           <User className="h-4 w-4" />
         </div>
       )}
-    </motion.div>
+    </m.div>
   );
 }
 
 // Typing indicator component
 function AiAssistantTypingIndicator({ className }: { className?: string }) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       className={cn("flex gap-3", className)}
@@ -548,7 +553,7 @@ function AiAssistantTypingIndicator({ className }: { className?: string }) {
       <div className="bg-muted rounded-lg px-3 py-2">
         <div className="flex gap-1">
           {[0, 1, 2].map((i) => (
-            <motion.div
+            <m.div
               key={i}
               animate={{ opacity: [0.4, 1, 0.4] }}
               transition={{
@@ -561,7 +566,7 @@ function AiAssistantTypingIndicator({ className }: { className?: string }) {
           ))}
         </div>
       </div>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -676,11 +681,11 @@ interface AiAssistantProps extends Omit<AiAssistantProviderProps, "children"> {
 
 function AiAssistant({
   children,
-  triggerProps = {},
-  chatProps = {},
+  triggerProps = EMPTY_TRIGGER_PROPS,
+  chatProps = EMPTY_CHAT_PROPS,
   title = "AI Assistant",
   placeholder = "Ask me anything...",
-  suggestions = [],
+  suggestions = EMPTY_SUGGESTIONS,
   maxInputLength = 1000,
   ...providerProps
 }: AiAssistantProps) {

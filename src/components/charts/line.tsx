@@ -1,9 +1,11 @@
+// @react-compiler-skip
 "use client"
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react"
 import { curveNatural } from "@visx/curve"
 import { LinePath } from "@visx/shape"
-import { motion, useMotionTemplate, useSpring } from "motion/react"
+import { useMotionTemplate, useSpring } from "motion/react";
+import * as m from "motion/react-m";
 
 import { chartCssVars, useChart } from "./chart-context"
 import { ChartRevealClip } from "./chart-reveal-clip"
@@ -57,10 +59,8 @@ export function Line({
   const [pathLength, setPathLength] = useState(0)
 
   // Unique gradient ID for this line
-  const gradientId = useMemo(
-    () => `line-gradient-${dataKey}-${Math.random().toString(36).slice(2, 9)}`,
-    [dataKey]
-  )
+  const id = useId()
+  const gradientId = `line-gradient-${dataKey}-${id}`
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: data, innerWidth
   useEffect(() => {
@@ -211,7 +211,7 @@ export function Line({
           animate && data.length > 1 ? `url(#grow-clip-${dataKey})` : undefined
         }
       >
-        <motion.g
+        <m.g
           animate={{ opacity: isHovering && showHighlight ? 0.3 : 1 }}
           initial={{ opacity: 1 }}
           transition={{ duration: 0.4, ease: "easeInOut" }}
@@ -226,12 +226,12 @@ export function Line({
             x={(d) => xScale(xAccessor(d)) ?? 0}
             y={getY}
           />
-        </motion.g>
+        </m.g>
       </g>
 
       {/* Highlight segment on hover */}
       {showHighlight && isHovering && isLoaded && pathRef.current && (
-        <motion.path
+        <m.path
           animate={{ opacity: 1 }}
           d={pathRef.current.getAttribute("d") || ""}
           exit={{ opacity: 0 }}

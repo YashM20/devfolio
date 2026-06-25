@@ -2,7 +2,7 @@
 
 import { AppProgressProvider } from "@bprogress/next";
 import { Provider as JotaiProvider } from "jotai";
-import { MotionConfig } from "motion/react";
+import { LazyMotion, domMax, MotionConfig } from "motion/react";
 import { ThemeProvider } from "next-themes";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 
@@ -33,9 +33,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
             delay={500}
             options={{ showSpinner: false }}
           >
-            <MotionConfig reducedMotion="user">
-              <PostHogProvider>{children}</PostHogProvider>
-            </MotionConfig>
+            <LazyMotion features={domMax}>
+              <MotionConfig reducedMotion="user">
+                <PostHogProvider>{children}</PostHogProvider>
+              </MotionConfig>
+            </LazyMotion>
           </AppProgressProvider>
 
           <Toaster />
