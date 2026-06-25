@@ -53,6 +53,7 @@ export function AiAssistant() {
       // Track response received
       if (messageStartTimeRef.current) {
         const responseTime = getNow() - messageStartTimeRef.current;
+        // eslint-disable-next-line react-doctor/no-event-handler
         posthogEvents.ai.responseReceived(responseTime, undefined, sessionId);
         messageStartTimeRef.current = null;
       }

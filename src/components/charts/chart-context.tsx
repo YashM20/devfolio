@@ -103,6 +103,8 @@ export interface ChartContextValue {
 
   // Container ref for portals
   containerRef: RefObject<HTMLDivElement | null>
+  // Container DOM node for portals (to avoid render-time ref access)
+  containerNode: HTMLDivElement | null
 
   // Line configurations (extracted from children)
   lines: LineConfig[]

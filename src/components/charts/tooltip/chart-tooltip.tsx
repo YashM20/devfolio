@@ -65,7 +65,7 @@ export function ChartTooltip({
     lines,
     xAccessor,
     dateLabels,
-    containerRef,
+    containerNode,
     orientation,
     barXAccessor,
   } = useChart()
@@ -144,7 +144,7 @@ export function ChartTooltip({
 
   // Use portal to render into the chart container
   // Only render after mount on client side
-  const container = containerRef.current
+  const container = containerNode
   if (!(mounted && container)) {
     return null
   }
@@ -204,7 +204,7 @@ export function ChartTooltip({
       <TooltipBox
         className={className}
         containerHeight={height}
-        containerRef={containerRef}
+        containerNode={containerNode}
         containerWidth={width}
         top={isHorizontal ? undefined : margin.top}
         visible={visible}

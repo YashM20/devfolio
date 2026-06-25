@@ -57,6 +57,13 @@ export function Line({
 
   const pathRef = useRef<SVGPathElement>(null)
   const [pathLength, setPathLength] = useState(0)
+  const [pathElement, setPathElement] = useState<SVGPathElement | null>(null)
+
+  useEffect(() => {
+    if (pathRef.current !== pathElement) {
+      setPathElement(pathRef.current)
+    }
+  })
 
   // Unique gradient ID for this line
   const id = useId()
@@ -64,18 +71,18 @@ export function Line({
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: data, innerWidth
   useEffect(() => {
-    if (pathRef.current && animate) {
-      const len = pathRef.current.getTotalLength()
+    if (pathElement && animate) {
+      const len = pathElement.getTotalLength()
       if (len > 0) {
         setPathLength(len)
       }
     }
-  }, [animate, data, innerWidth])
+  }, [animate, data, innerWidth, pathElement])
 
   // Binary search to find path length at a given X coordinate
   const findLengthAtX = useCallback(
     (targetX: number): number => {
-      const path = pathRef.current
+      const path = pathElement
       if (!path || pathLength === 0) {
         return 0
       }
@@ -94,12 +101,12 @@ export function Line({
       }
       return (low + high) / 2
     },
-    [pathLength]
+    [pathLength, pathElement]
   )
 
   // Calculate segment bounds for highlight from either selection or hover
   const segmentBounds = useMemo(() => {
-    if (!pathRef.current || pathLength === 0) {
+    if (!pathElement || pathLength === 0) {
       return { startLength: 0, segmentLength: 0, isActive: false }
     }
 
@@ -147,6 +154,7 @@ export function Line({
     pathLength,
     xAccessor,
     findLengthAtX,
+    pathElement,
   ])
 
   // Springs for smooth highlight animation (both offset AND segment length)
@@ -230,10 +238,10 @@ export function Line({
       </g>
 
       {/* Highlight segment on hover */}
-      {showHighlight && isHovering && isLoaded && pathRef.current && (
+      {showHighlight && isHovering && isLoaded && pathElement && (
         <m.path
           animate={{ opacity: 1 }}
-          d={pathRef.current.getAttribute("d") || ""}
+          d={pathElement.getAttribute("d") || ""}
           exit={{ opacity: 0 }}
           fill="none"
           initial={{ opacity: 0 }}
@@ -252,5 +260,3 @@ export function Line({
 }
 
 Line.displayName = "Line"
-
-export default Line

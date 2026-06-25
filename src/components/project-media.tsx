@@ -137,7 +137,7 @@ export function ProjectIframe({
           className="h-full w-full border-0 bg-background"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowFullScreen
-          sandbox="allow-scripts allow-same-origin allow-presentation allow-forms"
+          sandbox="allow-scripts allow-presentation allow-forms"
         />
         <div className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-inset ring-black/10 dark:ring-white/10" />
       </div>

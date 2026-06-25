@@ -93,6 +93,14 @@ export function TimeSeriesChartInner({
   const [loadState, setLoadState] = useState({ isLoaded: false, revealEpoch: 0 })
   const { isLoaded, revealEpoch } = loadState
 
+  const [containerNode, setContainerNode] = useState<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    if (containerRef?.current !== containerNode) {
+      setContainerNode(containerRef.current)
+    }
+  }, [containerRef, containerNode])
+
   const innerWidth = width - margin.left - margin.right
   const innerHeight = height - margin.top - margin.bottom
 
@@ -233,6 +241,7 @@ export function TimeSeriesChartInner({
     tooltipData,
     setTooltipData,
     containerRef,
+    containerNode,
     lines,
     isLoaded,
     animationDuration,

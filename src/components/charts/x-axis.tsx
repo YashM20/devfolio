@@ -83,7 +83,7 @@ export function XAxis({
     xScale,
     margin,
     tooltipData,
-    containerRef,
+    containerNode,
     data,
     xAccessor,
     dateLabels,
@@ -146,7 +146,7 @@ export function XAxis({
 
   // Use portal to render into the chart container
   // Only render after mount on client side
-  const container = containerRef.current
+  const container = containerNode
   if (!(mounted && container)) {
     return null
   }

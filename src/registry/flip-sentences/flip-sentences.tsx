@@ -18,10 +18,13 @@ export function FlipSentences({
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
+    let activeInterval: NodeJS.Timeout | null = null;
+
     const startAnimation = () => {
-      intervalRef.current = setInterval(() => {
+      activeInterval = setInterval(() => {
         setCurrentSentence((prev) => (prev + 1) % sentences.length);
       }, 3500);
+      intervalRef.current = activeInterval;
     };
 
     startAnimation();
@@ -32,8 +35,9 @@ export function FlipSentences({
     document.addEventListener(
       "visibilitychange",
       () => {
-        if (document.visibilityState !== "visible" && intervalRef.current) {
-          clearInterval(intervalRef.current); // Clear the interval when the tab is not visible
+        if (document.visibilityState !== "visible" && activeInterval) {
+          clearInterval(activeInterval); // Clear the interval when the tab is not visible
+          activeInterval = null;
           intervalRef.current = null;
         } else if (document.visibilityState === "visible") {
           setCurrentSentence((prev) => (prev + 1) % sentences.length); // Show the next sentence immediately
@@ -44,8 +48,8 @@ export function FlipSentences({
     );
 
     return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
+      if (activeInterval) {
+        clearInterval(activeInterval);
       }
       abortController.abort();
     };

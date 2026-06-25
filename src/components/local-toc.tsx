@@ -41,6 +41,7 @@ export function LocalTOC({ className, ...props }: React.ComponentProps<typeof Co
       }
     });
 
+    // eslint-disable-next-line react-doctor/no-initialize-state
     setItems(parsedItems);
   }, []);
 

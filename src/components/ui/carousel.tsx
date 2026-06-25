@@ -88,9 +88,9 @@ function Carousel({
     [scrollPrev, scrollNext]
   );
 
-  // eslint-disable-next-line react-doctor/no-pass-data-to-parent
   React.useEffect(() => {
     if (!api || !setApi) return;
+    // eslint-disable-next-line react-doctor/no-pass-data-to-parent
     setApi(api);
   }, [api, setApi]);
 

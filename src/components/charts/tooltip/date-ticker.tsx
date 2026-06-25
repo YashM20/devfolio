@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/refs */
 "use client"
 
-import { useMemo, useRef } from "react"
+import { useEffect, useMemo, useRef } from "react"
 import { motion, useSpring } from "motion/react"
 
 const TICKER_ITEM_HEIGHT = 24
@@ -55,23 +55,19 @@ export function DateTicker({ currentIndex, labels, visible }: DateTickerProps) {
     return 0
   }, [currentIndex, parsedLabels.length, monthSegments])
 
-  // Track previous month index
-  const prevMonthIndexRef = useRef(-1)
-
   // Animated Y offsets
   const dayY = useSpring(0, { stiffness: 400, damping: 35 })
   const monthY = useSpring(0, { stiffness: 400, damping: 35 })
 
-  dayY.set(-currentIndex * TICKER_ITEM_HEIGHT)
+  useEffect(() => {
+    dayY.set(-currentIndex * TICKER_ITEM_HEIGHT)
+  }, [currentIndex, dayY])
 
-  if (currentMonthIndex >= 0) {
-    const isFirstRender = prevMonthIndexRef.current === -1
-    const monthChanged = prevMonthIndexRef.current !== currentMonthIndex
-    if (isFirstRender || monthChanged) {
+  useEffect(() => {
+    if (currentMonthIndex >= 0) {
       monthY.set(-currentMonthIndex * TICKER_ITEM_HEIGHT)
-      prevMonthIndexRef.current = currentMonthIndex
     }
-  }
+  }, [currentMonthIndex, monthY])
 
   if (!visible || labels.length === 0) {
     return null

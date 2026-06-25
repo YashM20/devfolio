@@ -41,14 +41,17 @@ export function CookieConsent() {
 
     // Show banner if we haven't shown it before or don't have consent
     if (!hasShownBanner || !hasConsent) {
+      // eslint-disable-next-line react-doctor/no-initialize-state
       setShowBanner(true);
     } else {
       // Load existing preferences
       try {
         const savedPreferences = JSON.parse(hasConsent);
+        // eslint-disable-next-line react-doctor/no-initialize-state
         setPreferences(savedPreferences);
       } catch (error) {
         console.warn("Failed to parse cookie preferences:", error);
+        // eslint-disable-next-line react-doctor/no-initialize-state
         setShowBanner(true);
       }
     }

@@ -178,8 +178,8 @@ function CalendarDayButton({
   const defaultClassNames = getDefaultClassNames();
 
   const ref = React.useRef<HTMLButtonElement>(null);
-  // eslint-disable-next-line react-doctor/no-event-handler
   React.useEffect(() => {
+    // eslint-disable-next-line react-doctor/no-event-handler
     if (modifiers.focused) ref.current?.focus();
   }, [modifiers.focused]);
 
