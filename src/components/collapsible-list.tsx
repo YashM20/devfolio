@@ -8,6 +8,16 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 
+function ListItem<T>({
+  renderItem,
+  item,
+}: {
+  renderItem: (item: T) => React.ReactNode;
+  item: T;
+}) {
+  return <>{renderItem(item)}</>;
+}
+
 export function CollapsibleList<T>({
   items,
   max = 3,
@@ -28,7 +38,7 @@ export function CollapsibleList<T>({
           key={typeof keyExtractor === "function" ? keyExtractor(award) : index}
           className="border-edge border-b"
         >
-          {renderItem(award)}
+          <ListItem renderItem={renderItem} item={award} />
         </div>
       ))}
 
@@ -42,7 +52,7 @@ export function CollapsibleList<T>({
             }
             className="border-edge border-b"
           >
-            {renderItem(award)}
+            <ListItem renderItem={renderItem} item={award} />
           </div>
         ))}
       </CollapsibleContent>

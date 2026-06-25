@@ -51,6 +51,7 @@ export function remarkCodeImport(options = {}) {
       const fileMeta = (node.meta || "")
         // Allow escaping spaces
         .split(/(?<!\\) /g)
+        // eslint-disable-next-line react-doctor/js-index-maps
         .find((meta) => meta.startsWith("file="));
 
       if (!fileMeta) {

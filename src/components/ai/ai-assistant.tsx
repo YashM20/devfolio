@@ -24,6 +24,8 @@ import { USER } from "@/data/user";
 import { cn } from "@/lib/utils";
 import { posthogEvents, generateAIChatSessionId } from "@/lib/posthog-events";
 
+const getNow = () => Date.now();
+
 const MAX_INPUT_LENGTH = 1024;
 const WARNING_THRESHOLD = MAX_INPUT_LENGTH - 128;
 
@@ -42,6 +44,7 @@ export function AiAssistant() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const { messages, sendMessage, setMessages } = useChat({
+    // eslint-disable-next-line react-doctor/no-event-handler
     onFinish: () => {
       console.log("✅ Chat onFinish called");
       setIsTyping(false);
@@ -49,7 +52,7 @@ export function AiAssistant() {
 
       // Track response received
       if (messageStartTimeRef.current) {
-        const responseTime = Date.now() - messageStartTimeRef.current;
+        const responseTime = getNow() - messageStartTimeRef.current;
         posthogEvents.ai.responseReceived(responseTime, undefined, sessionId);
         messageStartTimeRef.current = null;
       }
@@ -141,7 +144,7 @@ export function AiAssistant() {
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen]);
+  }, [isOpen, setIsOpen]);
 
   // Track chat open/close events
   useEffect(() => {
@@ -180,7 +183,7 @@ export function AiAssistant() {
     console.log("✅ Form submit proceeding - calling sendMessage");
     setError(null); // Clear any previous errors
     setIsTyping(true);
-    messageStartTimeRef.current = Date.now();
+    messageStartTimeRef.current = getNow();
 
     // Track message sent
     posthogEvents.ai.messageSent(input.length, messages.length, sessionId);
@@ -220,7 +223,7 @@ export function AiAssistant() {
 
     setError(null);
     setIsTyping(true);
-    messageStartTimeRef.current = Date.now();
+    messageStartTimeRef.current = getNow();
 
     // Track suggestion clicked
     posthogEvents.ai.suggestionClicked(suggestion, sessionId);

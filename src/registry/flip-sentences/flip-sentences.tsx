@@ -17,13 +17,13 @@ export function FlipSentences({
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  const startAnimation = () => {
-    intervalRef.current = setInterval(() => {
-      setCurrentSentence((prev) => (prev + 1) % sentences.length);
-    }, 3500);
-  };
-
   useEffect(() => {
+    const startAnimation = () => {
+      intervalRef.current = setInterval(() => {
+        setCurrentSentence((prev) => (prev + 1) % sentences.length);
+      }, 3500);
+    };
+
     startAnimation();
 
     const abortController = new AbortController();
@@ -49,7 +49,6 @@ export function FlipSentences({
       }
       abortController.abort();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sentences]);
 
   return (

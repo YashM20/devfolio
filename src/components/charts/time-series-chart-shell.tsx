@@ -90,8 +90,8 @@ export function TimeSeriesChartInner({
   composedStackGap,
   yScaleDomainMax,
 }: TimeSeriesChartInnerProps) {
-  const [isLoaded, setIsLoaded] = useState(false)
-  const [revealEpoch, setRevealEpoch] = useState(0)
+  const [loadState, setLoadState] = useState({ isLoaded: false, revealEpoch: 0 })
+  const { isLoaded, revealEpoch } = loadState
 
   const innerWidth = width - margin.left - margin.right
   const innerHeight = height - margin.top - margin.bottom
@@ -165,11 +165,12 @@ export function TimeSeriesChartInner({
   )
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setRevealEpoch((n) => n + 1)
-    setIsLoaded(false)
+    setLoadState((s) => ({
+      revealEpoch: s.revealEpoch + 1,
+      isLoaded: false,
+    }))
     const timer = setTimeout(() => {
-      setIsLoaded(true)
+      setLoadState((s) => ({ ...s, isLoaded: true }))
     }, animationDuration)
     return () => clearTimeout(timer)
   }, [animationDuration, revealSignature])

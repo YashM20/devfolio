@@ -20,17 +20,18 @@ export function Hello() {
   useEffect(() => {
     const realUser = isRealUser();
     if (realUser) {
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         setCurrentIndex(0);
       }, 500);
+      return () => clearTimeout(timer);
     }
   }, []);
 
-  const nextAnimation = useCallback(() => {
+  const nextAnimation = () => {
     setTimeout(() => {
       setCurrentIndex((prev) => (prev + 1) % layers.length);
     }, 500);
-  }, []);
+  };
 
   return (
     <>

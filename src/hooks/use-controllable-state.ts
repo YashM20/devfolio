@@ -37,6 +37,7 @@ export function useControllableState<T>({
   // consistently in the same environment. Bundlers should be able to remove the
   // code block entirely in production.
   const isControlledRef = React.useRef(prop !== undefined);
+  // eslint-disable-next-line react-doctor/no-event-handler
   React.useEffect(() => {
     if (process.env.NODE_ENV !== "production") {
       const wasControlled = isControlledRef.current;

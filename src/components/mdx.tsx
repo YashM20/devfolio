@@ -135,8 +135,10 @@ const components: MDXRemoteProps["components"] = {
       {...props}
     />
   ),
-  Step: ({ className, ...props }: React.ComponentProps<"h3">) => (
-    <h3 className={cn("step", className)} {...props} />
+  Step: ({ className, children, ...props }: React.ComponentProps<"h3">) => (
+    <h3 className={cn("step", className)} {...props}>
+      {children}
+    </h3>
   ),
   Tabs,
   TabsList,

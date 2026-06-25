@@ -50,6 +50,7 @@ const components: Partial<Components> = {
     );
   },
   img: ({ node, children, ...props }) => {
+    // eslint-disable-next-line react-doctor/nextjs-no-img-element
     return <img data-mark alt="" {...props} />;
   },
   h1: ({ node, children, ...props }) => {

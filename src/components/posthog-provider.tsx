@@ -14,8 +14,11 @@ const shouldLoad =
   !!(POSTHOG_KEY && POSTHOG_HOST) && process.env.NODE_ENV === "production";
 
 export function PostHogProvider({ children }: { children: React.ReactNode }) {
-  const [consentGiven, setConsentGiven] = useState(false);
-  const [isInitialized, setIsInitialized] = useState(false);
+  const [posthogState, setPosthogState] = useState({
+    consentGiven: false,
+    isInitialized: false,
+  });
+  const { consentGiven, isInitialized } = posthogState;
 
   useEffect(() => {
     if (!shouldLoad) return;
@@ -24,8 +27,8 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
     const checkConsent = () => {
       const preferences = getCookiePreferences();
       const analyticsAllowed = preferences?.analytics || false;
-      setConsentGiven(analyticsAllowed);
 
+      let nextInitialized = isInitialized;
       // Initialize PostHog if consent is given and not already initialized
       if (analyticsAllowed && !isInitialized) {
         posthog.init(POSTHOG_KEY, {
@@ -37,7 +40,7 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
           capture_pageview: true,
           capture_pageleave: true,
         });
-        setIsInitialized(true);
+        nextInitialized = true;
       } else if (!analyticsAllowed && isInitialized) {
         // If consent is withdrawn, opt out
         posthog.opt_out_capturing();
@@ -45,6 +48,11 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
         // If consent is given and already initialized, opt back in
         posthog.opt_in_capturing();
       }
+
+      setPosthogState({
+        consentGiven: analyticsAllowed,
+        isInitialized: nextInitialized,
+      });
     };
 
     // Check consent on mount
@@ -54,8 +62,8 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
     const handleConsentChange = (event: CustomEvent) => {
       const preferences = event.detail;
       const analyticsAllowed = preferences?.analytics || false;
-      setConsentGiven(analyticsAllowed);
 
+      let nextInitialized = isInitialized;
       if (analyticsAllowed && !isInitialized) {
         // Initialize if not already done
         posthog.init(POSTHOG_KEY, {
@@ -63,7 +71,7 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
           ui_host: POSTHOG_UI_HOST || "https://us.posthog.com",
           person_profiles: "identified_only",
         });
-        setIsInitialized(true);
+        nextInitialized = true;
       } else if (analyticsAllowed && isInitialized) {
         // Re-enable if disabled
         posthog.opt_in_capturing();
@@ -71,6 +79,11 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
         // Disable if consent withdrawn
         posthog.opt_out_capturing();
       }
+
+      setPosthogState({
+        consentGiven: analyticsAllowed,
+        isInitialized: nextInitialized,
+      });
     };
 
     window.addEventListener(

@@ -104,6 +104,7 @@ export function ProjectVideo({
         <video
           src={src}
           controls
+          aria-label={caption || "Project video"}
           className="h-full w-full object-cover"
         />
         <div className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-inset ring-black/10 dark:ring-white/10" />
@@ -136,6 +137,7 @@ export function ProjectIframe({
           className="h-full w-full border-0 bg-background"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowFullScreen
+          sandbox="allow-scripts allow-same-origin allow-presentation allow-forms"
         />
         <div className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-inset ring-black/10 dark:ring-white/10" />
       </div>

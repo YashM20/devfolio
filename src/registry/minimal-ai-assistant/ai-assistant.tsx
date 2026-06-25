@@ -479,21 +479,25 @@ function AiAssistantMessageList({
   );
 }
 
-// Helper function to render message content
-const renderMessageContent = (message: any) => {
+// Helper component to render message content
+function RenderMessageContent({ message }: { message: any }) {
   if (message.parts) {
-    return message.parts.flatMap((part: any) =>
-      part.type === "text"
-        ? [
-            <div key={part.text} className="whitespace-pre-wrap">
-              {part.text}
-            </div>,
-          ]
-        : []
+    return (
+      <>
+        {message.parts.flatMap((part: any) =>
+          part.type === "text"
+            ? [
+                <div key={part.text} className="whitespace-pre-wrap">
+                  {part.text}
+                </div>,
+              ]
+            : []
+        )}
+      </>
     );
   }
   return <div className="whitespace-pre-wrap">{message.content || ""}</div>;
-};
+}
 
 // Individual message component
 function AiAssistantMessage({
@@ -527,7 +531,7 @@ function AiAssistantMessage({
             : "bg-muted text-muted-foreground"
         )}
       >
-        {renderMessageContent(message)}
+        <RenderMessageContent message={message} />
       </div>
 
       {message.role === "user" && (
@@ -646,6 +650,7 @@ function AiAssistantInput({
             onChange={(e) => setInput(e.target.value.slice(0, maxLength))}
             onKeyDown={handleKeyDown}
             placeholder={placeholder}
+            aria-label={placeholder || "Type a message"}
             className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring max-h-[120px] min-h-11 w-full resize-none rounded-lg border p-3 pr-12 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             disabled={isTyping}
             rows={1}

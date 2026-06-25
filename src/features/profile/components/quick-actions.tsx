@@ -42,6 +42,7 @@ export function QuickActions() {
             <div className="border-edge border-x pt-2">
               <div className="screen-line-before screen-line-after -mx-px grid grid-cols-[1fr_1fr_2.5rem] gap-2 sm:grid-cols-2 sm:gap-4">
                 <Button size="lg" asChild>
+                  {/* eslint-disable-next-line react-doctor/nextjs-no-a-element */}
                   <a href="/vcard" target="_blank" rel="noopener noreferrer">
                     <DownloadIcon />
                     Save vCard

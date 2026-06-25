@@ -22,7 +22,13 @@ export function LogoResizeAnimation({
   maxWidth?: number;
 }) {
   const [width, setWidth] = useState(maxWidth);
+  const [prevMaxWidth, setPrevMaxWidth] = useState(maxWidth);
   const [isEnd, setIsEnd] = useState(false);
+
+  if (maxWidth !== prevMaxWidth) {
+    setPrevMaxWidth(maxWidth);
+    setWidth(maxWidth);
+  }
 
   return (
     <m.div

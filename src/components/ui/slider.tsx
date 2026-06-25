@@ -25,7 +25,7 @@ function Slider({
 
   const thumbs = React.useMemo(
     () => _values.map((_, i) => ({ id: `thumb-${i}` })),
-    [_values.length]
+    [_values]
   );
 
   return (
