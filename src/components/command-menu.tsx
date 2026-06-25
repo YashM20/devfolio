@@ -176,12 +176,16 @@ export function CommandMenu({ posts }: { posts: Post[] }) {
 
   const { blogLinks, componentLinks } = useMemo(
     () => ({
-      blogLinks: posts
-        .filter((post) => post.metadata?.category !== "components")
-        .map(postToCommandLinkItem),
-      componentLinks: posts
-        .filter((post) => post.metadata?.category === "components")
-        .map(postToCommandLinkItem),
+      blogLinks: posts.flatMap((post) =>
+        post.metadata?.category !== "components"
+          ? [postToCommandLinkItem(post)]
+          : []
+      ),
+      componentLinks: posts.flatMap((post) =>
+        post.metadata?.category === "components"
+          ? [postToCommandLinkItem(post)]
+          : []
+      ),
     }),
     [posts]
   );

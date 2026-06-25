@@ -18,7 +18,10 @@ function parseImagesProp(images: string[] | string | undefined): string[] {
         if (Array.isArray(parsed)) return parsed;
       } catch {}
     }
-    return trimmed.split(",").map((src) => src.trim()).filter(Boolean);
+    return trimmed.split(",").flatMap((src) => {
+      const trimmedSrc = src.trim();
+      return trimmedSrc ? [trimmedSrc] : [];
+    });
   }
   return [];
 }

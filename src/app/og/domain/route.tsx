@@ -3,19 +3,24 @@ import { join } from "node:path";
 
 import { ImageResponse } from "next/og";
 
+const magistralMediumPromise = readFile(
+  join(process.cwd(), "src/assets/fonts/Magistral-Medium.ttf")
+);
+
+const robotoMediumPromise = readFile(
+  join(process.cwd(), "src/assets/fonts/Roboto-Medium.ttf")
+);
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
 
   const domain = searchParams.get("domain");
   const isForSale = searchParams.get("sale") === "true";
 
-  const magistralMedium = await readFile(
-    join(process.cwd(), "src/assets/fonts/Magistral-Medium.ttf")
-  );
-
-  const robotoMedium = await readFile(
-    join(process.cwd(), "src/assets/fonts/Roboto-Medium.ttf")
-  );
+  const [magistralMedium, robotoMedium] = await Promise.all([
+    magistralMediumPromise,
+    robotoMediumPromise,
+  ]);
 
   return new ImageResponse(
     (

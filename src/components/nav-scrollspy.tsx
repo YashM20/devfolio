@@ -14,7 +14,10 @@ export function NavScrollspy({
   className?: string;
 }) {
   const shouldObserve = useMediaQuery("(min-width: 48rem)"); // 768px
-  const itemIds = items.map((link) => link.href?.split("#")[1]).filter(Boolean);
+  const itemIds = items.flatMap((link) => {
+    const id = link.href?.split("#")[1];
+    return id ? [id] : [];
+  });
   const activeItemId = useActiveItem(itemIds, shouldObserve);
 
   return (

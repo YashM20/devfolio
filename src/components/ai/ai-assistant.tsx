@@ -244,7 +244,7 @@ export function AiAssistant() {
       {/* Floating Chat Button - Bottom Center */}
       <motion.div
         className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 transform"
-        initial={{ scale: 0, opacity: 0 }}
+        initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{
           type: "spring",
@@ -456,22 +456,22 @@ export function AiAssistant() {
                           )}
                         >
                           {message.parts ? (
-                            message.parts
-                              .filter((part: any) => {
-                                // Filter out step-related parts and empty content
-                                if (typeof part === "object" && part.type) {
-                                  return (
-                                    !part.type.includes("step") &&
-                                    part.type !== "tool-result" &&
-                                    !part.type.startsWith("tool-")
-                                  );
+                            message.parts.flatMap((part: any, i: number) => {
+                              // Filter out step-related parts and empty content
+                              if (typeof part === "object" && part.type) {
+                                if (
+                                  part.type.includes("step") ||
+                                  part.type === "tool-result" ||
+                                  part.type.startsWith("tool-")
+                                ) {
+                                  return [];
                                 }
-                                return true;
-                              })
-                              .map((part: any, i: number) => {
-                                switch (part.type) {
-                                  case "text":
-                                    return message.role === "assistant" ? (
+                              }
+
+                              switch (part.type) {
+                                case "text":
+                                  return [
+                                    message.role === "assistant" ? (
                                       <div
                                         key={part.text}
                                         className="prose prose-sm dark:prose-invert min-w-0 max-w-none"
@@ -489,80 +489,81 @@ export function AiAssistant() {
                                       >
                                         {part.text}
                                       </p>
-                                    );
-                                  case "tool-call":
-                                    return (
-                                      <div
-                                        key={part.toolCallId}
-                                        className="mb-1 mt-2 text-xs opacity-70"
-                                      >
-                                        <div className="flex items-center gap-1 text-blue-500 dark:text-blue-400">
-                                          <span className="animate-spin">
-                                            ⚙️
-                                          </span>
-                                          <span>Using {part.toolName}...</span>
-                                        </div>
+                                    ),
+                                  ];
+                                case "tool-call":
+                                  return [
+                                    <div
+                                      key={part.toolCallId}
+                                      className="mb-1 mt-2 text-xs opacity-70"
+                                    >
+                                      <div className="flex items-center gap-1 text-blue-500 dark:text-blue-400">
+                                        <span className="animate-spin">
+                                          ⚙️
+                                        </span>
+                                        <span>Using {part.toolName}...</span>
                                       </div>
-                                    );
-                                  case "tool-result":
-                                    // Don't show tool results in UI, they're used internally
-                                    return null;
-                                  case "tool-searchProjects":
-                                  case "tool-searchBlogPosts":
-                                  case "tool-getTechStack":
-                                  case "tool-getExperience":
-                                  case "tool-generateCodeSnippet":
-                                    return (
-                                      <div
-                                        key={part.toolCallId || JSON.stringify(part)}
-                                        className="mt-2 text-xs opacity-70"
-                                      >
-                                        <details>
-                                          <summary>🔧 Tool Call</summary>
-                                          <pre className="mt-1 overflow-auto text-xs">
-                                            {JSON.stringify(part, null, 2)}
-                                          </pre>
-                                        </details>
-                                      </div>
-                                    );
-                                  case "step-start":
-                                  case "step-finish":
-                                    // Hide step markers from UI - they're used for internal processing
-                                    return null;
-                                  default:
-                                    // Only show non-step content to users
-                                    if (
-                                      typeof part === "object" &&
-                                      part.type &&
-                                      part.type.includes("step")
-                                    ) {
-                                      return null; // Hide any step-related content
-                                    }
+                                    </div>,
+                                  ];
+                                case "tool-result":
+                                  // Don't show tool results in UI, they're used internally
+                                  return [];
+                                case "tool-searchProjects":
+                                case "tool-searchBlogPosts":
+                                case "tool-getTechStack":
+                                case "tool-getExperience":
+                                case "tool-generateCodeSnippet":
+                                  return [
+                                    <div
+                                      key={part.toolCallId || JSON.stringify(part)}
+                                      className="mt-2 text-xs opacity-70"
+                                    >
+                                      <details>
+                                        <summary>🔧 Tool Call</summary>
+                                        <pre className="mt-1 overflow-auto text-xs">
+                                          {JSON.stringify(part, null, 2)}
+                                        </pre>
+                                      </details>
+                                    </div>,
+                                  ];
+                                case "step-start":
+                                case "step-finish":
+                                  // Hide step markers from UI - they're used for internal processing
+                                  return [];
+                                default:
+                                  // Only show non-step content to users
+                                  if (
+                                    typeof part === "object" &&
+                                    part.type &&
+                                    part.type.includes("step")
+                                  ) {
+                                    return []; // Hide any step-related content
+                                  }
 
-                                    return (
-                                      <div key={typeof part === "string" ? part : JSON.stringify(part)}>
-                                        {typeof part === "string" ? (
-                                          message.role === "assistant" ? (
-                                            <div className="prose prose-sm dark:prose-invert max-w-none overflow-x-auto">
-                                              <Markdown>{part}</Markdown>
-                                            </div>
-                                          ) : (
-                                            <p className="whitespace-pre-wrap">
-                                              {part}
-                                            </p>
-                                          )
+                                  return [
+                                    <div key={typeof part === "string" ? part : JSON.stringify(part)}>
+                                      {typeof part === "string" ? (
+                                        message.role === "assistant" ? (
+                                          <div className="prose prose-sm dark:prose-invert max-w-none overflow-x-auto">
+                                            <Markdown>{part}</Markdown>
+                                          </div>
                                         ) : (
-                                          // Only show non-step objects
-                                          !part.type?.includes("step") && (
-                                            <p className="whitespace-pre-wrap">
-                                              {JSON.stringify(part)}
-                                            </p>
-                                          )
-                                        )}
-                                      </div>
-                                    );
-                                }
-                              })
+                                          <p className="whitespace-pre-wrap">
+                                            {part}
+                                          </p>
+                                        )
+                                      ) : (
+                                        // Only show non-step objects
+                                        !part.type?.includes("step") && (
+                                          <p className="whitespace-pre-wrap">
+                                            {JSON.stringify(part)}
+                                          </p>
+                                        )
+                                      )}
+                                    </div>,
+                                  ];
+                              }
+                            })
                           ) : message.role === "assistant" ? (
                             <div className="prose prose-sm dark:prose-invert max-w-none overflow-x-auto">
                               <Markdown>{message.content}</Markdown>

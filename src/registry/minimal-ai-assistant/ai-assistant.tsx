@@ -62,8 +62,7 @@ function AiAssistantProvider({
       if (lastMessage && lastMessage.role === "assistant") {
         if (lastMessage.parts) {
           const textParts = lastMessage.parts
-            .filter((part: any) => part.type === "text")
-            .map((part: any) => part.text)
+            .flatMap((part: any) => part.type === "text" ? [part.text] : [])
             .join("");
           onResponse?.(textParts);
         }
@@ -209,9 +208,9 @@ function AiAssistantTrigger({
 
   return (
     <motion.button
-      initial={{ scale: 0 }}
-      animate={{ scale: 1 }}
-      exit={{ scale: 0 }}
+      initial={{ scale: 0.95, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      exit={{ scale: 0.95, opacity: 0 }}
       className={cn(
         aiAssistantTriggerVariants({ variant, size, position, className })
       )}
@@ -475,25 +474,28 @@ function AiAssistantMessageList({
   );
 }
 
+// Helper function to render message content
+const renderMessageContent = (message: any) => {
+  if (message.parts) {
+    return message.parts.flatMap((part: any) =>
+      part.type === "text"
+        ? [
+            <div key={part.text} className="whitespace-pre-wrap">
+              {part.text}
+            </div>,
+          ]
+        : []
+    );
+  }
+  return <div className="whitespace-pre-wrap">{message.content || ""}</div>;
+};
+
 // Individual message component
 function AiAssistantMessage({
   message,
   className,
   ...props
 }: React.ComponentProps<typeof motion.div> & { message: any }) {
-  // Helper function to render message content
-  const renderMessageContent = (message: any) => {
-    if (message.parts) {
-      return message.parts
-        .filter((part: any) => part.type === "text")
-        .map((part: any) => (
-          <div key={part.text} className="whitespace-pre-wrap">
-            {part.text}
-          </div>
-        ));
-    }
-    return <div className="whitespace-pre-wrap">{message.content || ""}</div>;
-  };
 
   return (
     <motion.div

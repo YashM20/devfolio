@@ -3,14 +3,16 @@ import { join } from "node:path";
 
 import { ImageResponse } from "next/og";
 
+const robotoCondensedMediumPromise = readFile(
+  join(process.cwd(), "src/assets/fonts/RobotoCondensed-Medium.ttf")
+);
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
 
   const title = searchParams.get("title");
 
-  const robotoCondensedMedium = await readFile(
-    join(process.cwd(), "src/assets/fonts/RobotoCondensed-Medium.ttf")
-  );
+  const robotoCondensedMedium = await robotoCondensedMediumPromise;
 
   return new ImageResponse(
     (
