@@ -5,6 +5,12 @@ import type { Experience } from "../../types/experiences";
 import { ExperiencePositionItem } from "./experience-position-item";
 
 export function ExperienceItem({ experience }: { experience: Experience }) {
+  // console.log({
+  //   "companyLogo": experience.companyLogo,
+  //   "companyName": experience.companyName,
+  //   "isCurrentEmployer": experience.isCurrentEmployer,
+  //   "positions": experience.positions,
+  // })
   return (
     <div className="screen-line-after space-y-4 py-4">
       <div className="flex items-center gap-3">
@@ -28,7 +34,7 @@ export function ExperienceItem({ experience }: { experience: Experience }) {
         <h3 className="text-lg font-medium leading-snug">
           {experience.companyName}
         </h3>
-
+        <p> isCurrentEmployer: {experience.isCurrentEmployer ? "T":"F"}</p>
         {experience.isCurrentEmployer && (
           <span className="relative flex items-center justify-center">
             <span className="bg-info absolute inline-flex size-3 animate-ping rounded-full opacity-50" />
@@ -39,6 +45,7 @@ export function ExperienceItem({ experience }: { experience: Experience }) {
       </div>
 
       <div className="before:bg-border relative space-y-4 before:absolute before:left-3 before:h-full before:w-px">
+        <p>Length: {experience.positions.length}</p>
         {experience.positions.map((position) => (
           <ExperiencePositionItem key={position.id} position={position} />
         ))}

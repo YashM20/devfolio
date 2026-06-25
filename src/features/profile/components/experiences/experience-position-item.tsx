@@ -1,3 +1,4 @@
+"use client"
 import {
   ChevronsDownUpIcon,
   ChevronsUpDownIcon,
@@ -26,38 +27,44 @@ export function ExperiencePositionItem({
   const { start, end } = position.employmentPeriod;
   const isOngoing = !end;
 
+  const [isOpen, setIsOpen] = React.useState(position.isExpanded ?? false);
+
+  React.useEffect(() => {
+    setIsOpen(position.isExpanded ?? false);
+  }, [position.isExpanded]);
+
   return (
-    <Collapsible defaultOpen={position.isExpanded} asChild>
+    <Collapsible open={isOpen} onOpenChange={setIsOpen} asChild>
       <div className="last:before:bg-background relative last:before:absolute last:before:h-full last:before:w-4">
         <CollapsibleTrigger className="group/experience block w-full select-none text-left">
-          <div className="z-1 bg-background relative mb-1 flex items-center gap-3">
-            <div
+          <span className="z-1 bg-background relative mb-1 flex items-center gap-3">
+            <span
               className="bg-muted text-muted-foreground flex size-6 shrink-0 items-center justify-center rounded-lg"
               aria-hidden
             >
               <ExperienceIcon className="size-4" icon={position.icon} />
-            </div>
+            </span>
 
-            <h4 className="flex-1 text-balance font-medium">
+            <span className="flex-1 text-balance font-medium">
               {position.title}
-            </h4>
+            </span>
 
-            <div
+            <span
               className="text-muted-foreground shrink-0 [&_svg]:size-4"
               aria-hidden
             >
               <ChevronsDownUpIcon className="hidden group-data-[state=open]/experience:block" />
               <ChevronsUpDownIcon className="hidden group-data-[state=closed]/experience:block" />
-            </div>
-          </div>
+            </span>
+          </span>
 
-          <div className="text-muted-foreground flex flex-wrap items-center gap-x-2 gap-y-1 pl-9 text-sm">
+          <span className="text-muted-foreground flex flex-wrap items-center gap-x-2 gap-y-1 pl-9 text-sm">
             {position.employmentType && (
               <>
-                <div className="whitespace-nowrap">
-                  <dt className="sr-only">Employment Type</dt>
-                  <dd>{position.employmentType}</dd>
-                </div>
+                <span className="whitespace-nowrap">
+                  <span className="sr-only">Employment Type</span>
+                  <span>{position.employmentType}</span>
+                </span>
 
                 <Separator
                   className="data-[orientation=vertical]:h-4"
@@ -66,9 +73,9 @@ export function ExperiencePositionItem({
               </>
             )}
 
-            <div className="whitespace-nowrap">
-              <dt className="sr-only">Employment Period</dt>
-              <dd className="flex items-center gap-0.5">
+            <span className="whitespace-nowrap">
+              <span className="sr-only">Employment Period</span>
+              <span className="flex items-center gap-0.5">
                 <span>{start}</span>
                 <span className="font-mono">—</span>
                 {isOngoing ? (
@@ -82,9 +89,9 @@ export function ExperiencePositionItem({
                 ) : (
                   <span>{end}</span>
                 )}
-              </dd>
-            </div>
-          </div>
+              </span>
+            </span>
+          </span>
         </CollapsibleTrigger>
 
         <CollapsibleContent className="data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down overflow-hidden duration-300">
