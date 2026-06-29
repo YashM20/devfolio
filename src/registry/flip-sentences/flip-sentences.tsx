@@ -1,6 +1,7 @@
 "use client";
 
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence } from "motion/react";
+import * as m from "motion/react-m";
 import { useEffect, useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
@@ -16,13 +17,16 @@ export function FlipSentences({
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  const startAnimation = () => {
-    intervalRef.current = setInterval(() => {
-      setCurrentSentence((prev) => (prev + 1) % sentences.length);
-    }, 3500);
-  };
-
   useEffect(() => {
+    let activeInterval: NodeJS.Timeout | null = null;
+
+    const startAnimation = () => {
+      activeInterval = setInterval(() => {
+        setCurrentSentence((prev) => (prev + 1) % sentences.length);
+      }, 3500);
+      intervalRef.current = activeInterval;
+    };
+
     startAnimation();
 
     const abortController = new AbortController();
@@ -31,8 +35,9 @@ export function FlipSentences({
     document.addEventListener(
       "visibilitychange",
       () => {
-        if (document.visibilityState !== "visible" && intervalRef.current) {
-          clearInterval(intervalRef.current); // Clear the interval when the tab is not visible
+        if (document.visibilityState !== "visible" && activeInterval) {
+          clearInterval(activeInterval); // Clear the interval when the tab is not visible
+          activeInterval = null;
           intervalRef.current = null;
         } else if (document.visibilityState === "visible") {
           setCurrentSentence((prev) => (prev + 1) % sentences.length); // Show the next sentence immediately
@@ -43,17 +48,16 @@ export function FlipSentences({
     );
 
     return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
+      if (activeInterval) {
+        clearInterval(activeInterval);
       }
       abortController.abort();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sentences]);
 
   return (
     <AnimatePresence mode="wait" initial={false}>
-      <motion.p
+      <m.p
         key={`current-sentence-${currentSentence}`}
         className={cn(
           "text-muted-foreground select-none text-balance font-mono text-sm",
@@ -77,7 +81,7 @@ export function FlipSentences({
         }}
       >
         {sentences[currentSentence]}
-      </motion.p>
+      </m.p>
     </AnimatePresence>
   );
 }

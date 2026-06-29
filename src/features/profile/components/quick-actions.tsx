@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useMotionValueEvent, useScroll } from "motion/react";
+import { useMotionValueEvent, useScroll } from "motion/react";
+import * as m from "motion/react-m";
 import { useState } from "react";
 
 import { MobileNav } from "@/components/mobile-nav";
@@ -26,7 +27,7 @@ export function QuickActions() {
     <>
       <div className="h-14" />
 
-      <motion.div
+      <m.div
         className="bg-background fixed inset-x-0 bottom-0 z-50 pb-[calc(0.5rem+env(safe-area-inset-bottom,0px))]"
         initial={{ opacity: 1 }}
         animate={{
@@ -41,6 +42,7 @@ export function QuickActions() {
             <div className="border-edge border-x pt-2">
               <div className="screen-line-before screen-line-after -mx-px grid grid-cols-[1fr_1fr_2.5rem] gap-2 sm:grid-cols-2 sm:gap-4">
                 <Button size="lg" asChild>
+                  {/* eslint-disable-next-line react-doctor/nextjs-no-a-element */}
                   <a href="/vcard" target="_blank" rel="noopener noreferrer">
                     <DownloadIcon />
                     Save vCard
@@ -63,7 +65,7 @@ export function QuickActions() {
             </div>
           </div>
         </div>
-      </motion.div>
+      </m.div>
     </>
   );
 }

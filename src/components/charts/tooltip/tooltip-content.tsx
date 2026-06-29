@@ -1,18 +1,18 @@
-"use client"
+"use client";
 
-import type { ReactNode } from "react"
+import type { ReactNode } from "react";
 
 export interface TooltipRow {
-  color: string
-  label: string
-  value: string | number
+  color: string;
+  label: string;
+  value: string | number;
 }
 
 export interface TooltipContentProps {
-  title?: string
-  rows: TooltipRow[]
+  title?: string;
+  rows: TooltipRow[];
   /** Optional additional content (e.g., markers) */
-  children?: ReactNode
+  children?: ReactNode;
 }
 
 export function TooltipContent({ title, rows, children }: TooltipContentProps) {
@@ -55,9 +55,7 @@ export function TooltipContent({ title, rows, children }: TooltipContentProps) {
         )}
       </div>
     </div>
-  )
+  );
 }
 
-TooltipContent.displayName = "TooltipContent"
-
-export default TooltipContent
+TooltipContent.displayName = "TooltipContent";

@@ -3,9 +3,11 @@
 **Role:** Frontend Developer
 
 ## Description
+
 Developed the application that provides mobile point of sale that provides store billing system and manage invoices.
 
 ## Responsibilities
+
 - Involved in requirement gathering with client and developed a custom application which involved creating application using React-native.
 - Worked on design using HTML5, CSS3, JavaScript, Bootstrap, and React Native.
 - Develop new mobile application on Android and IOS.
@@ -20,4 +22,5 @@ Developed the application that provides mobile point of sale that provides store
 - Effectively resolved the production issue.
 
 ## Technologies
-HTML5, CSS3, JavaScript, React-native, DOM, JEST, REDUX, RESTful, Agile and Windows. 
+
+HTML5, CSS3, JavaScript, React-native, DOM, JEST, REDUX, RESTful, Agile and Windows.

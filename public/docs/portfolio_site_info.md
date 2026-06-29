@@ -9,7 +9,6 @@ Gujarat, India
 Get in touch
 yash.reactopia@gmail.com
 
-
 Overview
 I’m a Software Engineer with 4+ years of experience building frontend interfaces, backend services, and mobile applications using JavaScript frameworks and libraries like Next.js, React, React Native, Expo, and Node.js.
 

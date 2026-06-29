@@ -1,1 +1,1 @@
-export * from "./contribution-graph"
+export * from "./contribution-graph";

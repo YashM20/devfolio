@@ -200,12 +200,14 @@ export async function POST(req: Request) {
     });
 
     return new Response(stream.pipeThrough(new JsonToSseTransformStream()));
-  } catch (error) {
-    console.error("Chat API error:", error);
-    return new Response("Error processing request", { status: 500 });
-  }
+
+} catch (error) {
+console.error("Chat API error:", error);
+return new Response("Error processing request", { status: 500 });
 }
-```
+}
+
+````
 
 ### Environment Variables
 
@@ -214,7 +216,7 @@ Add your AI provider API key to your environment variables:
 ```bash
 # .env.local
 GOOGLE_GENERATIVE_AI_API_KEY=your_api_key_here
-```
+````
 
 ### Advanced Route with Rate Limiting
 
@@ -230,16 +232,16 @@ const MAX_REQUESTS_PER_HOUR = 100;
 function checkRateLimit(ip: string): boolean {
   const now = Date.now();
   const userHistory = userRequests.get(ip) || [];
-  
+
   // Remove requests older than 1 hour
   const recentRequests = userHistory.filter(
     (time: number) => now - time < 60 * 60 * 1000
   );
-  
+
   if (recentRequests.length >= MAX_REQUESTS_PER_HOUR) {
     return false;
   }
-  
+
   recentRequests.push(now);
   userRequests.set(ip, recentRequests);
   return true;
@@ -249,7 +251,7 @@ export async function POST(req: Request) {
   try {
     // Get client IP
     const ip = req.headers.get("x-forwarded-for") || "unknown";
-    
+
     // Check rate limit
     if (!checkRateLimit(ip)) {
       return new Response("Rate limit exceeded", { status: 429 });

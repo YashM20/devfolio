@@ -1,3 +1,4 @@
+"use client";
 import {
   BriefcaseBusinessIcon,
   ChevronsDownUpIcon,
@@ -135,38 +136,46 @@ export function ExperiencePositionItem({
 }) {
   const ExperienceIcon = iconMap[position.icon || "business"];
 
+  const [isOpen, setIsOpen] = React.useState(position.isExpanded ?? false);
+  const [prevPosition, setPrevPosition] = React.useState(position);
+
+  if (position !== prevPosition) {
+    setPrevPosition(position);
+    setIsOpen(position.isExpanded ?? false);
+  }
+
   return (
-    <Collapsible defaultOpen={position.isExpanded} asChild>
+    <Collapsible open={isOpen} onOpenChange={setIsOpen} asChild>
       <div className="last:before:bg-background relative last:before:absolute last:before:h-full last:before:w-4">
         <CollapsibleTrigger className="group/experience not-prose block w-full select-none text-left">
-          <div className="z-1 bg-background relative mb-1 flex items-center gap-3">
-            <div
+          <span className="z-1 bg-background relative mb-1 flex items-center gap-3">
+            <span
               className="bg-muted text-muted-foreground flex size-6 shrink-0 items-center justify-center rounded-lg"
               aria-hidden
             >
               <ExperienceIcon className="size-4" />
-            </div>
+            </span>
 
-            <h4 className="flex-1 text-balance text-base font-medium">
+            <span className="flex-1 text-balance text-base font-medium">
               {position.title}
-            </h4>
+            </span>
 
-            <div
+            <span
               className="text-muted-foreground shrink-0 [&_svg]:size-4"
               aria-hidden
             >
               <ChevronsDownUpIcon className="hidden group-data-[state=open]/experience:block" />
               <ChevronsUpDownIcon className="hidden group-data-[state=closed]/experience:block" />
-            </div>
-          </div>
+            </span>
+          </span>
 
-          <div className="text-muted-foreground flex items-center gap-2 pl-9 text-sm">
+          <span className="text-muted-foreground flex items-center gap-2 pl-9 text-sm">
             {position.employmentType && (
               <>
-                <div>
-                  <dt className="sr-only">Employment Type</dt>
-                  <dd>{position.employmentType}</dd>
-                </div>
+                <span className="whitespace-nowrap">
+                  <span className="sr-only">Employment Type</span>
+                  <span>{position.employmentType}</span>
+                </span>
 
                 <Separator
                   className="data-[orientation=vertical]:h-4"
@@ -175,11 +184,11 @@ export function ExperiencePositionItem({
               </>
             )}
 
-            <div>
-              <dt className="sr-only">Employment Period</dt>
-              <dd>{position.employmentPeriod}</dd>
-            </div>
-          </div>
+            <span className="whitespace-nowrap">
+              <span className="sr-only">Employment Period</span>
+              <span>{position.employmentPeriod}</span>
+            </span>
+          </span>
         </CollapsibleTrigger>
 
         <CollapsibleContent className="data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down overflow-hidden duration-300">
@@ -191,8 +200,8 @@ export function ExperiencePositionItem({
 
           {Array.isArray(position.skills) && position.skills.length > 0 && (
             <ul className="not-prose flex flex-wrap gap-1.5 pl-9 pt-2">
-              {position.skills.map((skill, index) => (
-                <li key={index} className="flex">
+              {position.skills.map((skill) => (
+                <li key={skill} className="flex">
                   <Skill>{skill}</Skill>
                 </li>
               ))}
@@ -209,7 +218,7 @@ function Prose({ className, ...props }: React.ComponentProps<"div">) {
     <div
       className={cn(
         "prose prose-sm text-foreground prose-zinc dark:prose-invert max-w-none font-mono",
-        "prose-a:font-medium prose-a:break-words prose-a:text-foreground prose-a:underline prose-a:underline-offset-4",
+        "prose-a:font-medium prose-a:wrap-break-word prose-a:text-foreground prose-a:underline prose-a:underline-offset-4",
         "prose-code:rounded-md prose-code:border prose-code:bg-muted/50 prose-code:px-[0.3rem] prose-code:py-[0.2rem] prose-code:text-sm prose-code:font-normal prose-code:before:content-none prose-code:after:content-none",
         className
       )}

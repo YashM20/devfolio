@@ -3,9 +3,11 @@
 **Role:** Frontend Developer
 
 ## Description
+
 Developed an admin portal web application using React.js for product management, reports management, campaign management, password and device management, and product category management. Implemented features for an intuitive user interface, responsive design, integration with backend APIs, user authentication and authorization, performance optimization, and documentation.
 
 ## Responsibilities
+
 - Working with designers to create a user-friendly interface and an intuitive user experience for the application.
 - Developing the application's user interface using React.js, along with Redux or other state management libraries to manage data flow, including components for product management, reports management, campaign management, password and device management, and product category management.
 - Using CSS and bootstrap to style and layout the application's components and pages.
@@ -16,4 +18,5 @@ Developed an admin portal web application using React.js for product management,
 - Writing documentation for the application's codebase to make it easier for other developers to understand and maintain.
 
 ## Technologies
-HTML5, CSS3, JavaScript, React, REDUX, Apex charts, AWS, S3, Next.js. 
+
+HTML5, CSS3, JavaScript, React, REDUX, Apex charts, AWS, S3, Next.js.

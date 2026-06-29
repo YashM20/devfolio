@@ -6,9 +6,11 @@ import { useWindowSize } from "react-use";
 
 import { useIsClient } from "@/hooks/use-is-client";
 
+const EMPTY_DATES: string[] = [];
+
 export function Confetti({
-  datesWithoutYear = [],
-  datesWithYear = [],
+  datesWithoutYear = EMPTY_DATES,
+  datesWithYear = EMPTY_DATES,
 }: {
   datesWithoutYear?: string[];
   datesWithYear?: string[];

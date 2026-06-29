@@ -13,13 +13,13 @@ export function CollapsibleList<T>({
   max = 3,
 
   keyExtractor,
-  renderItem,
+  renderItem: RenderItem,
 }: {
   items: T[];
   max?: number;
 
   keyExtractor?: (item: T) => string;
-  renderItem: (item: T) => React.ReactNode;
+  renderItem: React.ComponentType<{ item: T }>;
 }) {
   return (
     <Collapsible>
@@ -28,7 +28,7 @@ export function CollapsibleList<T>({
           key={typeof keyExtractor === "function" ? keyExtractor(award) : index}
           className="border-edge border-b"
         >
-          {renderItem(award)}
+          <RenderItem item={award} />
         </div>
       ))}
 
@@ -42,7 +42,7 @@ export function CollapsibleList<T>({
             }
             className="border-edge border-b"
           >
-            {renderItem(award)}
+            <RenderItem item={award} />
           </div>
         ))}
       </CollapsibleContent>

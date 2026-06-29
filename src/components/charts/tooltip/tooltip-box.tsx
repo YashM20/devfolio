@@ -1,49 +1,54 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 /* eslint-disable @typescript-eslint/no-require-imports */
-/* eslint-disable react-hooks/refs */
-"use client"
+"use client";
 
-import type { RefObject } from "react"
-import { useEffect, useLayoutEffect, useRef, useState } from "react"
-import { motion, useSpring } from "motion/react"
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
+import { useSpring } from "motion/react";
+import * as m from "motion/react-m";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 // Spring config for smooth tooltip movement
-const springConfig = { stiffness: 100, damping: 20 }
+const springConfig = { stiffness: 100, damping: 20 };
 
 export interface TooltipBoxProps {
   /** X position in pixels (relative to container) */
-  x: number
+  x: number;
   /** Y position in pixels (relative to container) */
-  y: number
+  y: number;
   /** Whether the tooltip is visible */
-  visible: boolean
-  /** Container ref for portal rendering */
-  containerRef: RefObject<HTMLDivElement | null>
+  visible: boolean;
+  /** Container DOM node for portal rendering */
+  containerNode: HTMLDivElement | null;
   /** Container width for flip detection */
-  containerWidth: number
+  containerWidth: number;
   /** Container height for bounds clamping */
-  containerHeight: number
+  containerHeight: number;
   /** Offset from the target position */
-  offset?: number
+  offset?: number;
   /** Custom class name */
-  className?: string
+  className?: string;
   /** Tooltip content */
-  children: React.ReactNode
+  children: React.ReactNode;
   /** Override left position (bypasses internal calculation) */
-  left?: number | ReturnType<typeof useSpring>
+  left?: number | ReturnType<typeof useSpring>;
   /** Override top position (bypasses internal calculation) */
-  top?: number | ReturnType<typeof useSpring>
+  top?: number | ReturnType<typeof useSpring>;
   /** Force flip direction (for custom positioning) */
-  flipped?: boolean
+  flipped?: boolean;
 }
 
 export function TooltipBox({
   x,
   y,
   visible,
-  containerRef,
+  containerNode,
   containerWidth,
   containerHeight,
   offset = 16,
@@ -53,60 +58,69 @@ export function TooltipBox({
   top: topOverride,
   flipped: flippedOverride,
 }: TooltipBoxProps) {
-  const tooltipRef = useRef<HTMLDivElement>(null)
-  const tooltipWidthRef = useRef(180)
-  const tooltipHeightRef = useRef(80)
-  const [mounted, setMounted] = useState(false)
+  const tooltipRef = useRef<HTMLDivElement>(null);
+  const [tw, setTw] = useState(180);
+  const [th, setTh] = useState(80);
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
 
-  const animatedLeft = useSpring(x + offset, springConfig)
-  const animatedTop = useSpring(y, springConfig)
+  const animatedLeft = useSpring(x + offset, springConfig);
+  const animatedTop = useSpring(y, springConfig);
 
-  const tw = tooltipWidthRef.current
-  const th = tooltipHeightRef.current
-  const shouldFlipX = x + tw + offset > containerWidth
-  const targetX = shouldFlipX ? x - offset - tw : x + offset
+  const shouldFlipX = x + tw + offset > containerWidth;
+  const targetX = shouldFlipX ? x - offset - tw : x + offset;
   const targetY = Math.max(
     offset,
     Math.min(y - th / 2, containerHeight - th - offset)
-  )
+  );
 
   if (leftOverride === undefined) {
-    animatedLeft.set(targetX)
+    animatedLeft.set(targetX);
   }
   if (topOverride === undefined) {
-    animatedTop.set(targetY)
+    animatedTop.set(targetY);
   }
 
   useLayoutEffect(() => {
     if (!(visible && tooltipRef.current)) {
-      return
+      return;
     }
-    const el = tooltipRef.current
-    const w = el.offsetWidth
-    const h = el.offsetHeight
-    if (w > 0) {
-      tooltipWidthRef.current = w
+    const el = tooltipRef.current;
+    const w = el.offsetWidth;
+    const h = el.offsetHeight;
+
+    let nextTw = tw;
+    let nextTh = th;
+    let sizeChanged = false;
+
+    if (w > 0 && w !== tw) {
+      nextTw = w;
+      sizeChanged = true;
     }
-    if (h > 0) {
-      tooltipHeightRef.current = h
+    if (h > 0 && h !== th) {
+      nextTh = h;
+      sizeChanged = true;
     }
-    const w2 = tooltipWidthRef.current
-    const h2 = tooltipHeightRef.current
-    const flip = x + w2 + offset > containerWidth
-    const tx = flip ? x - offset - w2 : x + offset
+
+    if (sizeChanged) {
+      setTw(nextTw);
+      setTh(nextTh);
+    }
+
+    const flip = x + nextTw + offset > containerWidth;
     const ty = Math.max(
       offset,
-      Math.min(y - h2 / 2, containerHeight - h2 - offset)
-    )
+      Math.min(y - nextTh / 2, containerHeight - nextTh - offset)
+    );
     if (leftOverride === undefined) {
-      animatedLeft.set(tx)
+      animatedLeft.set(flip ? x - offset - nextTw : x + offset);
     }
     if (topOverride === undefined) {
-      animatedTop.set(ty)
+      animatedTop.set(ty);
     }
   }, [
     visible,
@@ -119,36 +133,38 @@ export function TooltipBox({
     topOverride,
     animatedLeft,
     animatedTop,
-  ])
+    tw,
+    th,
+  ]);
 
-  const prevFlipRef = useRef(shouldFlipX)
-  const [flipKey, setFlipKey] = useState(0)
+  const prevFlipRef = useRef(shouldFlipX);
+  const [flipKey, setFlipKey] = useState(0);
 
   useEffect(() => {
     if (prevFlipRef.current !== shouldFlipX) {
-      setFlipKey((k) => k + 1)
-      prevFlipRef.current = shouldFlipX
+      setFlipKey((k) => k + 1);
+      prevFlipRef.current = shouldFlipX;
     }
-  }, [shouldFlipX])
+  }, [shouldFlipX]);
 
-  const finalLeft = leftOverride ?? animatedLeft
-  const finalTop = topOverride ?? animatedTop
-  const isFlipped = flippedOverride ?? shouldFlipX
-  const transformOrigin = isFlipped ? "right top" : "left top"
+  const finalLeft = leftOverride ?? animatedLeft;
+  const finalTop = topOverride ?? animatedTop;
+  const isFlipped = flippedOverride ?? shouldFlipX;
+  const transformOrigin = isFlipped ? "right top" : "left top";
 
-  const container = containerRef.current
+  const container = containerNode;
   if (!(mounted && container)) {
-    return null
+    return null;
   }
 
-  const { createPortal } = require("react-dom") as typeof import("react-dom")
+  const { createPortal } = require("react-dom") as typeof import("react-dom");
 
   if (!visible) {
-    return null
+    return null;
   }
 
   return createPortal(
-    <motion.div
+    <m.div
       animate={{ opacity: 1 }}
       className={cn("pointer-events-none absolute z-50", className)}
       exit={{ opacity: 0 }}
@@ -157,7 +173,7 @@ export function TooltipBox({
       style={{ left: finalLeft, top: finalTop }}
       transition={{ duration: 0.1 }}
     >
-      <motion.div
+      <m.div
         animate={{ scale: 1, opacity: 1, x: 0 }}
         className="min-w-35 overflow-hidden rounded-lg bg-chart-tooltip-background text-chart-tooltip-foreground shadow-lg ring-1 ring-foreground/10 backdrop-blur-md dark:ring-foreground/15"
         initial={{ scale: 0.85, opacity: 0, x: isFlipped ? 20 : -20 }}
@@ -166,12 +182,10 @@ export function TooltipBox({
         transition={{ type: "spring", stiffness: 300, damping: 25 }}
       >
         {children}
-      </motion.div>
-    </motion.div>,
+      </m.div>
+    </m.div>,
     container
-  )
+  );
 }
 
-TooltipBox.displayName = "TooltipBox"
-
-export default TooltipBox
+TooltipBox.displayName = "TooltipBox";

@@ -8,11 +8,11 @@ APCA (Accessible Perceptual Contrast Algorithm) is more perceptually accurate th
 
 Lc (Lightness Contrast) measures the perceived contrast between foreground and background. These are conservative approximations:
 
-| Content Type | Pass | Pass+ |
-| --- | --- | --- |
-| Normal text | Lc 60 | Lc 75 |
-| Large text | Lc 45 | Lc 60 |
-| UI components | Lc 30 | — |
+| Content Type  | Pass  | Pass+ |
+| ------------- | ----- | ----- |
+| Normal text   | Lc 60 | Lc 75 |
+| Large text    | Lc 45 | Lc 60 |
+| UI components | Lc 30 | —     |
 
 APCA's Lc value is signed — positive means light text on dark background, negative means dark text on light. Use the absolute value for threshold comparison.
 
@@ -20,11 +20,11 @@ APCA's Lc value is signed — positive means light text on dark background, nega
 
 WCAG 2 is still required when making formal WCAG 2.x conformance claims. It uses a luminance ratio that can be both too strict and too lenient depending on the color pair.
 
-| Content Type | AA | AAA |
-| --- | --- | --- |
-| Normal text (<18px / <14px bold) | 4.5:1 | 7:1 |
-| Large text (>=18px / >=14px bold) | 3:1 | 4.5:1 |
-| UI components & graphical objects | 3:1 | — |
+| Content Type                      | AA    | AAA   |
+| --------------------------------- | ----- | ----- |
+| Normal text (<18px / <14px bold)  | 4.5:1 | 7:1   |
+| Large text (>=18px / >=14px bold) | 3:1   | 4.5:1 |
+| UI components & graphical objects | 3:1   | —     |
 
 ## Fixing contrast with oklch
 
@@ -32,11 +32,11 @@ In hex/rgb, fixing contrast means trial and error across three channels. In oklc
 
 ```css
 /* Failing: text too close in lightness to its background */
-color: oklch(0.65 0.2 250);       /* foreground */
+color: oklch(0.65 0.2 250); /* foreground */
 background: oklch(0.75 0.05 250); /* background */
 
 /* Fix: darken the text, keep C and H unchanged */
-color: oklch(0.35 0.2 250);       /* foreground — more L distance */
+color: oklch(0.35 0.2 250); /* foreground — more L distance */
 background: oklch(0.75 0.05 250); /* background — unchanged */
 ```
 

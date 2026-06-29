@@ -34,15 +34,15 @@ The client required a unified, scalable backend platform that could automaticall
 
 Build a production-ready Node.js REST API backend to power the Legit mobile application with an intelligent, secure, and scalable news ecosystem.
 
-* Automated hourly ingestion of news from multiple RSS sources
-* Smart article categorization through configurable keyword intelligence
-* AI-powered fact-checking chatbot using GPT-3.5 Turbo
-* JWT-based authentication with access and refresh token architecture
-* OTP-driven password recovery through email workflows
-* Personalized and paginated news feed APIs with category filters
-* Trending news ingestion from Google RSS feeds
-* Complete user account lifecycle management
-* Dockerized deployment for reliable cloud hosting and portability
+- Automated hourly ingestion of news from multiple RSS sources
+- Smart article categorization through configurable keyword intelligence
+- AI-powered fact-checking chatbot using GPT-3.5 Turbo
+- JWT-based authentication with access and refresh token architecture
+- OTP-driven password recovery through email workflows
+- Personalized and paginated news feed APIs with category filters
+- Trending news ingestion from Google RSS feeds
+- Complete user account lifecycle management
+- Dockerized deployment for reliable cloud hosting and portability
 
 ## 9. Solution Summary
 
@@ -58,21 +58,21 @@ Built a dynamic category engine that classifies content using configurable keywo
 
 ## 10. Key Features
 
-* Dual RSS news ingestion pipelines with hourly automated scheduling (node-cron)
-* AI-powered fact-checking chatbot using OpenAI GPT-3.5 Turbo Chat Completions API
-* Keyword-based article auto-categorization engine with 13 default categories and database-configurable tags
-* JWT authentication with configurable access token expiry and 30-day refresh tokens
-* Dual login method support: email/password ("legit") and Google OAuth ("google")
-* Password recovery workflow: OTP generation → email delivery → OTP verification → password reset
-* Bcrypt password hashing with auto-generated salts
-* Paginated news feed API with category-based filtering
-* Trending news pipeline from Google News RSS with IST timezone conversion
-* Image extraction from article HTML content via regex with fallback thumbnails
-* Article deduplication by GUID
-* Dynamic category management system
-* Account lifecycle management
-* Structured JSON logging with Pino
-* Docker containerization with non-root user execution
+- Dual RSS news ingestion pipelines with hourly automated scheduling (node-cron)
+- AI-powered fact-checking chatbot using OpenAI GPT-3.5 Turbo Chat Completions API
+- Keyword-based article auto-categorization engine with 13 default categories and database-configurable tags
+- JWT authentication with configurable access token expiry and 30-day refresh tokens
+- Dual login method support: email/password ("legit") and Google OAuth ("google")
+- Password recovery workflow: OTP generation → email delivery → OTP verification → password reset
+- Bcrypt password hashing with auto-generated salts
+- Paginated news feed API with category-based filtering
+- Trending news pipeline from Google News RSS with IST timezone conversion
+- Image extraction from article HTML content via regex with fallback thumbnails
+- Article deduplication by GUID
+- Dynamic category management system
+- Account lifecycle management
+- Structured JSON logging with Pino
+- Docker containerization with non-root user execution
 
 ## 11. Frontend Tech
 
@@ -100,58 +100,58 @@ Yes
 
 ## 17. AI/ML Details
 
-* OpenAI GPT-3.5 Turbo integration for fact-checking chatbot
-* Conversational responses using Chat Completions API
-* Rule-based keyword categorization engine
+- OpenAI GPT-3.5 Turbo integration for fact-checking chatbot
+- Conversational responses using Chat Completions API
+- Rule-based keyword categorization engine
 
 ## 18. Individual Contribution
 
-* Designed and built complete REST API architecture
-* Implemented dual RSS ingestion pipelines
-* Built categorization engine
-* Developed JWT authentication system
-* Built password recovery flow
-* Integrated OpenAI chatbot
-* Designed MongoDB schemas/models
-* Implemented pagination and filtering APIs
-* Configured logging and Docker deployment
+- Designed and built complete REST API architecture
+- Implemented dual RSS ingestion pipelines
+- Built categorization engine
+- Developed JWT authentication system
+- Built password recovery flow
+- Integrated OpenAI chatbot
+- Designed MongoDB schemas/models
+- Implemented pagination and filtering APIs
+- Configured logging and Docker deployment
 
 ## 19. Challenges
 
-* Concurrent RSS pipelines without duplicates
-* Flexible categorization engine
-* Missing article images
-* JWT lifecycle management
-* OTP recovery flow complexity
-* Parsing inconsistent RSS HTML
-* Date consistency across pipelines
+- Concurrent RSS pipelines without duplicates
+- Flexible categorization engine
+- Missing article images
+- JWT lifecycle management
+- OTP recovery flow complexity
+- Parsing inconsistent RSS HTML
+- Date consistency across pipelines
 
 ## 20. Solutions
 
-* GUID-based deduplication checks
-* Two-tier category fallback system
-* Random image fallback mechanism
-* DB-driven token expiry configuration
-* Login method aware auth branching
-* Regex-based image extraction
-* Timezone conversion handling
+- GUID-based deduplication checks
+- Two-tier category fallback system
+- Random image fallback mechanism
+- DB-driven token expiry configuration
+- Login method aware auth branching
+- Regex-based image extraction
+- Timezone conversion handling
 
 ## 21. Measurable Results
 
-* Automated hourly ingestion with zero manual effort
-* 13 production-ready REST APIs delivered
-* Reliable duplicate prevention
-* Auto-classified articles into 13 categories
-* Real-time AI fact-checking enabled
-* Dockerized deployment consistency
+- Automated hourly ingestion with zero manual effort
+- 13 production-ready REST APIs delivered
+- Reliable duplicate prevention
+- Auto-classified articles into 13 categories
+- Real-time AI fact-checking enabled
+- Dockerized deployment consistency
 
 ## 22. Business Impact
 
-* Differentiated platform with AI fact-checking
-* Removed manual content curation
-* Increased trust and engagement
-* Reduced onboarding friction
-* Scalable backend foundation created
+- Differentiated platform with AI fact-checking
+- Removed manual content curation
+- Increased trust and engagement
+- Reduced onboarding friction
+- Scalable backend foundation created
 
 ## 23. Architecture Summary
 
@@ -159,8 +159,8 @@ Monolithic Express.js REST API with modular routes, MongoDB data layer, cron-bas
 
 ## 24. Scalability Improvements
 
-* Database-driven categories and prompts
-* Runtime configurable token expiry
-* Modular route architecture
-* Centralized error handling
-* Docker portability across environments
+- Database-driven categories and prompts
+- Runtime configurable token expiry
+- Modular route architecture
+- Centralized error handling
+- Docker portability across environments

@@ -3,9 +3,11 @@
 **Role:** Lead Front-end Developer
 
 ## Description
+
 Developed a dynamic consumer app using Next.js, App Router, Tailwind, and Styled Components, featuring Geo-location based personalized offers, wallet functionality, event booking with coupon redemption and E-bill management.
 
 ## Responsibilities
+
 - Worked on design using HTML5, CSS3, JavaScript, Tailwind to create a pixel perfect design.
 - Implemented dynamic theming and PWA support for an enhanced user experience.
 - Created reusable components and functionalities for future use.
@@ -27,4 +29,5 @@ Developed a dynamic consumer app using Next.js, App Router, Tailwind, and Styled
 - Performed database migrations, ensured data integrity, and optimized database queries for performance.
 
 ## Technologies
-HTML5, CSS3, JavaScript, Next.js, Tailwind, Styled Components, Shadcn, AWS S3, Framer motion, Redux, Zustand, axios, Progressive Web App (PWA) Support (next-pwa), Adobe XD, Prisma ORM(with Planetscale), Node JS, Prisma. 
+
+HTML5, CSS3, JavaScript, Next.js, Tailwind, Styled Components, Shadcn, AWS S3, Framer motion, Redux, Zustand, axios, Progressive Web App (PWA) Support (next-pwa), Adobe XD, Prisma ORM(with Planetscale), Node JS, Prisma.

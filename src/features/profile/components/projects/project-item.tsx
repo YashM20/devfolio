@@ -96,12 +96,12 @@ export function ProjectItem({
           <div className="border-edge flex-1 border-l border-dashed">
             <CollapsibleTrigger className="group/project flex w-full select-none items-center justify-between gap-4 p-4 pr-2 text-left">
               <div className="flex-1">
-                  <h3
-                    className="text-balance font-medium leading-snug"
-                    style={{ viewTransitionName: `project-title-${project.id}` }}
-                  >
-                    {project.title}
-                  </h3>
+                <h3
+                  className="text-balance font-medium leading-snug"
+                  style={{ viewTransitionName: `project-title-${project.id}` }}
+                >
+                  {project.title}
+                </h3>
 
                 <div className="text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
                   <div className="flex shrink-0 items-center gap-1 whitespace-nowrap">
@@ -188,8 +188,8 @@ export function ProjectItem({
                 Technology Stack
               </h4>
               <div className="flex flex-wrap gap-1.5">
-                {project.skills.map((skill, index) => (
-                  <Badge key={index} variant="secondary" className="text-xs">
+                {project.skills.map((skill) => (
+                  <Badge key={skill} variant="secondary" className="text-xs">
                     {skill}
                   </Badge>
                 ))}

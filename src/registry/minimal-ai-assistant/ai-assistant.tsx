@@ -3,7 +3,8 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
-import { motion, AnimatePresence } from "motion/react";
+import { AnimatePresence } from "motion/react";
+import * as m from "motion/react-m";
 import { useChat } from "@ai-sdk/react";
 import { Send, MessageCircle, X, Bot, User, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -27,8 +28,12 @@ const AiAssistantContext = React.createContext<AiAssistantContextProps | null>(
   null
 );
 
+const EMPTY_TRIGGER_PROPS = {};
+const EMPTY_CHAT_PROPS = {};
+const EMPTY_SUGGESTIONS: string[] = [];
+
 function useAiAssistant() {
-  const context = React.useContext(AiAssistantContext);
+  const context = React.use(AiAssistantContext);
   if (!context) {
     throw new Error(
       "useAiAssistant must be used within an AiAssistantProvider."
@@ -62,8 +67,7 @@ function AiAssistantProvider({
       if (lastMessage && lastMessage.role === "assistant") {
         if (lastMessage.parts) {
           const textParts = lastMessage.parts
-            .filter((part: any) => part.type === "text")
-            .map((part: any) => part.text)
+            .flatMap((part: any) => (part.type === "text" ? [part.text] : []))
             .join("");
           onResponse?.(textParts);
         }
@@ -75,34 +79,19 @@ function AiAssistantProvider({
     },
   });
 
-  const contextValue = React.useMemo<AiAssistantContextProps>(
-    () => ({
-      isOpen,
-      setIsOpen,
-      isTyping,
-      setIsTyping,
-      messages,
-      sendMessage,
-      setMessages,
-      error,
-      onMessageSent,
-      onResponse,
-      onError,
-    }),
-    [
-      isOpen,
-      setIsOpen,
-      isTyping,
-      setIsTyping,
-      messages,
-      sendMessage,
-      setMessages,
-      error,
-      onMessageSent,
-      onResponse,
-      onError,
-    ]
-  );
+  const contextValue: AiAssistantContextProps = {
+    isOpen,
+    setIsOpen,
+    isTyping,
+    setIsTyping,
+    messages,
+    sendMessage,
+    setMessages,
+    error,
+    onMessageSent,
+    onResponse,
+    onError,
+  };
 
   return (
     <AiAssistantContext.Provider value={contextValue}>
@@ -152,8 +141,9 @@ const aiAssistantTriggerVariants = cva(
 );
 
 // Trigger component
-interface AiAssistantTriggerProps
-  extends VariantProps<typeof aiAssistantTriggerVariants> {
+interface AiAssistantTriggerProps extends VariantProps<
+  typeof aiAssistantTriggerVariants
+> {
   asChild?: boolean;
   className?: string;
   children?: React.ReactNode;
@@ -208,10 +198,10 @@ function AiAssistantTrigger({
   }
 
   return (
-    <motion.button
-      initial={{ scale: 0 }}
-      animate={{ scale: 1 }}
-      exit={{ scale: 0 }}
+    <m.button
+      initial={{ scale: 0.95, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      exit={{ scale: 0.95, opacity: 0 }}
       className={cn(
         aiAssistantTriggerVariants({ variant, size, position, className })
       )}
@@ -224,7 +214,7 @@ function AiAssistantTrigger({
           Chat
         </>
       )}
-    </motion.button>
+    </m.button>
   );
 }
 
@@ -264,7 +254,8 @@ const aiAssistantChatVariants = cva(
 
 // Chat container component
 interface AiAssistantChatProps
-  extends React.ComponentProps<typeof motion.div>,
+  extends
+    React.ComponentProps<typeof m.div>,
     VariantProps<typeof aiAssistantChatVariants> {}
 
 function AiAssistantChat({
@@ -281,7 +272,7 @@ function AiAssistantChat({
 
   return (
     <AnimatePresence>
-      <motion.div
+      <m.div
         initial={{ opacity: 0, scale: 0.8, y: 20 }}
         animate={{
           opacity: 1,
@@ -296,7 +287,7 @@ function AiAssistantChat({
         {...props}
       >
         {children}
-      </motion.div>
+      </m.div>
     </AnimatePresence>
   );
 }
@@ -328,7 +319,7 @@ function AiAssistantHeaderTitle({
 }: React.ComponentProps<"div">) {
   return (
     <div className={cn("flex items-center gap-3", className)} {...props}>
-      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-purple-500">
+      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-linear-to-r from-blue-500 to-purple-500">
         <Bot className="h-4 w-4 text-white" />
       </div>
       <h3 className="font-semibold">{children || "AI Assistant"}</h3>
@@ -349,6 +340,7 @@ function AiAssistantHeaderActions({
       {children || (
         <>
           <button
+            type="button"
             onClick={() => setMessages([])}
             className="hover:bg-accent rounded p-1 transition-colors"
             title="Clear chat"
@@ -356,6 +348,7 @@ function AiAssistantHeaderActions({
             <Trash2 className="h-4 w-4" />
           </button>
           <button
+            type="button"
             onClick={() => setIsOpen(false)}
             className="hover:bg-accent rounded p-1 transition-colors"
             title="Close"
@@ -400,7 +393,7 @@ function AiAssistantMessages({
 function AiAssistantEmptyState({
   className,
   children,
-  suggestions = [],
+  suggestions = EMPTY_SUGGESTIONS,
   ...props
 }: React.ComponentProps<"div"> & { suggestions?: string[] }) {
   const { messages } = useAiAssistant();
@@ -444,9 +437,10 @@ function AiAssistantSuggestions({
   return (
     <div className={cn("space-y-2", className)} {...props}>
       <p className="text-muted-foreground mb-2 text-sm">Try asking:</p>
-      {suggestions.map((suggestion, index) => (
+      {suggestions.map((suggestion) => (
         <button
-          key={index}
+          type="button"
+          key={suggestion}
           onClick={() => handleSuggestionClick(suggestion)}
           className="hover:bg-accent block w-full rounded border p-2 text-left text-sm transition-colors"
         >
@@ -475,28 +469,34 @@ function AiAssistantMessageList({
   );
 }
 
+// Helper component to render message content
+function RenderMessageContent({ message }: { message: any }) {
+  if (message.parts) {
+    return (
+      <>
+        {message.parts.flatMap((part: any) =>
+          part.type === "text"
+            ? [
+                <div key={part.text} className="whitespace-pre-wrap">
+                  {part.text}
+                </div>,
+              ]
+            : []
+        )}
+      </>
+    );
+  }
+  return <div className="whitespace-pre-wrap">{message.content || ""}</div>;
+}
+
 // Individual message component
 function AiAssistantMessage({
   message,
   className,
   ...props
-}: React.ComponentProps<typeof motion.div> & { message: any }) {
-  // Helper function to render message content
-  const renderMessageContent = (message: any) => {
-    if (message.parts) {
-      return message.parts
-        .filter((part: any) => part.type === "text")
-        .map((part: any, i: number) => (
-          <div key={i} className="whitespace-pre-wrap">
-            {part.text}
-          </div>
-        ));
-    }
-    return <div className="whitespace-pre-wrap">{message.content || ""}</div>;
-  };
-
+}: React.ComponentProps<typeof m.div> & { message: any }) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       className={cn(
@@ -507,7 +507,7 @@ function AiAssistantMessage({
       {...props}
     >
       {message.role === "assistant" && (
-        <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-purple-500">
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-linear-to-r from-blue-500 to-purple-500">
           <Bot className="h-4 w-4 text-white" />
         </div>
       )}
@@ -520,33 +520,33 @@ function AiAssistantMessage({
             : "bg-muted text-muted-foreground"
         )}
       >
-        {renderMessageContent(message)}
+        <RenderMessageContent message={message} />
       </div>
 
       {message.role === "user" && (
-        <div className="bg-muted flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full">
+        <div className="bg-muted flex h-8 w-8 shrink-0 items-center justify-center rounded-full">
           <User className="h-4 w-4" />
         </div>
       )}
-    </motion.div>
+    </m.div>
   );
 }
 
 // Typing indicator component
 function AiAssistantTypingIndicator({ className }: { className?: string }) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       className={cn("flex gap-3", className)}
     >
-      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-purple-500">
+      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-linear-to-r from-blue-500 to-purple-500">
         <Bot className="h-4 w-4 text-white" />
       </div>
       <div className="bg-muted rounded-lg px-3 py-2">
         <div className="flex gap-1">
           {[0, 1, 2].map((i) => (
-            <motion.div
+            <m.div
               key={i}
               animate={{ opacity: [0.4, 1, 0.4] }}
               transition={{
@@ -559,7 +559,7 @@ function AiAssistantTypingIndicator({ className }: { className?: string }) {
           ))}
         </div>
       </div>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -639,7 +639,8 @@ function AiAssistantInput({
             onChange={(e) => setInput(e.target.value.slice(0, maxLength))}
             onKeyDown={handleKeyDown}
             placeholder={placeholder}
-            className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring max-h-[120px] min-h-[44px] w-full resize-none rounded-lg border p-3 pr-12 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            aria-label={placeholder || "Type a message"}
+            className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring max-h-[120px] min-h-11 w-full resize-none rounded-lg border p-3 pr-12 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             disabled={isTyping}
             rows={1}
           />
@@ -674,11 +675,11 @@ interface AiAssistantProps extends Omit<AiAssistantProviderProps, "children"> {
 
 function AiAssistant({
   children,
-  triggerProps = {},
-  chatProps = {},
+  triggerProps = EMPTY_TRIGGER_PROPS,
+  chatProps = EMPTY_CHAT_PROPS,
   title = "AI Assistant",
   placeholder = "Ask me anything...",
-  suggestions = [],
+  suggestions = EMPTY_SUGGESTIONS,
   maxInputLength = 1000,
   ...providerProps
 }: AiAssistantProps) {

@@ -5,7 +5,17 @@ role: "Lead Frontend Developer"
 duration: "May 2023 - May 2024"
 industry: "Retail / Consumer Tech / E-commerce"
 client: "PIPLI TECHNOLOGIES PRIVATE LIMITED"
-skills: ["Next.js", "React", "Tailwind CSS", "Zustand", "Prisma", "PWA", "MySQL", "AWS"]
+skills:
+  [
+    "Next.js",
+    "React",
+    "Tailwind CSS",
+    "Zustand",
+    "Prisma",
+    "PWA",
+    "MySQL",
+    "AWS",
+  ]
 createdAt: "2023-05-01"
 updatedAt: "2024-05-31"
 ---
@@ -53,11 +63,13 @@ Built a comprehensive Next.js web application functioning as a native-like PWA. 
 ## Challenges & Solutions
 
 ### Challenges
+
 - Architecting a single-source codebase that dynamically reshapes its entire frontend aesthetics (CSS properties, manifest details, logos) based upon real-time tenant detection.
 - Optimizing hydration crashes when combining Next.js Server-Side Rendering arrays against durably synced local persistent keys under Redux Persist.
 - Validating external payment workflows efficiently through custom SDK interactions wrapped within React hooks without blocking thread concurrency.
 
 ### Solutions
+
 - Orchestrated a powerful unified Zustand `useThemeCart` hook directly at the app entry root. On startup, the service fetches domain/tenant specifics, injects the parameters into the global application, and immediately recalculates the active CSS tokens.
 - Deployed specialized `PersistGate` boundaries specifically tailored around hydration blocks, gracefully presenting loaders before painting complex client metrics.
 - Utilized robust caching systems inside TanStack React Query, decoupling standard RESTful HTTP fetch calls from the UI components directly, maintaining smooth 60fps renders.
@@ -82,9 +94,11 @@ Built a comprehensive Next.js web application functioning as a native-like PWA. 
 ## Architecture & Scalability
 
 ### Architecture Summary
+
 A Hybrid SSR/CSR Next.js Web App configured to emit service-workers behaving as a PWA. State lives across a triad: Redux handling durable application data, Zustand tackling high-frequency/ephemeral layout toggles, and React Query handling asynchronous cache validity. The frontend interacts directly with Next.js specific Serverless API routes.
 
 ### Scalability Improvements
+
 - Segmenting fetching constraints directly into React Query automatically solves standard data deduping and invalidation complexities without requiring manual React lifecycle refactors.
 - Built heavily atomized components (BannerCards, Modals, Accordions) that receive styles strictly via theme-store properties, allowing infinite new tenants without rewriting JSX structures.
 - Migrating API dependencies directly into Next.js routes effectively scales endpoints dynamically alongside page generation logic without requiring standalone API web-servers.

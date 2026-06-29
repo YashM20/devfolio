@@ -48,10 +48,14 @@ export function remarkCodeImport(options = {}) {
     });
 
     for (const [node] of codes) {
-      const fileMeta = (node.meta || "")
-        // Allow escaping spaces
-        .split(/(?<!\\) /g)
-        .find((meta) => meta.startsWith("file="));
+      let fileMeta;
+      const metaParts = (node.meta || "").split(/(?<!\\) /g);
+      for (const meta of metaParts) {
+        if (meta.startsWith("file=")) {
+          fileMeta = meta;
+          break;
+        }
+      }
 
       if (!fileMeta) {
         continue;

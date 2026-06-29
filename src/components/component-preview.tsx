@@ -1,7 +1,7 @@
 "use client";
 
 import { RepeatIcon } from "lucide-react";
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 
 import { Index } from "@/__registry__/index";
 import { cn } from "@/lib/utils";
@@ -34,19 +34,14 @@ export function ComponentPreview({
   const Codes = React.Children.toArray(children) as React.ReactElement[];
   const Code = Codes[0];
 
-  const Preview = useMemo(() => {
-    const Component = Index[name]?.component;
-
-    if (!Component) {
-      return (
-        <p className="text-muted-foreground text-sm">
-          Component <CodeInline>{name}</CodeInline> not found in registry.
-        </p>
-      );
-    }
-
-    return <Component />;
-  }, [name]);
+  const Component = Index[name]?.component;
+  const Preview = Component ? (
+    <Component />
+  ) : (
+    <p className="text-muted-foreground text-sm">
+      Component <CodeInline>{name}</CodeInline> not found in registry.
+    </p>
+  );
 
   return (
     <div className={cn("my-6", notProse && "not-prose", className)} {...props}>

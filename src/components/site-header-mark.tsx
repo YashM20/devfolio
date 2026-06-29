@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useMotionValueEvent, useScroll } from "motion/react";
+import { useMotionValueEvent, useScroll } from "motion/react";
+import * as m from "motion/react-m";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, Suspense } from "react";
 
@@ -52,7 +53,7 @@ function ChanhDaiMarkMotion() {
   const color = "currentColor";
 
   return (
-    <motion.svg
+    <m.svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 800 600"
       initial={{
@@ -155,7 +156,7 @@ function ChanhDaiMarkMotion() {
         </pattern>
       </defs>
       <rect width="100%" height="100%" fill="url(#pppixelate-pattern)" />
-    </motion.svg>
+    </m.svg>
   );
 }
 

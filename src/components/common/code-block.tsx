@@ -48,6 +48,7 @@ export function CodeBlock({
         <div className="bg-muted text-muted-foreground border-border flex flex-shrink-0 items-center justify-between rounded-t-md border-b px-3 py-2 text-xs">
           <span className="font-medium">{language}</span>
           <button
+            type="button"
             onClick={() => handleCopy(code)}
             className="hover:bg-background/50 flex flex-shrink-0 items-center gap-1 rounded px-2 py-1 opacity-0 transition-colors group-hover:opacity-100"
             title={copied ? "Copied!" : "Copy code"}

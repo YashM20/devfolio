@@ -12,16 +12,16 @@ const nextConfig: NextConfig = {
     mdxRs: true,
   },
   logging: {
-    browserToTerminal: true
+    browserToTerminal: true,
   },
   compiler:
-      process.env.NODE_ENV === "production"
-        ? {
-            removeConsole: {
-              exclude: ["error"],
-            },
-          }
-        : undefined,
+    process.env.NODE_ENV === "production"
+      ? {
+          removeConsole: {
+            exclude: ["error"],
+          },
+        }
+      : undefined,
   images: {
     qualities: [25, 50, 75, 100],
     remotePatterns: [
@@ -71,7 +71,6 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-
 };
 
 export default nextConfig;

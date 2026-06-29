@@ -46,7 +46,7 @@ export function PostItem({
       )}
 
       <div className="flex flex-col gap-1 p-2">
-        <h3 
+        <h3
           className="text-balance text-lg font-medium leading-snug underline-offset-4 group-hover/post:underline"
           style={{ viewTransitionName: `blog-title-${post.slug}` }}
         >
@@ -58,7 +58,7 @@ export function PostItem({
             <dt className="sr-only">Published on</dt>
             <dd className="text-muted-foreground text-sm">
               <time dateTime={dayjs(post.metadata.createdAt).toISOString()}>
-                {dayjs(post.metadata.createdAt).format('DD.MM.YYYY')}
+                {dayjs(post.metadata.createdAt).format("DD.MM.YYYY")}
               </time>
             </dd>
           </dl>

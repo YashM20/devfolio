@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { AnimatePresence } from "motion/react";
+import * as m from "motion/react-m";
 import { Cookie, X, Check, Settings } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -11,20 +12,12 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
-const CONSENT_KEY = "cookie-consent-preferences";
-const BANNER_SHOWN_KEY = "cookie-banner-shown";
-
-interface CookiePreferences {
-  necessary: boolean;
-  analytics: boolean;
-  marketing: boolean;
-}
-
-const defaultPreferences: CookiePreferences = {
-  necessary: true, // Always required
-  analytics: false,
-  marketing: false,
-};
+import {
+  type CookiePreferences,
+  CONSENT_KEY,
+  BANNER_SHOWN_KEY,
+  defaultPreferences,
+} from "@/lib/cookie";
 
 export function CookieConsent() {
   const [showBanner, setShowBanner] = useState(false);
@@ -41,14 +34,17 @@ export function CookieConsent() {
 
     // Show banner if we haven't shown it before or don't have consent
     if (!hasShownBanner || !hasConsent) {
+      // eslint-disable-next-line react-doctor/no-initialize-state
       setShowBanner(true);
     } else {
       // Load existing preferences
       try {
         const savedPreferences = JSON.parse(hasConsent);
+        // eslint-disable-next-line react-doctor/no-initialize-state
         setPreferences(savedPreferences);
       } catch (error) {
         console.warn("Failed to parse cookie preferences:", error);
+        // eslint-disable-next-line react-doctor/no-initialize-state
         setShowBanner(true);
       }
     }
@@ -120,7 +116,7 @@ export function CookieConsent() {
 
   return (
     <AnimatePresence>
-      <motion.div
+      <m.div
         initial={{ opacity: 0, y: 100 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 100 }}
@@ -141,10 +137,9 @@ export function CookieConsent() {
                     We use cookies to enhance your experience and analyze site
                     usage. You can manage your preferences below.{" "}
                     <a
-                      href="#"
+                      href="/privacy"
                       className="text-muted-foreground hover:underline"
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      aria-label="Learn more about our cookie policy"
                     >
                       Learn more
                     </a>
@@ -283,52 +278,7 @@ export function CookieConsent() {
             </>
           )}
         </Card>
-      </motion.div>
+      </m.div>
     </AnimatePresence>
   );
-}
-
-// Helper function to check if specific cookie types are allowed
-export function isCookieAllowed(type: keyof CookiePreferences): boolean {
-  if (typeof window === "undefined") return false;
-
-  try {
-    const consent = localStorage.getItem(CONSENT_KEY);
-    if (!consent) return false;
-
-    const preferences: CookiePreferences = JSON.parse(consent);
-    return preferences[type] || false;
-  } catch {
-    return false;
-  }
-}
-
-// Helper function to get all cookie preferences
-export function getCookiePreferences(): CookiePreferences | null {
-  if (typeof window === "undefined") return null;
-
-  try {
-    const consent = localStorage.getItem(CONSENT_KEY);
-    if (!consent) return null;
-
-    return JSON.parse(consent);
-  } catch {
-    return null;
-  }
-}
-
-// Helper function to re-show the cookie banner
-export function showCookiePreferences(): void {
-  if (typeof window === "undefined") return;
-
-  // Remove the banner shown flag to trigger the banner to show again
-  localStorage.removeItem(BANNER_SHOWN_KEY);
-
-  // Dispatch event to trigger banner re-render
-  window.dispatchEvent(new CustomEvent("showCookieBanner"));
-}
-
-// Make the function available globally for easy access
-if (typeof window !== "undefined") {
-  (window as any).showCookiePreferences = showCookiePreferences;
 }

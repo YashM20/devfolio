@@ -1,10 +1,10 @@
 "use client";
 
 import { MonitorIcon, MoonStarIcon, SunIcon } from "lucide-react";
-import { motion } from "motion/react";
+import * as m from "motion/react-m";
 import { useTheme } from "next-themes";
 import type { JSX } from "react";
-import React, { useEffect, useState } from "react";
+import React, { useSyncExternalStore } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -21,6 +21,7 @@ function ThemeOption({
 }) {
   return (
     <button
+      type="button"
       className={cn(
         "relative flex size-8 cursor-default items-center justify-center rounded-full transition-all [&_svg]:size-4",
         isActive
@@ -35,7 +36,7 @@ function ThemeOption({
       {icon}
 
       {isActive && (
-        <motion.div
+        <m.div
           layoutId="theme-option"
           transition={{ type: "spring", bounce: 0.3, duration: 0.6 }}
           className="absolute inset-0 rounded-full border border-zinc-200 dark:border-zinc-700"
@@ -63,18 +64,18 @@ const THEME_OPTIONS = [
 function ThemeSwitcher() {
   const { theme, setTheme } = useTheme();
 
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  const isMounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
 
   if (!isMounted) {
     return <div className="flex h-8 w-24" />;
   }
 
   return (
-    <motion.div
+    <m.div
       key={String(isMounted)}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -91,7 +92,7 @@ function ThemeSwitcher() {
           onClick={setTheme}
         />
       ))}
-    </motion.div>
+    </m.div>
   );
 }
 

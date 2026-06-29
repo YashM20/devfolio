@@ -2,7 +2,7 @@
 
 import { MoonStarIcon, SunIcon } from "lucide-react";
 import { useTheme } from "next-themes";
-import React, { useCallback } from "react";
+import React from "react";
 
 import { META_THEME_COLORS } from "@/config/site";
 import { useMetaColor } from "@/hooks/use-meta-color";
@@ -14,14 +14,14 @@ export function ToggleTheme() {
 
   const { setMetaColor } = useMetaColor();
 
-  const handleToggle = useCallback(() => {
+  const handleToggle = () => {
     setTheme(resolvedTheme === "dark" ? "light" : "dark");
     setMetaColor(
       resolvedTheme === "dark"
         ? META_THEME_COLORS.light
         : META_THEME_COLORS.dark
     );
-  }, [resolvedTheme, setTheme, setMetaColor]);
+  };
 
   return (
     <Button variant="outline" size="icon" onClick={handleToggle}>

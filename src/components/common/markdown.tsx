@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React, { memo } from "react";
+import React from "react";
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { CodeBlock } from "./code-block";
@@ -50,7 +50,8 @@ const components: Partial<Components> = {
     );
   },
   img: ({ node, children, ...props }) => {
-    return <img data-mark {...props} />;
+    // eslint-disable-next-line react-doctor/nextjs-no-img-element
+    return <img data-mark alt="" {...props} />;
   },
   h1: ({ node, children, ...props }) => {
     return (
@@ -98,15 +99,10 @@ const components: Partial<Components> = {
 
 const remarkPlugins = [remarkGfm];
 
-const NonMemoizedMarkdown = ({ children }: { children: string }) => {
+export const Markdown = ({ children }: { children: string }) => {
   return (
     <ReactMarkdown remarkPlugins={remarkPlugins} components={components}>
       {children}
     </ReactMarkdown>
   );
 };
-
-export const Markdown = memo(
-  NonMemoizedMarkdown,
-  (prevProps, nextProps) => prevProps.children === nextProps.children
-);

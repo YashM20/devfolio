@@ -3,6 +3,7 @@
 import React from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
+import { useIsClient } from "@/hooks/use-is-client";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -18,7 +19,10 @@ function parseImagesProp(images: string[] | string | undefined): string[] {
         if (Array.isArray(parsed)) return parsed;
       } catch {}
     }
-    return trimmed.split(",").map((src) => src.trim()).filter(Boolean);
+    return trimmed.split(",").flatMap((src) => {
+      const trimmedSrc = src.trim();
+      return trimmedSrc ? [trimmedSrc] : [];
+    });
   }
   return [];
 }
@@ -31,6 +35,16 @@ const aspectMap = {
 };
 
 export type AspectType = "video" | "portrait" | "square" | "auto";
+
+function getAspectSizes(aspect: AspectType = "video"): string {
+  if (aspect === "portrait") {
+    return "(max-width: 360px) 100vw, 320px";
+  }
+  if (aspect === "square") {
+    return "(max-width: 520px) 100vw, 480px";
+  }
+  return "(max-width: 768px) 100vw, 768px";
+}
 
 // 1. Image Component with Outlines & Captions
 export function ProjectImage({
@@ -49,12 +63,24 @@ export function ProjectImage({
   const aspectClass = aspectMap[aspect] || aspectMap.video;
 
   return (
-    <figure className={cn("my-6 overflow-hidden rounded-2xl border border-edge bg-muted/20 p-2", aspect === "portrait" && "max-w-[336px] mx-auto", className)}>
-      <div className={cn("relative overflow-hidden rounded-lg bg-muted", aspectClass)}>
+    <figure
+      className={cn(
+        "my-6 overflow-hidden rounded-2xl border border-edge bg-muted/20 p-2",
+        aspect === "portrait" && "max-w-[336px] mx-auto",
+        className
+      )}
+    >
+      <div
+        className={cn(
+          "relative overflow-hidden rounded-lg bg-muted",
+          aspectClass
+        )}
+      >
         <Image
           src={src}
           alt={alt}
           fill
+          sizes={getAspectSizes(aspect)}
           className="object-cover"
           unoptimized
         />
@@ -84,13 +110,27 @@ export function ProjectVideo({
   const aspectClass = aspectMap[aspect] || aspectMap.video;
 
   return (
-    <figure className={cn("my-6 overflow-hidden rounded-2xl border border-edge bg-muted/20 p-2", aspect === "portrait" && "max-w-[336px] mx-auto", className)}>
-      <div className={cn("relative overflow-hidden rounded-lg bg-muted", aspectClass)}>
+    <figure
+      className={cn(
+        "my-6 overflow-hidden rounded-2xl border border-edge bg-muted/20 p-2",
+        aspect === "portrait" && "max-w-[336px] mx-auto",
+        className
+      )}
+    >
+      <div
+        className={cn(
+          "relative overflow-hidden rounded-lg bg-muted",
+          aspectClass
+        )}
+      >
         <video
           src={src}
           controls
+          aria-label={caption || "Project video"}
           className="h-full w-full object-cover"
-        />
+        >
+          <track kind="captions" />
+        </video>
         <div className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-inset ring-black/10 dark:ring-white/10" />
       </div>
       {caption && (
@@ -113,7 +153,12 @@ export function ProjectIframe({
   className?: string;
 }) {
   return (
-    <div className={cn("relative my-6 aspect-video w-full overflow-hidden rounded-2xl border border-edge bg-muted/20 p-2", className)}>
+    <div
+      className={cn(
+        "relative my-6 aspect-video w-full overflow-hidden rounded-2xl border border-edge bg-muted/20 p-2",
+        className
+      )}
+    >
       <div className="relative h-full w-full overflow-hidden rounded-lg bg-background">
         <iframe
           src={src}
@@ -121,6 +166,7 @@ export function ProjectIframe({
           className="h-full w-full border-0 bg-background"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowFullScreen
+          sandbox="allow-scripts allow-presentation allow-forms"
         />
         <div className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-inset ring-black/10 dark:ring-white/10" />
       </div>
@@ -142,7 +188,9 @@ export function ProjectGrid({
     <div
       className={cn(
         "my-6 grid gap-4",
-        cols === 3 ? "grid-cols-1 md:grid-cols-3" : "grid-cols-1 md:grid-cols-2",
+        cols === 3
+          ? "grid-cols-1 md:grid-cols-3"
+          : "grid-cols-1 md:grid-cols-2",
         className
       )}
     >
@@ -161,26 +209,38 @@ function SliderCarousel({
 }) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
 
-  const scrollPrev = React.useCallback(() => {
+  const scrollPrev = () => {
     if (emblaApi) emblaApi.scrollPrev();
-  }, [emblaApi]);
+  };
 
-  const scrollNext = React.useCallback(() => {
+  const scrollNext = () => {
     if (emblaApi) emblaApi.scrollNext();
-  }, [emblaApi]);
+  };
 
   const aspectClass = aspectMap[aspect] || aspectMap.video;
 
   return (
-    <div className={cn("relative my-6 overflow-hidden rounded-2xl border border-edge bg-muted/20 p-2", aspect === "portrait" && "max-w-[336px] mx-auto")}>
-      <div className={cn("overflow-hidden rounded-lg bg-muted", aspectClass)} ref={emblaRef}>
+    <div
+      className={cn(
+        "relative my-6 overflow-hidden rounded-2xl border border-edge bg-muted/20 p-2",
+        aspect === "portrait" && "max-w-[336px] mx-auto"
+      )}
+    >
+      <div
+        className={cn("overflow-hidden rounded-lg bg-muted", aspectClass)}
+        ref={emblaRef}
+      >
         <div className="flex h-full w-full">
-          {images.map((src, index) => (
-            <div className="relative h-full w-full min-w-0 flex-[0_0_100%]" key={index}>
+          {images.map((src) => (
+            <div
+              className="relative h-full w-full min-w-0 flex-[0_0_100%]"
+              key={src}
+            >
               <Image
                 src={src}
-                alt={`Slide ${index + 1}`}
+                alt="Slide"
                 fill
+                sizes={getAspectSizes(aspect)}
                 className="object-cover"
                 unoptimized
               />
@@ -191,6 +251,7 @@ function SliderCarousel({
       </div>
 
       <button
+        type="button"
         onClick={scrollPrev}
         className="absolute left-4 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-edge bg-background/80 text-foreground backdrop-blur-xs transition-[background-color,border-color,transform] duration-150 ease-out hover:bg-background active:scale-[0.96] before:absolute before:-inset-2 before:content-['']"
         aria-label="Previous slide"
@@ -199,6 +260,7 @@ function SliderCarousel({
       </button>
 
       <button
+        type="button"
         onClick={scrollNext}
         className="absolute right-4 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-edge bg-background/80 text-foreground backdrop-blur-xs transition-[background-color,border-color,transform] duration-150 ease-out hover:bg-background active:scale-[0.96] before:absolute before:-inset-2 before:content-['']"
         aria-label="Next slide"
@@ -217,17 +279,18 @@ export function ProjectSlider({
   aspect?: AspectType;
 }) {
   const imageList = parseImagesProp(images);
-  const [isMounted, setIsMounted] = React.useState(false);
-
-  React.useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  const isMounted = useIsClient();
 
   const aspectClass = aspectMap[aspect] || aspectMap.video;
 
   if (!isMounted) {
     return (
-      <div className={cn("relative my-6 overflow-hidden rounded-2xl border border-edge bg-muted/20 p-2", aspect === "portrait" && "max-w-[336px] mx-auto")}>
+      <div
+        className={cn(
+          "relative my-6 overflow-hidden rounded-2xl border border-edge bg-muted/20 p-2",
+          aspect === "portrait" && "max-w-[336px] mx-auto"
+        )}
+      >
         <div className={cn("overflow-hidden rounded-lg bg-muted", aspectClass)}>
           <div className="flex h-full w-full">
             <div className="relative w-full h-full bg-muted">
@@ -236,6 +299,7 @@ export function ProjectSlider({
                   src={imageList[0]}
                   alt="Slide 1 Preview"
                   fill
+                  sizes={getAspectSizes(aspect)}
                   className="object-cover"
                   unoptimized
                 />

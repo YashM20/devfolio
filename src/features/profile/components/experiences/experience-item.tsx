@@ -28,7 +28,6 @@ export function ExperienceItem({ experience }: { experience: Experience }) {
         <h3 className="text-lg font-medium leading-snug">
           {experience.companyName}
         </h3>
-
         {experience.isCurrentEmployer && (
           <span className="relative flex items-center justify-center">
             <span className="bg-info absolute inline-flex size-3 animate-ping rounded-full opacity-50" />

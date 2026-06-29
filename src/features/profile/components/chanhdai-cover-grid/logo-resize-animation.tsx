@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import * as m from "motion/react-m";
 import { useState } from "react";
 
 import { ChanhDaiMark } from "@/components/chanhdai-mark";
@@ -21,11 +21,19 @@ export function LogoResizeAnimation({
   minWidth?: number;
   maxWidth?: number;
 }) {
-  const [width, setWidth] = useState(maxWidth);
+  const [width, setWidth] = useState<number | null>(null);
+  const [prevMaxWidth, setPrevMaxWidth] = useState<number | null>(null);
   const [isEnd, setIsEnd] = useState(false);
 
+  if (maxWidth !== prevMaxWidth) {
+    setPrevMaxWidth(maxWidth);
+    setWidth(maxWidth);
+  }
+
+  const currentWidth = width ?? maxWidth;
+
   return (
-    <motion.div
+    <m.div
       className="relative"
       initial={{ width: maxWidth }}
       whileInView={{ width: [maxWidth, minWidth, maxWidth] }}
@@ -38,7 +46,7 @@ export function LogoResizeAnimation({
         setIsEnd(true);
       }}
     >
-      <motion.div
+      <m.div
         variants={variants}
         animate={isEnd ? "hide" : "show"}
         transition={{
@@ -51,9 +59,9 @@ export function LogoResizeAnimation({
         <div className="-right-[5px] -top-[5px]" />
         <div className="-bottom-[5px] -left-[5px]" />
         <div className="-bottom-[5px] -right-[5px]" />
-      </motion.div>
+      </m.div>
 
-      <motion.div
+      <m.div
         variants={variants}
         animate={isEnd ? "hide" : "show"}
         transition={{
@@ -62,10 +70,10 @@ export function LogoResizeAnimation({
         }}
         className="absolute -top-2 left-1/2 -translate-x-1/2 -translate-y-full transform whitespace-nowrap rounded-sm bg-blue-600 px-1 font-mono text-sm text-white dark:bg-zinc-600"
       >
-        {Math.round(width)}x{Math.round(width / 2)}
-      </motion.div>
+        {Math.round(currentWidth)}x{Math.round(currentWidth / 2)}
+      </m.div>
 
       <ChanhDaiMark className="size-full text-black dark:text-white" />
-    </motion.div>
+    </m.div>
   );
 }

@@ -29,7 +29,7 @@ export function Nav({
   );
 }
 
-export function NavItem({
+function NavItem({
   active,
   ...props
 }: React.ComponentProps<typeof Link> & {

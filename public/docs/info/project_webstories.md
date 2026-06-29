@@ -3,9 +3,11 @@
 **Role:** NodeJS Developer
 
 ## Description
+
 Developed a robust and scalable backend system for WebStories, a platform allowing users to create and share multimedia stories. The project utilizes NodeJS with TypeScript, featuring a module-based architecture, full type safety, and advanced functionality for story management and sharing.
 
 ## Responsibilities
+
 - Implemented a feature-rich back-end system using NodeJS, TypeScript, and MongoDB with Mongoose, ensuring type safety and efficient data management.
 - Designed and developed a module-based architecture for improved code organization, maintainability, and scalability.
 - Created functionality for users to add multiple stories simultaneously, enhancing the platform's usability and content creation capabilities.
@@ -20,4 +22,5 @@ Developed a robust and scalable backend system for WebStories, a platform allowi
 - Configured efficient logging with pino-http for improved debugging and monitoring capabilities.
 
 ## Technologies
-NodeJS, TypeScript, MongoDB, Mongoose, Zod, Azure Key Vault, Express.js, Vitest OpenAPI, Helmet, CORS, pino-http, cron, Bree. 
+
+NodeJS, TypeScript, MongoDB, Mongoose, Zod, Azure Key Vault, Express.js, Vitest OpenAPI, Helmet, CORS, pino-http, cron, Bree.

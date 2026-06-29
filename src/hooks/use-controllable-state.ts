@@ -36,10 +36,10 @@ export function useControllableState<T>({
   // OK to disable conditionally calling hooks here because they will always run
   // consistently in the same environment. Bundlers should be able to remove the
   // code block entirely in production.
-  /* eslint-disable react-hooks/rules-of-hooks */
-  if (process.env.NODE_ENV !== "production") {
-    const isControlledRef = React.useRef(prop !== undefined);
-    React.useEffect(() => {
+  // eslint-disable-next-line react-doctor/no-event-handler
+  const isControlledRef = React.useRef(prop !== undefined);
+  React.useEffect(() => {
+    if (process.env.NODE_ENV !== "production") {
       const wasControlled = isControlledRef.current;
       if (wasControlled !== isControlled) {
         const from = wasControlled ? "controlled" : "uncontrolled";
@@ -48,24 +48,20 @@ export function useControllableState<T>({
           `${caller} is changing from ${from} to ${to}. Components should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled value for the lifetime of the component.`
         );
       }
-      isControlledRef.current = isControlled;
-    }, [isControlled, caller]);
-  }
-  /* eslint-enable react-hooks/rules-of-hooks */
+    }
+    isControlledRef.current = isControlled;
+  }, [isControlled, caller]);
 
-  const setValue = React.useCallback<SetStateFn<T>>(
-    (nextValue) => {
-      if (isControlled) {
-        const value = isFunction(nextValue) ? nextValue(prop) : nextValue;
-        if (value !== prop) {
-          onChangeRef.current?.(value);
-        }
-      } else {
-        setUncontrolledProp(nextValue);
+  const setValue: SetStateFn<T> = (nextValue) => {
+    if (isControlled) {
+      const value = isFunction(nextValue) ? nextValue(prop) : nextValue;
+      if (value !== prop) {
+        onChangeRef.current?.(value);
       }
-    },
-    [isControlled, prop, setUncontrolledProp, onChangeRef]
-  );
+    } else {
+      setUncontrolledProp(nextValue);
+    }
+  };
 
   return [value, setValue];
 }

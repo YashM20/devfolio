@@ -1,4 +1,5 @@
 # Yash Mahajan
+
 ## Software Developer
 
 - 4 Years of IT experience in all phases of software development life cycle including requirements analysis and debugging, Applications design, Development, Integration, Maintenance, Installation.
@@ -7,7 +8,7 @@
 - Experienced with JavaScript, jQuery, newer specifications of ECMA Script 2015 (ES6).
 - Experience in Cross-Platform Mobile Development using React Native + Type Script based mobile app.
 - Extensive experience in designing professional UI web applications using front-end technologies like HTML5, DHTML, CSS3, JavaScript, Typescript, Next JS, React JS, React-native, ES5, ES6.
-- Extensively worked on the React-native Applications, React Web Applications with Redux and also Experienced to worked with in front-end development.  
+- Extensively worked on the React-native Applications, React Web Applications with Redux and also Experienced to worked with in front-end development.
 - Proficient in using AJAX for implementing dynamic Webpages where the content was fetched via API calls and updated the DOM (JSON Parsing).
 - Expert in designing web applications and web contents utilizing various Search Engine Optimization (SEO) techniques.
 - Good understanding of authorization mechanisms, such as Cookie Authentication, JSON Web Token.
@@ -30,9 +31,11 @@
 - Experience with Prisma ORM for efficient database management and exploring TRPC for end-to-end type safety
 
 ## Summary
+
 Software Engineer with 4+ years of experience. I have been developing web and mobile applications using JavaScript frameworks and libraries, including Next.js, React JS, React Native & expo cli. I'm passionate about staying up to date with the modern frontend development trends & React Community.
 
 ## Top Skills
+
 - Next JS (Pages/App Router)
 - React
 - Javascript
@@ -43,12 +46,14 @@ Software Engineer with 4+ years of experience. I have been developing web and mo
 - Third Party APIs/SDK integrations
 
 ## Languages
+
 - English (Professional Working)
 - Hindi (Native)
 - Gujarati (Native)
 - Marathi (Native)
 
 ## Extra Skills
+
 - Figma / Adobe XD
 - Github / Bitbucket / JIRA
 - ShadCn / Prime React
@@ -56,15 +61,15 @@ Software Engineer with 4+ years of experience. I have been developing web and mo
 
 ## Technical Skills
 
-| Category | Skills |
-|----------|--------|
-| Web Technologies | HTML5, CSS3, JSON, XML, JSX, JSON, Tailwind, Bootstrap |
+| Category                          | Skills                                                                                                       |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| Web Technologies                  | HTML5, CSS3, JSON, XML, JSX, JSON, Tailwind, Bootstrap                                                       |
 | JavaScript Libraries & Frameworks | Next Js (app router & pages router), React.JS, Prime React, Node JS, React-Native, Angular-Js, Expo, Express |
-| Scripting | JavaScript, Typescript, ECMA Script 2015 (ES6) |
-| Styling | CSS, SCSS, Tailwind, Bootstrap, Styled Component, Shadcn Ui, CSS Modules, Stylesheet, Prime Flex |
-| Design Tools | Figma, Adobe XD |
-| Debugging Tools | Firebug, Chrome Developer Tools |
-| SDLC | Agile, Waterfall, JIRA |
-| IDE | Visual Studio Code, Android Studio, Jetbrains IDE, Sublime |
-| Version Control | GIT, BITBUCKET |
-| Operating Systems | Windows Variants | 
+| Scripting                         | JavaScript, Typescript, ECMA Script 2015 (ES6)                                                               |
+| Styling                           | CSS, SCSS, Tailwind, Bootstrap, Styled Component, Shadcn Ui, CSS Modules, Stylesheet, Prime Flex             |
+| Design Tools                      | Figma, Adobe XD                                                                                              |
+| Debugging Tools                   | Firebug, Chrome Developer Tools                                                                              |
+| SDLC                              | Agile, Waterfall, JIRA                                                                                       |
+| IDE                               | Visual Studio Code, Android Studio, Jetbrains IDE, Sublime                                                   |
+| Version Control                   | GIT, BITBUCKET                                                                                               |
+| Operating Systems                 | Windows Variants                                                                                             |

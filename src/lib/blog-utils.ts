@@ -39,7 +39,7 @@ export function calculateReadingTime(content: string): {
 /**
  * Extract headings from content for table of contents
  */
-export function extractHeadings(content: string): Array<{
+function extractHeadings(content: string): Array<{
   id: string;
   text: string;
   level: number;
@@ -67,7 +67,7 @@ export function extractHeadings(content: string): Array<{
 /**
  * Get current reading progress based on scroll position
  */
-export function getReadingProgress(element: HTMLElement | null): number {
+function getReadingProgress(element: HTMLElement | null): number {
   if (!element) return 0;
 
   const { scrollTop, scrollHeight, clientHeight } = element;

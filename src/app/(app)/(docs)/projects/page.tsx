@@ -39,7 +39,8 @@ const PROJECT_ICONS: Record<string, React.ComponentType<any>> = {
 
 export const metadata: Metadata = {
   title: "Projects",
-  description: "A detailed showcase of case studies, systems, tools, and side projects I've developed.",
+  description:
+    "A detailed showcase of case studies, systems, tools, and side projects I've developed.",
 };
 
 export default function ProjectsPage() {
@@ -74,23 +75,30 @@ export default function ProjectsPage() {
   );
 }
 
-function ProjectCard({ project, index }: { project: (typeof PROJECTS)[number]; index: number }) {
+function ProjectCard({
+  project,
+  index,
+}: {
+  project: (typeof PROJECTS)[number];
+  index: number;
+}) {
   const { start, end } = project.period;
   const isOngoing = !end;
   const isSinglePeriod = end === start;
-  
+
   // Direct details navigation prioritizes case studies, then external project links
   const href = project.hasCaseStudy
     ? `/projects/${project.id}`
     : project.link
-    ? addQueryParams(project.link, UTM_PARAMS)
-    : "#";
+      ? addQueryParams(project.link, UTM_PARAMS)
+      : "#";
 
   const isExternal = !project.hasCaseStudy && !!project.link;
   const isClickable = href !== "#";
 
   const IconComponent = PROJECT_ICONS[project.id] || BoxIcon;
-  const isGenericLogo = !project.logo || project.logo.includes("quaricdotcom.svg");
+  const isGenericLogo =
+    !project.logo || project.logo.includes("quaricdotcom.svg");
 
   const logoNode = !isGenericLogo ? (
     <div className="relative size-8 shrink-0 overflow-hidden rounded-lg bg-muted/30 border border-border transition-all duration-200">
@@ -98,6 +106,7 @@ function ProjectCard({ project, index }: { project: (typeof PROJECTS)[number]; i
         src={project.logo!}
         alt={project.title}
         fill
+        sizes="32px"
         className="object-cover grayscale select-none group-hover/project:grayscale-0 transition-[filter] duration-300"
         unoptimized
       />
@@ -116,7 +125,7 @@ function ProjectCard({ project, index }: { project: (typeof PROJECTS)[number]; i
         <div className="flex items-start gap-3 min-w-0 w-full">
           {logoNode}
           <div className="min-w-0 flex-1 mt-0.5">
-            <h3 
+            <h3
               className="text-foreground font-medium leading-snug transition-colors text-pretty flex flex-wrap items-center gap-x-2 gap-y-1"
               style={{ viewTransitionName: `project-title-${project.id}` }}
             >
@@ -125,7 +134,7 @@ function ProjectCard({ project, index }: { project: (typeof PROJECTS)[number]; i
                 <ArrowUpRightIcon className="inline-block size-3.5 text-muted-foreground/60 transition-all duration-150 ease-out align-baseline group-hover/project:translate-x-0.5 group-hover/project:-translate-y-0.5 group-hover/project:text-foreground" />
               )}
             </h3>
-            
+
             <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-1">
               <p className="text-muted-foreground font-mono text-xs">
                 {start} {!isSinglePeriod && `— ${isOngoing ? "Present" : end}`}
@@ -147,9 +156,9 @@ function ProjectCard({ project, index }: { project: (typeof PROJECTS)[number]; i
 
       {/* Tech Stack Footer */}
       <div className="flex flex-wrap items-center gap-1.5 pt-2">
-        {project.skills.slice(0, 3).map((skill, index) => (
+        {project.skills.slice(0, 3).map((skill) => (
           <span
-            key={index}
+            key={skill}
             className="inline-flex items-center rounded-full border border-border bg-muted/30 px-2 py-0.5 font-mono text-[10px] text-muted-foreground select-none transition-colors duration-200 group-hover/project:bg-muted group-hover/project:text-foreground"
           >
             {skill}

@@ -19,7 +19,7 @@ import {
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import {
@@ -36,7 +36,8 @@ import { cn } from "@/lib/utils";
 import type { Post } from "@/types/blog";
 import { copyText } from "@/utils/copy";
 
-import { ChanhDaiMark, getMarkSVG } from "./chanhdai-mark";
+import { ChanhDaiMark } from "./chanhdai-mark";
+import { getMarkSVG } from "@/lib/brand-assets";
 import { getWordmarkSVG } from "./chanhdai-wordmark";
 import { Icons } from "./icons";
 import { Button } from "./ui/button";
@@ -147,44 +148,39 @@ export function CommandMenu({ posts }: { posts: Post[] }) {
     return () => abortController.abort();
   }, []);
 
-  const handleOpenLink = useCallback(
-    (href: string, openInNewTab = false) => {
-      setOpen(false);
+  const handleOpenLink = (href: string, openInNewTab = false) => {
+    setOpen(false);
 
-      if (openInNewTab) {
-        window.open(href, "_blank", "noopener");
-      } else {
-        router.push(href as any);
-      }
-    },
-    [router]
-  );
+    if (openInNewTab) {
+      window.open(href, "_blank", "noopener");
+    } else {
+      router.push(href as any);
+    }
+  };
 
-  const handleCopyText = useCallback((text: string, message: string) => {
+  const handleCopyText = (text: string, message: string) => {
     setOpen(false);
     copyText(text);
     toast.success(message);
-  }, []);
+  };
 
-  const handleThemeChange = useCallback(
-    (theme: "light" | "dark" | "system") => {
-      setOpen(false);
-      setTheme(theme);
-    },
-    [setTheme]
-  );
+  const handleThemeChange = (theme: "light" | "dark" | "system") => {
+    setOpen(false);
+    setTheme(theme);
+  };
 
-  const { blogLinks, componentLinks } = useMemo(
-    () => ({
-      blogLinks: posts
-        .filter((post) => post.metadata?.category !== "components")
-        .map(postToCommandLinkItem),
-      componentLinks: posts
-        .filter((post) => post.metadata?.category === "components")
-        .map(postToCommandLinkItem),
-    }),
-    [posts]
-  );
+  const { blogLinks, componentLinks } = {
+    blogLinks: posts.flatMap((post) =>
+      post.metadata?.category !== "components"
+        ? [postToCommandLinkItem(post)]
+        : []
+    ),
+    componentLinks: posts.flatMap((post) =>
+      post.metadata?.category === "components"
+        ? [postToCommandLinkItem(post)]
+        : []
+    ),
+  };
 
   return (
     <>

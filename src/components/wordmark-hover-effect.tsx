@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import * as m from "motion/react-m";
 import React, { useEffect, useRef, useState } from "react";
 
 function WordmarkPaths() {
@@ -21,21 +21,8 @@ function WordmarkPaths() {
 
 export function WordmarkHoverEffect() {
   const containerRef = useRef<SVGSVGElement>(null);
-  const [cursor, setCursor] = useState({ x: 0, y: 0 });
   const [hovered, setHovered] = useState(false);
   const [maskPosition, setMaskPosition] = useState({ cx: "50%", cy: "50%" });
-
-  useEffect(() => {
-    if (containerRef.current && cursor.x !== null && cursor.y !== null) {
-      const svgRect = containerRef.current.getBoundingClientRect();
-      const cxPercentage = ((cursor.x - svgRect.left) / svgRect.width) * 100;
-      const cyPercentage = ((cursor.y - svgRect.top) / svgRect.height) * 100;
-      setMaskPosition({
-        cx: `${cxPercentage}%`,
-        cy: `${cyPercentage}%`,
-      });
-    }
-  }, [cursor]);
 
   return (
     <svg
@@ -45,7 +32,19 @@ export function WordmarkHoverEffect() {
       xmlns="http://www.w3.org/2000/svg"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      onMouseMove={(e) => setCursor({ x: e.clientX, y: e.clientY })}
+      onMouseMove={(e) => {
+        if (containerRef.current) {
+          const svgRect = containerRef.current.getBoundingClientRect();
+          const cxPercentage =
+            ((e.clientX - svgRect.left) / svgRect.width) * 100;
+          const cyPercentage =
+            ((e.clientY - svgRect.top) / svgRect.height) * 100;
+          setMaskPosition({
+            cx: `${cxPercentage}%`,
+            cy: `${cyPercentage}%`,
+          });
+        }
+      }}
     >
       <defs>
         <linearGradient
@@ -66,7 +65,7 @@ export function WordmarkHoverEffect() {
           )}
         </linearGradient>
 
-        <motion.radialGradient
+        <m.radialGradient
           id="revealMask"
           gradientUnits="userSpaceOnUse"
           r="15%"
@@ -76,7 +75,7 @@ export function WordmarkHoverEffect() {
         >
           <stop offset="0%" stopColor="white" />
           <stop offset="100%" stopColor="black" />
-        </motion.radialGradient>
+        </m.radialGradient>
 
         <mask
           id="logoMask"

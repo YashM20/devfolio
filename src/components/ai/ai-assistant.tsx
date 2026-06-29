@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { AnimatePresence } from "motion/react";
+import * as m from "motion/react-m";
 import { useChat } from "@ai-sdk/react";
 import { useQueryState, parseAsBoolean } from "nuqs";
 import {
@@ -23,6 +24,8 @@ import { USER } from "@/data/user";
 import { cn } from "@/lib/utils";
 import { posthogEvents, generateAIChatSessionId } from "@/lib/posthog-events";
 
+const getNow = () => Date.now();
+
 const MAX_INPUT_LENGTH = 1024;
 const WARNING_THRESHOLD = MAX_INPUT_LENGTH - 128;
 
@@ -41,6 +44,7 @@ export function AiAssistant() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const { messages, sendMessage, setMessages } = useChat({
+    // eslint-disable-next-line react-doctor/no-event-handler
     onFinish: () => {
       console.log("✅ Chat onFinish called");
       setIsTyping(false);
@@ -48,7 +52,8 @@ export function AiAssistant() {
 
       // Track response received
       if (messageStartTimeRef.current) {
-        const responseTime = Date.now() - messageStartTimeRef.current;
+        const responseTime = getNow() - messageStartTimeRef.current;
+        // eslint-disable-next-line react-doctor/no-event-handler
         posthogEvents.ai.responseReceived(responseTime, undefined, sessionId);
         messageStartTimeRef.current = null;
       }
@@ -140,7 +145,7 @@ export function AiAssistant() {
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen]);
+  }, [isOpen, setIsOpen]);
 
   // Track chat open/close events
   useEffect(() => {
@@ -179,7 +184,7 @@ export function AiAssistant() {
     console.log("✅ Form submit proceeding - calling sendMessage");
     setError(null); // Clear any previous errors
     setIsTyping(true);
-    messageStartTimeRef.current = Date.now();
+    messageStartTimeRef.current = getNow();
 
     // Track message sent
     posthogEvents.ai.messageSent(input.length, messages.length, sessionId);
@@ -219,7 +224,7 @@ export function AiAssistant() {
 
     setError(null);
     setIsTyping(true);
-    messageStartTimeRef.current = Date.now();
+    messageStartTimeRef.current = getNow();
 
     // Track suggestion clicked
     posthogEvents.ai.suggestionClicked(suggestion, sessionId);
@@ -242,9 +247,9 @@ export function AiAssistant() {
   return (
     <>
       {/* Floating Chat Button - Bottom Center */}
-      <motion.div
+      <m.div
         className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 transform"
-        initial={{ scale: 0, opacity: 0 }}
+        initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{
           type: "spring",
@@ -256,12 +261,12 @@ export function AiAssistant() {
         <div className={cn(isOpen && "hidden")}>
           <RealismButton onClick={() => setIsOpen(true)}>Ask Me</RealismButton>
         </div>
-      </motion.div>
+      </m.div>
 
       {/* Chat Modal */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div
+          <m.div
             className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-6"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -269,16 +274,16 @@ export function AiAssistant() {
             transition={{ duration: 0.2 }}
           >
             {/* Backdrop */}
-            <motion.div
+            <m.div
               className="z-1 absolute inset-0 bg-black/20 backdrop-blur-sm dark:bg-black/20"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsOpen(false)}
-            ></motion.div>
+            ></m.div>
 
             {/* Chat Container */}
-            <motion.div
+            <m.div
               className={cn(
                 "z-2 relative flex h-full max-h-[98vh] w-full max-w-[clamp(300px,800px,95vw)] flex-col",
                 "bg-background/95 border-border border backdrop-blur-md dark:border-white/10 dark:bg-[radial-gradient(circle_200px_at_50%_0%,#1a1a1a,#0a0a0a)]",
@@ -326,7 +331,7 @@ export function AiAssistant() {
                           .join("")}
                       </AvatarFallback>
                     </Avatar>
-                    <motion.div
+                    <m.div
                       className="border-background absolute -bottom-1 -right-1 h-4 w-4 rounded-full border-2 bg-green-500 dark:border-black dark:bg-cyan-400"
                       animate={{ scale: [1, 1.2, 1] }}
                       transition={{ duration: 2, repeat: Infinity }}
@@ -370,7 +375,7 @@ export function AiAssistant() {
                 <ScrollArea className="w-full">
                   <div className="w-full space-y-4 overflow-x-auto p-4">
                     {messages.length === 0 && (
-                      <motion.div
+                      <m.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2 }}
@@ -395,7 +400,7 @@ export function AiAssistant() {
                           </p>
                           <div className="flex flex-wrap justify-center gap-2">
                             {suggestions.map((suggestion, index) => (
-                              <motion.button
+                              <m.button
                                 key={suggestion}
                                 initial={{ opacity: 0, scale: 0.8 }}
                                 animate={{ opacity: 1, scale: 1 }}
@@ -406,7 +411,7 @@ export function AiAssistant() {
                                 className="from-primary/20 to-primary/10 border-primary/30 text-primary hover:from-primary/30 hover:to-primary/20 hover:border-primary/50 rounded-full border bg-gradient-to-r px-3 py-1.5 text-xs transition-all duration-200 hover:scale-105 dark:border-cyan-400/30 dark:from-cyan-500/20 dark:to-blue-500/20 dark:text-cyan-300 dark:hover:border-cyan-400/50 dark:hover:from-cyan-500/30 dark:hover:to-blue-500/30"
                               >
                                 {suggestion}
-                              </motion.button>
+                              </m.button>
                             ))}
                           </div>
                         </div>
@@ -423,11 +428,11 @@ export function AiAssistant() {
                             </p>
                           </div>
                         </div>
-                      </motion.div>
+                      </m.div>
                     )}
 
                     {messages.map((message: any, index: number) => (
-                      <motion.div
+                      <m.div
                         key={message.id}
                         initial={{ opacity: 0, y: 20, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -456,24 +461,24 @@ export function AiAssistant() {
                           )}
                         >
                           {message.parts ? (
-                            message.parts
-                              .filter((part: any) => {
-                                // Filter out step-related parts and empty content
-                                if (typeof part === "object" && part.type) {
-                                  return (
-                                    !part.type.includes("step") &&
-                                    part.type !== "tool-result" &&
-                                    !part.type.startsWith("tool-")
-                                  );
+                            message.parts.flatMap((part: any, i: number) => {
+                              // Filter out step-related parts and empty content
+                              if (typeof part === "object" && part.type) {
+                                if (
+                                  part.type.includes("step") ||
+                                  part.type === "tool-result" ||
+                                  part.type.startsWith("tool-")
+                                ) {
+                                  return [];
                                 }
-                                return true;
-                              })
-                              .map((part: any, i: number) => {
-                                switch (part.type) {
-                                  case "text":
-                                    return message.role === "assistant" ? (
+                              }
+
+                              switch (part.type) {
+                                case "text":
+                                  return [
+                                    message.role === "assistant" ? (
                                       <div
-                                        key={i}
+                                        key={part.text}
                                         className="prose prose-sm dark:prose-invert min-w-0 max-w-none"
                                         style={{
                                           wordBreak: "break-word",
@@ -484,85 +489,92 @@ export function AiAssistant() {
                                       </div>
                                     ) : (
                                       <p
-                                        key={i}
+                                        key={part.text}
                                         className="whitespace-pre-wrap"
                                       >
                                         {part.text}
                                       </p>
-                                    );
-                                  case "tool-call":
-                                    return (
-                                      <div
-                                        key={i}
-                                        className="mb-1 mt-2 text-xs opacity-70"
-                                      >
-                                        <div className="flex items-center gap-1 text-blue-500 dark:text-blue-400">
-                                          <span className="animate-spin">
-                                            ⚙️
-                                          </span>
-                                          <span>Using {part.toolName}...</span>
-                                        </div>
+                                    ),
+                                  ];
+                                case "tool-call":
+                                  return [
+                                    <div
+                                      key={part.toolCallId}
+                                      className="mb-1 mt-2 text-xs opacity-70"
+                                    >
+                                      <div className="flex items-center gap-1 text-blue-500 dark:text-blue-400">
+                                        <span className="animate-spin">⚙️</span>
+                                        <span>Using {part.toolName}...</span>
                                       </div>
-                                    );
-                                  case "tool-result":
-                                    // Don't show tool results in UI, they're used internally
-                                    return null;
-                                  case "tool-searchProjects":
-                                  case "tool-searchBlogPosts":
-                                  case "tool-getTechStack":
-                                  case "tool-getExperience":
-                                  case "tool-generateCodeSnippet":
-                                    return (
-                                      <div
-                                        key={i}
-                                        className="mt-2 text-xs opacity-70"
-                                      >
-                                        <details>
-                                          <summary>🔧 Tool Call</summary>
-                                          <pre className="mt-1 overflow-auto text-xs">
-                                            {JSON.stringify(part, null, 2)}
-                                          </pre>
-                                        </details>
-                                      </div>
-                                    );
-                                  case "step-start":
-                                  case "step-finish":
-                                    // Hide step markers from UI - they're used for internal processing
-                                    return null;
-                                  default:
-                                    // Only show non-step content to users
-                                    if (
-                                      typeof part === "object" &&
-                                      part.type &&
-                                      part.type.includes("step")
-                                    ) {
-                                      return null; // Hide any step-related content
-                                    }
+                                    </div>,
+                                  ];
+                                case "tool-result":
+                                  // Don't show tool results in UI, they're used internally
+                                  return [];
+                                case "tool-searchProjects":
+                                case "tool-searchBlogPosts":
+                                case "tool-getTechStack":
+                                case "tool-getExperience":
+                                case "tool-generateCodeSnippet":
+                                  return [
+                                    <div
+                                      key={
+                                        part.toolCallId || JSON.stringify(part)
+                                      }
+                                      className="mt-2 text-xs opacity-70"
+                                    >
+                                      <details>
+                                        <summary>🔧 Tool Call</summary>
+                                        <pre className="mt-1 overflow-auto text-xs">
+                                          {JSON.stringify(part, null, 2)}
+                                        </pre>
+                                      </details>
+                                    </div>,
+                                  ];
+                                case "step-start":
+                                case "step-finish":
+                                  // Hide step markers from UI - they're used for internal processing
+                                  return [];
+                                default:
+                                  // Only show non-step content to users
+                                  if (
+                                    typeof part === "object" &&
+                                    part.type &&
+                                    part.type.includes("step")
+                                  ) {
+                                    return []; // Hide any step-related content
+                                  }
 
-                                    return (
-                                      <div key={i}>
-                                        {typeof part === "string" ? (
-                                          message.role === "assistant" ? (
-                                            <div className="prose prose-sm dark:prose-invert max-w-none overflow-x-auto">
-                                              <Markdown>{part}</Markdown>
-                                            </div>
-                                          ) : (
-                                            <p className="whitespace-pre-wrap">
-                                              {part}
-                                            </p>
-                                          )
+                                  return [
+                                    <div
+                                      key={
+                                        typeof part === "string"
+                                          ? part
+                                          : JSON.stringify(part)
+                                      }
+                                    >
+                                      {typeof part === "string" ? (
+                                        message.role === "assistant" ? (
+                                          <div className="prose prose-sm dark:prose-invert max-w-none overflow-x-auto">
+                                            <Markdown>{part}</Markdown>
+                                          </div>
                                         ) : (
-                                          // Only show non-step objects
-                                          !part.type?.includes("step") && (
-                                            <p className="whitespace-pre-wrap">
-                                              {JSON.stringify(part)}
-                                            </p>
-                                          )
-                                        )}
-                                      </div>
-                                    );
-                                }
-                              })
+                                          <p className="whitespace-pre-wrap">
+                                            {part}
+                                          </p>
+                                        )
+                                      ) : (
+                                        // Only show non-step objects
+                                        !part.type?.includes("step") && (
+                                          <p className="whitespace-pre-wrap">
+                                            {JSON.stringify(part)}
+                                          </p>
+                                        )
+                                      )}
+                                    </div>,
+                                  ];
+                              }
+                            })
                           ) : message.role === "assistant" ? (
                             <div className="prose prose-sm dark:prose-invert max-w-none overflow-x-auto">
                               <Markdown>{message.content}</Markdown>
@@ -581,11 +593,11 @@ export function AiAssistant() {
                             </AvatarFallback>
                           </Avatar>
                         )}
-                      </motion.div>
+                      </m.div>
                     ))}
 
                     {isTyping && (
-                      <motion.div
+                      <m.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         className="flex gap-3"
@@ -596,7 +608,7 @@ export function AiAssistant() {
                           </AvatarFallback>
                         </Avatar>
                         <div className="bg-muted/50 text-foreground border-border rounded-2xl border px-4 py-3 dark:border-white/10 dark:bg-black/20">
-                          <motion.div
+                          <m.div
                             className="flex gap-1"
                             animate={{ opacity: [0.5, 1, 0.5] }}
                             transition={{ duration: 1.5, repeat: Infinity }}
@@ -604,13 +616,13 @@ export function AiAssistant() {
                             <span>●</span>
                             <span>●</span>
                             <span>●</span>
-                          </motion.div>
+                          </m.div>
                         </div>
-                      </motion.div>
+                      </m.div>
                     )}
 
                     {error && (
-                      <motion.div
+                      <m.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         className="flex gap-3"
@@ -623,13 +635,14 @@ export function AiAssistant() {
                         <div className="max-w-[80%] rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-red-700 dark:border-red-400/20 dark:bg-red-500/10 dark:text-red-200">
                           <p className="text-sm">{error}</p>
                           <button
+                            type="button"
                             onClick={() => setError(null)}
                             className="mt-2 text-xs text-red-600 underline hover:text-red-800 dark:text-red-300 dark:hover:text-red-100"
                           >
                             Dismiss
                           </button>
                         </div>
-                      </motion.div>
+                      </m.div>
                     )}
                   </div>
                   <div ref={messagesEndRef} />
@@ -718,8 +731,8 @@ export function AiAssistant() {
                   </button>
                 </form>
               </div>
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
         )}
       </AnimatePresence>
     </>

@@ -40,7 +40,11 @@ function parseFrontmatter(fileContent: string) {
 
 function getMDXFiles(dir: string) {
   if (!fs.existsSync(dir)) return [];
-  return fs.readdirSync(dir).filter((file) => path.extname(file) === ".mdx" || path.extname(file) === ".md");
+  return fs
+    .readdirSync(dir)
+    .filter(
+      (file) => path.extname(file) === ".mdx" || path.extname(file) === ".md"
+    );
 }
 
 function readMDXFile(filePath: string) {
@@ -69,7 +73,9 @@ function getMDXData(dir: string) {
 }
 
 export function getAllProjectPosts() {
-  return getMDXData(path.join(process.cwd(), "src", "content", "projects")).sort(
+  return getMDXData(
+    path.join(process.cwd(), "src", "content", "projects")
+  ).sort(
     (a, b) =>
       new Date(b.metadata.createdAt).getTime() -
       new Date(a.metadata.createdAt).getTime()

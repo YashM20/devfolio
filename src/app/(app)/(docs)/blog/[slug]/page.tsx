@@ -92,6 +92,13 @@ async function getPageJsonLd(post: Post): Promise<WithContext<PageSchema>> {
 }
 
 // Create a component for the dynamic blog content
+function escapeHtml(str: string): string {
+  return str
+    .replace(/</g, "\\u003c")
+    .replace(/>/g, "\\u003e")
+    .replace(/&/g, "\\u0026");
+}
+
 async function BlogContent({ params }: { params: Promise<{ slug: string }> }) {
   const slug = (await params).slug;
   const post = getPostBySlug(slug);
@@ -111,7 +118,7 @@ async function BlogContent({ params }: { params: Promise<{ slug: string }> }) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(await getPageJsonLd(post)).replace(/</g, "\\u003c"),
+          __html: escapeHtml(JSON.stringify(await getPageJsonLd(post))),
         }}
       />
       <div className="flex items-center justify-between p-2 pl-4">
@@ -150,7 +157,7 @@ async function BlogContent({ params }: { params: Promise<{ slug: string }> }) {
         </div>
       </div>
       <Prose className="px-4">
-        <h1 
+        <h1
           className="screen-line-before screen-line-after mb-6 font-semibold"
           style={{ viewTransitionName: `blog-title-${post.slug}` }}
         >

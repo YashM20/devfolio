@@ -204,6 +204,20 @@
     @apply motion-safe:scroll-smooth;
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-delay: -1ms !important;
+      animation-duration: 1ms !important;
+      animation-iteration-count: 1 !important;
+      background-attachment: initial !important;
+      scroll-behavior: auto !important;
+      transition-duration: 0s !important;
+      transition-delay: 0s !important;
+    }
+  }
+
   body {
     @apply bg-background text-foreground overscroll-y-none font-sans antialiased;
     font-synthesis-weight: none;
@@ -296,4 +310,3 @@
 @utility animate-fade-in-up {
   animation: fadeInUp 400ms cubic-bezier(0.23, 1, 0.32, 1) forwards;
 }
-
