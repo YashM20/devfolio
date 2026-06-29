@@ -13,20 +13,13 @@ function Slider({
   max = 100,
   ...props
 }: React.ComponentProps<typeof SliderPrimitive.Root>) {
-  const _values = React.useMemo(
-    () =>
-      Array.isArray(value)
-        ? value
-        : Array.isArray(defaultValue)
-          ? defaultValue
-          : [min, max],
-    [value, defaultValue, min, max]
-  );
+  const _values = Array.isArray(value)
+    ? value
+    : Array.isArray(defaultValue)
+      ? defaultValue
+      : [min, max];
 
-  const thumbs = React.useMemo(
-    () => _values.map((_, i) => ({ id: `thumb-${i}` })),
-    [_values]
-  );
+  const thumbs = _values.map((_, i) => ({ id: `thumb-${i}` }));
 
   return (
     <SliderPrimitive.Root

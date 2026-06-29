@@ -3,7 +3,7 @@
 import { useSpring } from "motion/react"
 import * as m from "motion/react-m"
 
-import { chartCssVars } from "../chart-context"
+import { chartCssVars } from "../chart-theme"
 
 // Faster spring to stay in sync with indicator
 const crosshairSpringConfig = { stiffness: 300, damping: 30 }

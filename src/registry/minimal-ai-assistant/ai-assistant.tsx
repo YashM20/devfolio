@@ -79,34 +79,19 @@ function AiAssistantProvider({
     },
   });
 
-  const contextValue = React.useMemo<AiAssistantContextProps>(
-    () => ({
-      isOpen,
-      setIsOpen,
-      isTyping,
-      setIsTyping,
-      messages,
-      sendMessage,
-      setMessages,
-      error,
-      onMessageSent,
-      onResponse,
-      onError,
-    }),
-    [
-      isOpen,
-      setIsOpen,
-      isTyping,
-      setIsTyping,
-      messages,
-      sendMessage,
-      setMessages,
-      error,
-      onMessageSent,
-      onResponse,
-      onError,
-    ]
-  );
+  const contextValue: AiAssistantContextProps = {
+    isOpen,
+    setIsOpen,
+    isTyping,
+    setIsTyping,
+    messages,
+    sendMessage,
+    setMessages,
+    error,
+    onMessageSent,
+    onResponse,
+    onError,
+  };
 
   return (
     <AiAssistantContext.Provider value={contextValue}>

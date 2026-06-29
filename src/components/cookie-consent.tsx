@@ -11,20 +11,12 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
-const CONSENT_KEY = "cookie-consent-preferences";
-const BANNER_SHOWN_KEY = "cookie-banner-shown";
-
-interface CookiePreferences {
-  necessary: boolean;
-  analytics: boolean;
-  marketing: boolean;
-}
-
-const defaultPreferences: CookiePreferences = {
-  necessary: true, // Always required
-  analytics: false,
-  marketing: false,
-};
+import {
+  type CookiePreferences,
+  CONSENT_KEY,
+  BANNER_SHOWN_KEY,
+  defaultPreferences,
+} from "@/lib/cookie";
 
 export function CookieConsent() {
   const [showBanner, setShowBanner] = useState(false);
@@ -292,47 +284,3 @@ export function CookieConsent() {
   );
 }
 
-// Helper function to check if specific cookie types are allowed
-function isCookieAllowed(type: keyof CookiePreferences): boolean {
-  if (typeof window === "undefined") return false;
-
-  try {
-    const consent = localStorage.getItem(CONSENT_KEY);
-    if (!consent) return false;
-
-    const preferences: CookiePreferences = JSON.parse(consent);
-    return preferences[type] || false;
-  } catch {
-    return false;
-  }
-}
-
-// Helper function to get all cookie preferences
-export function getCookiePreferences(): CookiePreferences | null {
-  if (typeof window === "undefined") return null;
-
-  try {
-    const consent = localStorage.getItem(CONSENT_KEY);
-    if (!consent) return null;
-
-    return JSON.parse(consent);
-  } catch {
-    return null;
-  }
-}
-
-// Helper function to re-show the cookie banner
-export function showCookiePreferences(): void {
-  if (typeof window === "undefined") return;
-
-  // Remove the banner shown flag to trigger the banner to show again
-  localStorage.removeItem(BANNER_SHOWN_KEY);
-
-  // Dispatch event to trigger banner re-render
-  window.dispatchEvent(new CustomEvent("showCookieBanner"));
-}
-
-// Make the function available globally for easy access
-if (typeof window !== "undefined") {
-  (window as any).showCookiePreferences = showCookiePreferences;
-}

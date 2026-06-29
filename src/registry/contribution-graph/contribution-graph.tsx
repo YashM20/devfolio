@@ -6,7 +6,6 @@ import {
   createContext,
   Fragment,
   use,
-  useMemo,
   type CSSProperties,
   type HTMLAttributes,
   type ReactNode,
@@ -263,7 +262,7 @@ export const ContributionGraph = ({
   ...props
 }: ContributionGraphProps) => {
   const maxLevel = Math.max(1, maxLevelProp)
-  const weeks = useMemo(() => groupByWeeks(data, weekStart), [data, weekStart])
+  const weeks = groupByWeeks(data, weekStart)
   const LABEL_MARGIN = 8
 
   const labels = { ...DEFAULT_LABELS, ...labelsProp }
@@ -374,10 +373,7 @@ export const ContributionGraphCalendar = ({
   const { weeks, width, height, blockSize, blockMargin, labels } =
     useContributionGraph()
 
-  const monthLabels = useMemo(
-    () => getMonthLabels(weeks, labels.months),
-    [weeks, labels.months]
-  )
+  const monthLabels = getMonthLabels(weeks, labels.months)
 
   return (
     <div

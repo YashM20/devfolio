@@ -3,7 +3,6 @@
 import {
   Children,
   isValidElement,
-  useMemo,
   useRef,
   type ReactNode,
 } from "react"
@@ -101,7 +100,7 @@ function ChartInner({
   children,
   containerRef,
 }: ChartInnerProps) {
-  const lines = useMemo(() => extractLineConfigs(children), [children])
+  const lines = extractLineConfigs(children)
 
   return (
     <TimeSeriesChartInner

@@ -4,6 +4,12 @@ import { CERTIFICATIONS } from "../../data/certifications";
 import { Panel, PanelHeader, PanelTitle } from "../panel";
 import { CertificationItem } from "./certification-item";
 
+const CertificationListItem = ({
+  item,
+}: {
+  item: (typeof CERTIFICATIONS)[number];
+}) => <CertificationItem certification={item} />;
+
 export function Certifications() {
   return (
     <Panel id="certs">
@@ -19,7 +25,7 @@ export function Certifications() {
       <CollapsibleList
         items={CERTIFICATIONS}
         max={8}
-        renderItem={(item) => <CertificationItem certification={item} />}
+        renderItem={CertificationListItem}
       />
     </Panel>
   );

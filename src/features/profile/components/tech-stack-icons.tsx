@@ -1,7 +1,6 @@
-import type { TechStack } from "../types/tech-stack";
+import * as React from "react";
 
-// Standalone icon components for clean organization and reusability
-function BaseUiIcon(props: React.ComponentProps<"svg">) {
+export function BaseUiIcon(props: React.ComponentProps<"svg">) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden {...props}>
       <path
@@ -12,18 +11,18 @@ function BaseUiIcon(props: React.ComponentProps<"svg">) {
   );
 }
 
-function BunIcon(props: React.ComponentProps<"svg">) {
+export function BunIcon(props: React.ComponentProps<"svg">) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden {...props}>
       <path
-        d="M12 22.596c6.628 0 12-4.338 12-9.688 0-3.318-2.057-6.248-5.219-7.986-1.286-.715-2.297-1.357-3.139-1.89C14.058 2.025 13.08 1.404 12 1.404c-1.097 0-2.334.785-3.966 1.821a49.92 49.92 0 0 1-2.816 1.697C2.057 6.66 0 9.59 0 12.908c0 5.35 5.372 9.687 12 9.687v.001ZM10.599 4.715c.334-.759.503-1.58.498-2.409 0-.145.202-.187.23-.029.658 2.783-.902 4.162-2.057 4.624-.124.048-.199-.121-.103-.209a5.763 5.763 0 0 0 1.432-1.977Zm2.058-.102a5.82 5.82 0 0 0-.782-2.306v-.016c-.069-.123.086-.263.185-.172 1.962 2.111 1.307 4.067.556 5.051-.082.103-.23-.003-.189-.126a5.85 5.85 0 0 0 .23-2.431Zm1.776-.561a5.727 5.727 0 0 0-1.612-1.806v-.014c-.112-.085-.024-.274.114-.218 2.595 1.087 2.774 3.18 2.459 4.407a.116.116 0 0 1-.049.071.11.11 0 0 1-.153-.026.122.122 0 0 1-.022-.083 5.891 5.891 0 0 0-.737-2.331Zm-5.087.561c-.617.546-1.282.76-2.063 1-.117 0-.195-.078-.156-.181 1.752-.909 2.376-1.649 2.999-2.778 0 0 .155-.118.188.085 0 .304-.349 1.329-.968 1.874Zm4.945 11.237a2.957 2.957 0 0 1-.937 1.553c-.346.346-.8.565-1.286.62a2.178 2.178 0 0 1-1.327-.62 2.955 2.955 0 0 1-.925-1.553.244.244 0 0 1 .064-.198.234.234 0 0 1 .193-.069h3.965a.226.226 0 0 1 .19.07c.05.053.073.125.063.197Zm-5.458-2.176a1.862 1.862 0 0 1-2.384-.245 1.98 1.98 0 0 1-.233-2.447c.207-.319.503-.566.848-.713a1.84 1.84 0 0 1 1.092-.11c.366.075.703.261.967.531a1.98 1.98 0 0 1 .408 2.114 1.931 1.931 0 0 1-.698.869v.001Zm8.495.005a1.86 1.86 0 0 1-2.381-.253 1.964 1.964 0 0 1-.547-1.366c0-.384.11-.76.32-1.079.207-.319.503-.567.849-.713a1.844 1.844 0 0 1 1.093-.108c.367.076.704.262.968.534a1.98 1.98 0 0 1 .4 2.117 1.932 1.932 0 0 1-.702.868Z"
+        d="M12 22.596c6.628 0 12-4.338 12-9.688 0-3.318-2.057-6.248-5.219-7.986-1.286-.715-2.297-1.357-3.139-1.89C14.058 2.025 13.08 1.404 12 1.404c-1.097 0-2.334.785-3.966 1.821a49.92 49.92 0 0 1-2.816 1.697C2.057 6.66 0 9.59 0 12.908c0 5.35 5.372 9.687 12 9.687v.001ZM10.599 4.715c.334-.759.503-1.58.498-2.409 0-.145.202-.187.23-.029.658 2.783-.902 4.162-2.057 4.624-.124.048-.199-.121-.103-.209a5.763 5.763 0 0 0 1.432-1.977Zm2.058-.102a5.82 5.82 0 0 0-.782-2.306v-.016c-.069-.123.086-.263.185-.172 1.962 2.111 1.307 4.067.556 5.051-.082.103-.23-.003-.189-.126a5.85 5.85 0 0 0 .23-2.431Zm1.776-.561a5.727 5.727 0 0 0-1.612-1.806v-.014c-.112-.085-.024-.274.114-.218 2.595 1.087 2.774 3.18 2.459 4.407a.116.116 0 0 1-.049.071.11.11 0 0 1-.153-.026.122.122 0 0 1-.022-.083 5.891 5.891 0 0 0-.737-2.331Zm-5.087.561c-.617.546-1.282.76-2.063 1-.117 0-.195-.078-.156-.181 1.752-.909 2.376-1.649 2.999-2.778 0 0 .155-.118.188.085 0 .304-.349 1.329-.968 1.874Zm4.945 11.237a2.957 2.957 0 0 1-.937 1.553c-.346.346-.8.565-1.286.62a2.178 2.178 0 0 1-1.327-.62 2.955 2.955 0 0 1-.925-1.553.244.244 0 0 1 .064-.198.234.234 0 0 1 .193-.069h3.965a.226.226 0 0 1 .19.07c.05.053.073.125.063.197Zm-5.458-2.176a1.862 1.862 0 0 1-2.384-.245 1.98 1.98 0 0 1-.233-2.447c.207-.319.503-.566.848-.713a1.84 1.84 0 0 1 1.092-.11c.366.075.703.261.967.531a1.98 1.98 0 0 1 .4 2.114 1.931 1.931 0 0 1-.698.869v.001Zm8.495.005a1.86 1.86 0 0 1-2.381-.253 1.964 1.964 0 0 1-.547-1.366c0-.384.11-.76.32-1.079.207-.319.503-.567.849-.713a1.844 1.844 0 0 1 1.093-.108c.367.076.704.262.968.534a1.98 1.98 0 0 1 .4 2.117 1.932 1.932 0 0 1-.702.868Z"
         fill="currentColor"
       />
     </svg>
   );
 }
 
-function ClaudeIcon(props: React.ComponentProps<"svg">) {
+export function ClaudeIcon(props: React.ComponentProps<"svg">) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden {...props}>
       <path
@@ -34,7 +33,7 @@ function ClaudeIcon(props: React.ComponentProps<"svg">) {
   );
 }
 
-function CursorIcon(props: React.ComponentProps<"svg">) {
+export function CursorIcon(props: React.ComponentProps<"svg">) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden {...props}>
       <path
@@ -45,7 +44,7 @@ function CursorIcon(props: React.ComponentProps<"svg">) {
   );
 }
 
-function DatadogIcon(props: React.ComponentProps<"svg">) {
+export function DatadogIcon(props: React.ComponentProps<"svg">) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden {...props}>
       <path
@@ -56,7 +55,7 @@ function DatadogIcon(props: React.ComponentProps<"svg">) {
   );
 }
 
-function DockerIcon(props: React.ComponentProps<"svg">) {
+export function DockerIcon(props: React.ComponentProps<"svg">) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden {...props}>
       <path
@@ -67,7 +66,7 @@ function DockerIcon(props: React.ComponentProps<"svg">) {
   );
 }
 
-function ExpoIcon(props: React.ComponentProps<"svg">) {
+export function ExpoIcon(props: React.ComponentProps<"svg">) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden {...props}>
       <path
@@ -78,7 +77,7 @@ function ExpoIcon(props: React.ComponentProps<"svg">) {
   );
 }
 
-function FigmaIcon(props: React.ComponentProps<"svg">) {
+export function FigmaIcon(props: React.ComponentProps<"svg">) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden {...props}>
       <path
@@ -89,7 +88,7 @@ function FigmaIcon(props: React.ComponentProps<"svg">) {
   );
 }
 
-function GeminiIcon(props: React.ComponentProps<"svg">) {
+export function GeminiIcon(props: React.ComponentProps<"svg">) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden {...props}>
       <path
@@ -100,7 +99,7 @@ function GeminiIcon(props: React.ComponentProps<"svg">) {
   );
 }
 
-function GitHubIcon(props: React.ComponentProps<"svg">) {
+export function GitHubIcon(props: React.ComponentProps<"svg">) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden {...props}>
       <path
@@ -111,7 +110,7 @@ function GitHubIcon(props: React.ComponentProps<"svg">) {
   );
 }
 
-function GitIcon(props: React.ComponentProps<"svg">) {
+export function GitIcon(props: React.ComponentProps<"svg">) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden {...props}>
       <path
@@ -122,7 +121,7 @@ function GitIcon(props: React.ComponentProps<"svg">) {
   );
 }
 
-function JsIcon(props: React.ComponentProps<"svg">) {
+export function JsIcon(props: React.ComponentProps<"svg">) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden {...props}>
       <path
@@ -133,7 +132,7 @@ function JsIcon(props: React.ComponentProps<"svg">) {
   );
 }
 
-function MongoDBIcon(props: React.ComponentProps<"svg">) {
+export function MongoDBIcon(props: React.ComponentProps<"svg">) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden {...props}>
       <path
@@ -144,7 +143,7 @@ function MongoDBIcon(props: React.ComponentProps<"svg">) {
   );
 }
 
-function MotionIcon(props: React.ComponentProps<"svg">) {
+export function MotionIcon(props: React.ComponentProps<"svg">) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden {...props}>
       <path
@@ -155,7 +154,7 @@ function MotionIcon(props: React.ComponentProps<"svg">) {
   );
 }
 
-function NextjsIcon(props: React.ComponentProps<"svg">) {
+export function NextjsIcon(props: React.ComponentProps<"svg">) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden {...props}>
       <path
@@ -166,7 +165,7 @@ function NextjsIcon(props: React.ComponentProps<"svg">) {
   );
 }
 
-function NodejsIcon(props: React.ComponentProps<"svg">) {
+export function NodejsIcon(props: React.ComponentProps<"svg">) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden {...props}>
       <path
@@ -177,7 +176,7 @@ function NodejsIcon(props: React.ComponentProps<"svg">) {
   );
 }
 
-function OpenAIIcon(props: React.ComponentProps<"svg">) {
+export function OpenAIIcon(props: React.ComponentProps<"svg">) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden {...props}>
       <path
@@ -188,7 +187,7 @@ function OpenAIIcon(props: React.ComponentProps<"svg">) {
   );
 }
 
-function PostgreSqlIcon(props: React.ComponentProps<"svg">) {
+export function PostgreSqlIcon(props: React.ComponentProps<"svg">) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden {...props}>
       <path
@@ -199,7 +198,7 @@ function PostgreSqlIcon(props: React.ComponentProps<"svg">) {
   );
 }
 
-function PostHogIcon(props: React.ComponentProps<"svg">) {
+export function PostHogIcon(props: React.ComponentProps<"svg">) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden {...props}>
       <path
@@ -210,7 +209,7 @@ function PostHogIcon(props: React.ComponentProps<"svg">) {
   );
 }
 
-function PythonIcon(props: React.ComponentProps<"svg">) {
+export function PythonIcon(props: React.ComponentProps<"svg">) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden {...props}>
       <path
@@ -221,7 +220,7 @@ function PythonIcon(props: React.ComponentProps<"svg">) {
   );
 }
 
-function RadixUiIcon(props: React.ComponentProps<"svg">) {
+export function RadixUiIcon(props: React.ComponentProps<"svg">) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden {...props}>
       <path
@@ -232,7 +231,7 @@ function RadixUiIcon(props: React.ComponentProps<"svg">) {
   );
 }
 
-function ReactIcon(props: React.ComponentProps<"svg">) {
+export function ReactIcon(props: React.ComponentProps<"svg">) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden {...props}>
       <path
@@ -243,7 +242,7 @@ function ReactIcon(props: React.ComponentProps<"svg">) {
   );
 }
 
-function ReduxIcon(props: React.ComponentProps<"svg">) {
+export function ReduxIcon(props: React.ComponentProps<"svg">) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden {...props}>
       <path
@@ -253,18 +252,19 @@ function ReduxIcon(props: React.ComponentProps<"svg">) {
     </svg>
   );
 }
-function RedisIcon(props: React.ComponentProps<"svg">) {
+
+export function RedisIcon(props: React.ComponentProps<"svg">) {
   return (
-    <svg viewBox="0 0 24 24" aria-hidden>
-        <path
-          d="M22.71 13.145c-1.66 2.092-3.452 4.483-7.038 4.483-3.203 0-4.397-2.825-4.48-5.12.701 1.484 2.073 2.685 4.214 2.63 4.117-.133 6.94-3.852 6.94-7.239 0-4.05-3.022-6.972-8.268-6.972-3.752 0-8.4 1.428-11.455 3.685C2.59 6.937 3.885 9.958 4.35 9.626c2.648-1.904 4.748-3.13 6.784-3.744C8.12 9.244.886 17.05 0 18.425c.1 1.261 1.66 4.648 2.424 4.648.232 0 .431-.133.664-.365a100.49 100.49 0 0 0 5.54-6.765c.222 3.104 1.748 6.898 6.014 6.898 3.819 0 7.604-2.756 9.33-8.965.2-.764-.73-1.361-1.261-.73zm-4.349-5.013c0 1.959-1.926 2.922-3.685 2.922-.941 0-1.664-.247-2.235-.568 1.051-1.592 2.092-3.225 3.21-4.973 1.972.334 2.71 1.43 2.71 2.619z"
-          fill="currentColor"
-        />
-      </svg>
+    <svg viewBox="0 0 24 24" aria-hidden {...props}>
+      <path
+        d="M22.71 13.145c-1.66 2.092-3.452 4.483-7.038 4.483-3.203 0-4.397-2.825-4.48-5.12.701 1.484 2.073 2.685 4.214 2.63 4.117-.133 6.94-3.852 6.94-7.239 0-4.05-3.022-6.972-8.268-6.972-3.752 0-8.4 1.428-11.455 3.685C2.59 6.937 3.885 9.958 4.35 9.626c2.648-1.904 4.748-3.13 6.784-3.744C8.12 9.244.886 17.05 0 18.425c.1 1.261 1.66 4.648 2.424 4.648.232 0 .431-.133.664-.365a100.49 100.49 0 0 0 5.54-6.765c.222 3.104 1.748 6.898 6.014 6.898 3.819 0 7.604-2.756 9.33-8.965.2-.764-.73-1.361-1.261-.73zm-4.349-5.013c0 1.959-1.926 2.922-3.685 2.922-.941 0-1.664-.247-2.235-.568 1.051-1.592 2.092-3.225 3.21-4.973 1.972.334 2.71 1.43 2.71 2.619z"
+        fill="currentColor"
+      />
+    </svg>
   );
 }
 
-function ShadcnIcon(props: React.ComponentProps<"svg">) {
+export function ShadcnIcon(props: React.ComponentProps<"svg">) {
   return (
     <svg viewBox="0 0 256 256" aria-hidden {...props}>
       <path
@@ -279,7 +279,7 @@ function ShadcnIcon(props: React.ComponentProps<"svg">) {
   );
 }
 
-function TailwindCssIcon(props: React.ComponentProps<"svg">) {
+export function TailwindCssIcon(props: React.ComponentProps<"svg">) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden {...props}>
       <path
@@ -290,7 +290,7 @@ function TailwindCssIcon(props: React.ComponentProps<"svg">) {
   );
 }
 
-function TsIcon(props: React.ComponentProps<"svg">) {
+export function TsIcon(props: React.ComponentProps<"svg">) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden {...props}>
       <path
@@ -301,219 +301,10 @@ function TsIcon(props: React.ComponentProps<"svg">) {
   );
 }
 
-function VercelIcon(props: React.ComponentProps<"svg">) {
+export function VercelIcon(props: React.ComponentProps<"svg">) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden {...props}>
       <path d="m12 3 10 17H2L12 3Z" fill="currentColor" />
     </svg>
   );
 }
-
-export const TECH_STACK: TechStack[] = [
-  {
-    key: "typescript",
-    title: "TypeScript",
-    href: "https://www.typescriptlang.org",
-    icon: <TsIcon />,
-    categories: ["Language"],
-  },
-  {
-    key: "js",
-    title: "JavaScript",
-    href: "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
-    icon: <JsIcon />,
-    categories: ["Language"],
-  },
-  {
-    key: "python",
-    title: "Python",
-    href: "https://www.python.org",
-    icon: <PythonIcon />,
-    categories: ["Language"],
-  },
-  {
-    key: "react",
-    title: "React",
-    href: "https://react.dev",
-    icon: <ReactIcon />,
-    categories: ["Frontend"],
-  },
-    {
-    key: "nextjs",
-    title: "Next.js",
-    href: "https://nextjs.org",
-    icon: <NextjsIcon />,
-    categories: ["Frontend"],
-  },
- 
-
-  {
-    key: "tailwindcss",
-    title: "Tailwind CSS",
-    href: "https://tailwindcss.com",
-    icon: <TailwindCssIcon />,
-    categories: ["Frontend"],
-  },
-   {
-    key: "reactnative",
-    title: "React Native",
-    href: "https://reactnative.dev",
-    icon: <ReactIcon />,
-    categories: ["Frontend"],
-  },
-    {
-    key: "expo",
-    title: "Expo",
-    href: "https://expo.dev",
-    icon: <ExpoIcon />,
-    categories: ["Frontend"],
-  },
-  {
-    key: "nodejs",
-    title: "Node.js",
-    href: "https://nodejs.org",
-    icon: <NodejsIcon />,
-    categories: ["Backend & Database"],
-  },
-  {
-    key: "redux",
-    title: "Redux",
-    href: "https://redux.js.org",
-    icon: <ReduxIcon />,
-    categories: ["Frontend"],
-  },
-  {
-    key: "shadcn-ui",
-    title: "shadcn/ui",
-    href: "https://ui.shadcn.com",
-    icon: <ShadcnIcon />,
-    categories: ["Frontend"],
-  },
-  {
-    key: "radixui",
-    title: "Radix UI",
-    href: "https://www.radix-ui.com",
-    icon: <RadixUiIcon />,
-    categories: ["Frontend"],
-  },
-  {
-    key: "base-ui",
-    title: "Base UI",
-    href: "https://base-ui.com",
-    icon: <BaseUiIcon />,
-    categories: ["Frontend"],
-  },
-  {
-    key: "motion",
-    title: "Motion",
-    href: "https://motion.dev",
-    icon: <MotionIcon />,
-    categories: ["Frontend"],
-  },
-
-  {
-    key: "bun",
-    title: "Bun",
-    href: "https://bun.sh",
-    icon: <BunIcon />,
-    categories: ["Backend & Database"],
-  },
-  {
-    key: "postgresql",
-    title: "PostgreSQL",
-    href: "https://www.postgresql.org",
-    icon: <PostgreSqlIcon />,
-    categories: ["Backend & Database"],
-  },
-  {
-    key: "mongodb",
-    title: "MongoDB",
-    href: "https://www.mongodb.com",
-    icon: <MongoDBIcon />,
-    categories: ["Backend & Database"],
-  },
-  {
-    key: "redis",
-    title: "Redis",
-    href: "https://redis.io",
-    icon: <RedisIcon />,
-    categories: ["Backend & Database"],
-  },
-  {
-    key: "cursor",
-    title: "Cursor",
-    href: "https://cursor.com",
-    icon: <CursorIcon />,
-    categories: ["Workflow & AI"],
-  },
-  {
-    key: "claude",
-    title: "Claude",
-    href: "https://claude.ai",
-    icon: <ClaudeIcon />,
-    categories: ["Workflow & AI"],
-  },
-  {
-    key: "gemini",
-    title: "Gemini",
-    href: "https://gemini.google.com",
-    icon: <GeminiIcon />,
-    categories: ["Workflow & AI"],
-  },
-  {
-    key: "chatgpt",
-    title: "ChatGPT",
-    href: "https://chatgpt.com",
-    icon: <OpenAIIcon />,
-    categories: ["Workflow & AI"],
-  },
-  {
-    key: "git",
-    title: "Git",
-    href: "https://git-scm.com",
-    icon: <GitIcon />,
-    categories: ["Workflow & AI"],
-  },
-  {
-    key: "github",
-    title: "GitHub",
-    href: "https://github.com",
-    icon: <GitHubIcon />,
-    categories: ["Workflow & AI"],
-  },
-  {
-    key: "docker",
-    title: "Docker",
-    href: "https://www.docker.com",
-    icon: <DockerIcon />,
-    categories: ["Workflow & AI"],
-  },
-  {
-    key: "vercel",
-    title: "Vercel",
-    href: "https://vercel.com",
-    icon: <VercelIcon />,
-    categories: ["Workflow & AI"],
-  },
-  {
-    key: "posthog",
-    title: "PostHog",
-    href: "https://posthog.com",
-    icon: <PostHogIcon />,
-    categories: ["Analytics"],
-  },
-  {
-    key: "datadog",
-    title: "Datadog",
-    href: "https://www.datadoghq.com",
-    icon: <DatadogIcon />,
-    categories: ["Analytics"],
-  },
-  {
-    key: "figma",
-    title: "Figma",
-    href: "https://www.figma.com",
-    icon: <FigmaIcon />,
-    categories: ["Design"],
-  }
-];

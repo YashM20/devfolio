@@ -1,13 +1,13 @@
-// @react-compiler-skip
 "use client"
 
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react"
+import { useEffect, useId, useState } from "react"
 import { curveNatural } from "@visx/curve"
 import { LinePath } from "@visx/shape"
-import { useMotionTemplate, useSpring } from "motion/react";
+import { useMotionValue, useSpring, useTransform } from "motion/react";
 import * as m from "motion/react-m";
 
-import { chartCssVars, useChart } from "./chart-context"
+import { useChart } from "./chart-context"
+import { chartCssVars } from "./chart-theme"
 import { ChartRevealClip } from "./chart-reveal-clip"
 
 // CurveFactory type - simplified version compatible with visx
@@ -55,15 +55,10 @@ export function Line({
     xAccessor,
   } = useChart()
 
-  const pathRef = useRef<SVGPathElement>(null)
+  // eslint-disable-next-line react-doctor/no-derived-state
   const [pathLength, setPathLength] = useState(0)
   const [pathElement, setPathElement] = useState<SVGPathElement | null>(null)
-
-  useEffect(() => {
-    if (pathRef.current !== pathElement) {
-      setPathElement(pathRef.current)
-    }
-  })
+  const pathLengthMV = useMotionValue(0)
 
   // Unique gradient ID for this line
   const id = useId()
@@ -75,37 +70,35 @@ export function Line({
       const len = pathElement.getTotalLength()
       if (len > 0) {
         setPathLength(len)
+        pathLengthMV.set(len)
       }
     }
-  }, [animate, data, innerWidth, pathElement])
+  }, [animate, data, innerWidth, pathElement, pathLengthMV])
 
   // Binary search to find path length at a given X coordinate
-  const findLengthAtX = useCallback(
-    (targetX: number): number => {
-      const path = pathElement
-      if (!path || pathLength === 0) {
-        return 0
-      }
-      let low = 0
-      let high = pathLength
-      const tolerance = 0.5
+  const findLengthAtX = (targetX: number): number => {
+    const path = pathElement
+    if (!path || pathLength === 0) {
+      return 0
+    }
+    let low = 0
+    let high = pathLength
+    const tolerance = 0.5
 
-      while (high - low > tolerance) {
-        const mid = (low + high) / 2
-        const point = path.getPointAtLength(mid)
-        if (point.x < targetX) {
-          low = mid
-        } else {
-          high = mid
-        }
+    while (high - low > tolerance) {
+      const mid = (low + high) / 2
+      const point = path.getPointAtLength(mid)
+      if (point.x < targetX) {
+        low = mid
+      } else {
+        high = mid
       }
-      return (low + high) / 2
-    },
-    [pathLength, pathElement]
-  )
+    }
+    return (low + high) / 2
+  }
 
   // Calculate segment bounds for highlight from either selection or hover
-  const segmentBounds = useMemo(() => {
+  const segmentBounds = (() => {
     if (!pathElement || pathLength === 0) {
       return { startLength: 0, segmentLength: 0, isActive: false }
     }
@@ -146,16 +139,7 @@ export function Line({
       segmentLength: endLength - startLength,
       isActive: true,
     }
-  }, [
-    tooltipData,
-    selection,
-    data,
-    xScale,
-    pathLength,
-    xAccessor,
-    findLengthAtX,
-    pathElement,
-  ])
+  })()
 
   // Springs for smooth highlight animation (both offset AND segment length)
   const springConfig = { stiffness: 180, damping: 28 }
@@ -173,17 +157,18 @@ export function Line({
     segmentLengthSpring,
   ])
 
-  // Create animated strokeDasharray using motion template
-  const animatedDasharray = useMotionTemplate`${segmentLengthSpring} ${pathLength}`
+
+
+  const animatedDasharray = useTransform(
+    [segmentLengthSpring, pathLengthMV],
+    ([latestSegment, latestLength]) => `${latestSegment} ${latestLength}`
+  )
 
   // Get y value for a data point
-  const getY = useCallback(
-    (d: Record<string, unknown>) => {
-      const value = d[dataKey]
-      return typeof value === "number" ? (yScale(value) ?? 0) : 0
-    },
-    [dataKey, yScale]
-  )
+  const getY = (d: Record<string, unknown>) => {
+    const value = d[dataKey]
+    return typeof value === "number" ? (yScale(value) ?? 0) : 0
+  }
 
   const isHovering = tooltipData !== null || selection?.active === true
 
@@ -227,7 +212,7 @@ export function Line({
           <LinePath
             curve={curve}
             data={data}
-            innerRef={pathRef}
+            innerRef={setPathElement}
             stroke={fadeEdges ? `url(#${gradientId})` : stroke}
             strokeLinecap="round"
             strokeWidth={strokeWidth}

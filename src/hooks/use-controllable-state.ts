@@ -52,19 +52,16 @@ export function useControllableState<T>({
     isControlledRef.current = isControlled;
   }, [isControlled, caller]);
 
-  const setValue = React.useCallback<SetStateFn<T>>(
-    (nextValue) => {
-      if (isControlled) {
-        const value = isFunction(nextValue) ? nextValue(prop) : nextValue;
-        if (value !== prop) {
-          onChangeRef.current?.(value);
-        }
-      } else {
-        setUncontrolledProp(nextValue);
+  const setValue: SetStateFn<T> = (nextValue) => {
+    if (isControlled) {
+      const value = isFunction(nextValue) ? nextValue(prop) : nextValue;
+      if (value !== prop) {
+        onChangeRef.current?.(value);
       }
-    },
-    [isControlled, prop, setUncontrolledProp, onChangeRef]
-  );
+    } else {
+      setUncontrolledProp(nextValue);
+    }
+  };
 
   return [value, setValue];
 }

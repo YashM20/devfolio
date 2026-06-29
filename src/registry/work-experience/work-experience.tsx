@@ -137,10 +137,12 @@ export function ExperiencePositionItem({
   const ExperienceIcon = iconMap[position.icon || "business"];
 
   const [isOpen, setIsOpen] = React.useState(position.isExpanded ?? false);
+  const [prevIsExpanded, setPrevIsExpanded] = React.useState(position.isExpanded);
 
-  React.useEffect(() => {
+  if (position.isExpanded !== prevIsExpanded) {
+    setPrevIsExpanded(position.isExpanded);
     setIsOpen(position.isExpanded ?? false);
-  }, [position.isExpanded]);
+  }
 
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen} asChild>

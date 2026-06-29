@@ -9,6 +9,10 @@ import { PROJECTS } from "../../data/projects";
 import { Panel, PanelHeader, PanelTitle, PanelTitleSup } from "../panel";
 import { ProjectItem } from "./project-item";
 
+const ProjectListItem = ({ item }: { item: (typeof PROJECTS)[number] }) => (
+  <ProjectItem project={item} />
+);
+
 export function Projects() {
   return (
     <Panel id="projects">
@@ -34,7 +38,7 @@ export function Projects() {
       <CollapsibleList
         items={PROJECTS}
         max={4}
-        renderItem={(item) => <ProjectItem project={item} />}
+        renderItem={ProjectListItem}
       />
     </Panel>
   );

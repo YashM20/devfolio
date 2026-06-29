@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/refs */
 "use client"
 
-import { useMemo, useSyncExternalStore } from "react"
+import { useSyncExternalStore } from "react"
 
 import { cn } from "@/lib/utils"
 
@@ -95,7 +95,7 @@ export function XAxis({
   )
 
   // Generate tick labels: evenly spaced along the domain, or one per data row
-  const labelsToShow = useMemo(() => {
+  const labelsToShow = (() => {
     if (tickMode === "data") {
       return data.map((d, i) => ({
         date: xAccessor(d),
@@ -139,7 +139,7 @@ export function XAxis({
         day: "numeric",
       }),
     }))
-  }, [tickMode, data, xAccessor, xScale, margin.left, dateLabels, numTicks])
+  })()
 
   const isHovering = tooltipData !== null
   const crosshairX = tooltipData ? tooltipData.x + margin.left : null

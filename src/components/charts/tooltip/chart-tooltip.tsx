@@ -3,11 +3,12 @@
 /* eslint-disable react-hooks/refs */
 "use client"
 
-import { useMemo, useSyncExternalStore } from "react"
+import { useSyncExternalStore } from "react"
 import { useSpring } from "motion/react"
 import * as m from "motion/react-m"
 
-import { chartCssVars, useChart } from "../chart-context"
+import { useChart } from "../chart-context"
+import { chartCssVars } from "../chart-theme"
 import { DateTicker } from "./date-ticker"
 import { TooltipBox } from "./tooltip-box"
 import { TooltipContent, type TooltipRow } from "./tooltip-content"
@@ -95,7 +96,7 @@ export function ChartTooltip({
   animatedX.set(xWithMargin)
 
   // Generate rows from lines
-  const tooltipRows = useMemo(() => {
+  const tooltipRows = (() => {
     if (!tooltipData) {
       return []
     }
@@ -110,10 +111,10 @@ export function ChartTooltip({
       label: rowLabels?.[line.dataKey] || line.dataKey,
       value: (tooltipData.point[line.dataKey] as number) ?? 0,
     }))
-  }, [tooltipData, lines, rowLabels, rowsRenderer])
+  })()
 
   // Resolve indicator color (static or from hovered point)
-  const indicatorColor = useMemo(() => {
+  const indicatorColor = (() => {
     if (indicatorColorProp == null) {
       return chartCssVars.crosshair
     }
@@ -123,10 +124,10 @@ export function ChartTooltip({
         : chartCssVars.crosshair
     }
     return indicatorColorProp
-  }, [indicatorColorProp, tooltipData])
+  })()
 
   // Title from date or category
-  const title = useMemo(() => {
+  const title = (() => {
     if (!tooltipData) {
       return undefined
     }
@@ -140,7 +141,7 @@ export function ChartTooltip({
       month: "short",
       day: "numeric",
     })
-  }, [tooltipData, barXAccessor, xAccessor])
+  })()
 
   // Use portal to render into the chart container
   // Only render after mount on client side

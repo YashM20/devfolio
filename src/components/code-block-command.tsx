@@ -1,7 +1,5 @@
 "use client";
 
-import { useMemo } from "react";
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { PackageManager } from "@/hooks/use-config";
 import { useConfig } from "@/hooks/use-config";
@@ -20,14 +18,12 @@ export function CodeBlockCommand({
 
   const packageManager = config.packageManager || "pnpm";
 
-  const tabs = useMemo(() => {
-    return {
-      pnpm: __pnpm__,
-      yarn: __yarn__,
-      npm: __npm__,
-      bun: __bun__,
-    };
-  }, [__pnpm__, __yarn__, __npm__, __bun__]);
+  const tabs = {
+    pnpm: __pnpm__,
+    yarn: __yarn__,
+    npm: __npm__,
+    bun: __bun__,
+  };
 
   return (
     <div className="bg-code relative overflow-hidden rounded-lg">

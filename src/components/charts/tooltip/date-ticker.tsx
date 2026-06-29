@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/refs */
 "use client"
 
-import { useEffect, useMemo, useRef } from "react"
+import { useEffect, useRef } from "react"
 import { motion, useSpring } from "motion/react"
 
 const TICKER_ITEM_HEIGHT = 24
@@ -14,17 +14,15 @@ export interface DateTickerProps {
 
 export function DateTicker({ currentIndex, labels, visible }: DateTickerProps) {
   // Parse labels into month and day parts
-  const parsedLabels = useMemo(() => {
-    return labels.map((label, index) => {
-      const parts = label.split(" ")
-      const month = parts[0] || ""
-      const day = parts[1] || ""
-      return { month, day, full: label, key: `${label}::${index}` }
-    })
-  }, [labels])
+  const parsedLabels = labels.map((label, index) => {
+    const parts = label.split(" ")
+    const month = parts[0] || ""
+    const day = parts[1] || ""
+    return { month, day, full: label, key: `${label}::${index}` }
+  })
 
   // Month segments: one entry per consecutive run (Jan → Feb → …), keyed by start index
-  const monthSegments = useMemo(() => {
+  const monthSegments = (() => {
     const segments: { month: string; key: string; startIndex: number }[] = []
 
     parsedLabels.forEach((label, index) => {
@@ -39,10 +37,10 @@ export function DateTicker({ currentIndex, labels, visible }: DateTickerProps) {
     })
 
     return segments
-  }, [parsedLabels])
+  })()
 
   // Index into monthSegments for the current data point
-  const currentMonthIndex = useMemo(() => {
+  const currentMonthIndex = (() => {
     if (currentIndex < 0 || currentIndex >= parsedLabels.length) {
       return 0
     }
@@ -53,7 +51,7 @@ export function DateTicker({ currentIndex, labels, visible }: DateTickerProps) {
       }
     }
     return 0
-  }, [currentIndex, parsedLabels.length, monthSegments])
+  })()
 
   // Animated Y offsets
   const dayY = useSpring(0, { stiffness: 400, damping: 35 })

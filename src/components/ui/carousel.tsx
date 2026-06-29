@@ -61,32 +61,23 @@ function Carousel({
   const [canScrollPrev, setCanScrollPrev] = React.useState(false);
   const [canScrollNext, setCanScrollNext] = React.useState(false);
 
-  const onSelect = React.useCallback((api: CarouselApi) => {
-    if (!api) return;
-    setCanScrollPrev(api.canScrollPrev());
-    setCanScrollNext(api.canScrollNext());
-  }, []);
-
-  const scrollPrev = React.useCallback(() => {
+  const scrollPrev = () => {
     api?.scrollPrev();
-  }, [api]);
+  };
 
-  const scrollNext = React.useCallback(() => {
+  const scrollNext = () => {
     api?.scrollNext();
-  }, [api]);
+  };
 
-  const handleKeyDown = React.useCallback(
-    (event: React.KeyboardEvent<HTMLDivElement>) => {
-      if (event.key === "ArrowLeft") {
-        event.preventDefault();
-        scrollPrev();
-      } else if (event.key === "ArrowRight") {
-        event.preventDefault();
-        scrollNext();
-      }
-    },
-    [scrollPrev, scrollNext]
-  );
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      scrollPrev();
+    } else if (event.key === "ArrowRight") {
+      event.preventDefault();
+      scrollNext();
+    }
+  };
 
   React.useEffect(() => {
     if (!api || !setApi) return;
@@ -96,14 +87,25 @@ function Carousel({
 
   React.useEffect(() => {
     if (!api) return;
-    onSelect(api);
+
+    const onSelect = (api: CarouselApi) => {
+      if (!api) return;
+      setCanScrollPrev(api.canScrollPrev());
+      setCanScrollNext(api.canScrollNext());
+    };
+
+    // Defer initial scroll availability state check to avoid set-state-in-effect
+    Promise.resolve().then(() => {
+      onSelect(api);
+    });
+
     api.on("reInit", onSelect);
     api.on("select", onSelect);
 
     return () => {
-      api?.off("select", onSelect);
+      api.off("select", onSelect);
     };
-  }, [api, onSelect]);
+  }, [api]);
 
   return (
     <CarouselContext.Provider

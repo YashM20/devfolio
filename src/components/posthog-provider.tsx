@@ -4,7 +4,7 @@ import posthog from "posthog-js";
 import { PostHogProvider as Provider } from "posthog-js/react";
 import React, { useEffect, useState } from "react";
 
-import { getCookiePreferences } from "./cookie-consent";
+import { getCookiePreferences } from "@/lib/cookie";
 
 const POSTHOG_KEY = process.env.NEXT_PUBLIC_POSTHOG_KEY;
 const POSTHOG_HOST = process.env.NEXT_PUBLIC_POSTHOG_HOST;

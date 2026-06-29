@@ -178,13 +178,13 @@ function SliderCarousel({
 }) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
 
-  const scrollPrev = React.useCallback(() => {
+  const scrollPrev = () => {
     if (emblaApi) emblaApi.scrollPrev();
-  }, [emblaApi]);
+  };
 
-  const scrollNext = React.useCallback(() => {
+  const scrollNext = () => {
     if (emblaApi) emblaApi.scrollNext();
-  }, [emblaApi]);
+  };
 
   const aspectClass = aspectMap[aspect] || aspectMap.video;
 

@@ -1,8 +1,10 @@
+"use client";
+
 import { RssIcon } from "lucide-react";
 
 import { SITE_INFO, SOURCE_CODE_GITHUB_URL } from "@/config/site";
 import { cn } from "@/lib/utils";
-import { showCookiePreferences } from "@/components/cookie-consent";
+import { showCookiePreferences } from "@/lib/cookie";
 
 import { Icons } from "./icons";
 import Script from "next/script";

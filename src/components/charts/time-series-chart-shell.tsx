@@ -3,9 +3,7 @@
 import {
   Children,
   isValidElement,
-  useCallback,
   useEffect,
-  useMemo,
   useState,
   type ReactElement,
   type ReactNode,
@@ -93,6 +91,7 @@ export function TimeSeriesChartInner({
   const [loadState, setLoadState] = useState({ isLoaded: false, revealEpoch: 0 })
   const { isLoaded, revealEpoch } = loadState
 
+  // eslint-disable-next-line react-doctor/no-derived-state
   const [containerNode, setContainerNode] = useState<HTMLDivElement | null>(null)
 
   useEffect(() => {
@@ -104,72 +103,53 @@ export function TimeSeriesChartInner({
   const innerWidth = width - margin.left - margin.right
   const innerHeight = height - margin.top - margin.bottom
 
-  const xAccessor = useCallback(
-    (d: Record<string, unknown>): Date => {
-      const value = d[xDataKey]
-      return value instanceof Date ? value : new Date(value as string | number)
-    },
-    [xDataKey]
-  )
+  const xAccessor = (d: Record<string, unknown>): Date => {
+    const value = d[xDataKey]
+    return value instanceof Date ? value : new Date(value as string | number)
+  }
 
-  const bisectDate = useMemo(
-    () => bisector<Record<string, unknown>, Date>((d) => xAccessor(d)).left,
-    [xAccessor]
-  )
+  const bisectDate = bisector<Record<string, unknown>, Date>((d) => xAccessor(d)).left
 
-  const xScale = useMemo(() => {
-    const dates = data.map((d) => xAccessor(d))
-    const minTime = Math.min(...dates.map((d) => d.getTime()))
-    const maxTime = Math.max(...dates.map((d) => d.getTime()))
+  const dates = data.map((d) => xAccessor(d))
+  const minTime = Math.min(...dates.map((d) => d.getTime()))
+  const maxTime = Math.max(...dates.map((d) => d.getTime()))
 
-    return scaleTime({
-      range: [0, innerWidth],
-      domain: [minTime, maxTime],
-    })
-  }, [innerWidth, data, xAccessor])
+  const xScale = scaleTime({
+    range: [0, innerWidth],
+    domain: [minTime, maxTime],
+  })
 
-  const columnWidth = useMemo(() => {
-    if (data.length < 2) {
-      return 0
-    }
-    return innerWidth / (data.length - 1)
-  }, [innerWidth, data.length])
+  const columnWidth = data.length < 2 ? 0 : innerWidth / (data.length - 1)
 
-  const yScale = useMemo(() => {
-    let maxValue = 0
-    if (yScaleDomainMax != null && yScaleDomainMax > 0) {
-      maxValue = yScaleDomainMax
-    } else {
-      for (const line of lines) {
-        for (const d of data) {
-          const value = d[line.dataKey]
-          if (typeof value === "number" && value > maxValue) {
-            maxValue = value
-          }
+  let maxValue = 0
+  if (yScaleDomainMax != null && yScaleDomainMax > 0) {
+    maxValue = yScaleDomainMax
+  } else {
+    for (const line of lines) {
+      for (const d of data) {
+        const value = d[line.dataKey]
+        if (typeof value === "number" && value > maxValue) {
+          maxValue = value
         }
       }
-
-      if (maxValue === 0) {
-        maxValue = 100
-      }
     }
 
-    return scaleLinear({
-      range: [innerHeight, 0],
-      domain: [0, maxValue * 1.1],
-      nice: true,
-    })
-  }, [innerHeight, data, lines, yScaleDomainMax])
+    if (maxValue === 0) {
+      maxValue = 100
+    }
+  }
 
-  const dateLabels = useMemo(
-    () =>
-      data.map((d) =>
-        xAccessor(d).toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-        })
-      ),
-    [data, xAccessor]
+  const yScale = scaleLinear({
+    range: [innerHeight, 0],
+    domain: [0, maxValue * 1.1],
+    nice: true,
+  })
+
+  const dateLabels = data.map((d) =>
+    xAccessor(d).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    })
   )
 
   useEffect(() => {
