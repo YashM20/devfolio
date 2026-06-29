@@ -8,12 +8,7 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 import { Toaster } from "@/components/ui/sonner";
 
-import dynamic from "next/dynamic";
-
-const PostHogProvider = dynamic(
-  () => import("./posthog-provider").then((mod) => mod.PostHogProvider),
-  { ssr: false }
-);
+import { PostHogProvider } from "./posthog-provider";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (

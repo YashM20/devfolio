@@ -9,16 +9,23 @@ import { useChat } from "@ai-sdk/react";
 import { Send, MessageCircle, X, Bot, User, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+export interface ChatMessage {
+  id: string;
+  role: "system" | "user" | "assistant" | "data";
+  content?: string;
+  parts?: Array<{ type: string; text?: string }>;
+}
+
 // Context for AI Assistant
 type AiAssistantContextProps = {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
   isTyping: boolean;
   setIsTyping: (typing: boolean) => void;
-  messages: any[];
+  messages: ChatMessage[];
   sendMessage: (message: any) => void;
-  setMessages: (messages: any[]) => void;
-  error: any;
+  setMessages: (messages: ChatMessage[]) => void;
+  error: Error | undefined;
   onMessageSent?: (message: string) => void;
   onResponse?: (response: string) => void;
   onError?: (error: string) => void;
@@ -67,7 +74,10 @@ function AiAssistantProvider({
       if (lastMessage && lastMessage.role === "assistant") {
         if (lastMessage.parts) {
           const textParts = lastMessage.parts
-            .flatMap((part: any) => (part.type === "text" ? [part.text] : []))
+            .flatMap((partItem) => {
+              const part = partItem as { type: string; text?: string };
+              return part.type === "text" ? [part.text] : [];
+            })
             .join("");
           onResponse?.(textParts);
         }
@@ -84,9 +94,9 @@ function AiAssistantProvider({
     setIsOpen,
     isTyping,
     setIsTyping,
-    messages,
+    messages: messages as ChatMessage[],
     sendMessage,
-    setMessages,
+    setMessages: setMessages as unknown as (messages: ChatMessage[]) => void,
     error,
     onMessageSent,
     onResponse,
@@ -470,19 +480,20 @@ function AiAssistantMessageList({
 }
 
 // Helper component to render message content
-function RenderMessageContent({ message }: { message: any }) {
+function RenderMessageContent({ message }: { message: ChatMessage }) {
   if (message.parts) {
     return (
       <>
-        {message.parts.flatMap((part: any) =>
-          part.type === "text"
+        {message.parts.flatMap((partItem) => {
+          const part = partItem as { type: string; text?: string };
+          return part.type === "text"
             ? [
-                <div key={part.text} className="whitespace-pre-wrap">
-                  {part.text}
+                <div key={part.text || ""} className="whitespace-pre-wrap">
+                  {part.text || ""}
                 </div>,
               ]
-            : []
-        )}
+            : [];
+        })}
       </>
     );
   }
@@ -494,7 +505,7 @@ function AiAssistantMessage({
   message,
   className,
   ...props
-}: React.ComponentProps<typeof m.div> & { message: any }) {
+}: React.ComponentProps<typeof m.div> & { message: ChatMessage }) {
   return (
     <m.div
       initial={{ opacity: 0, y: 10 }}

@@ -461,7 +461,8 @@ export function AiAssistant() {
                           )}
                         >
                           {message.parts ? (
-                            message.parts.flatMap((part: any, i: number) => {
+                            message.parts.flatMap((partItem: unknown) => {
+                              const part = partItem as { type: string; text?: string; toolCallId?: string; toolName?: string };
                               // Filter out step-related parts and empty content
                               if (typeof part === "object" && part.type) {
                                 if (
@@ -478,21 +479,21 @@ export function AiAssistant() {
                                   return [
                                     message.role === "assistant" ? (
                                       <div
-                                        key={part.text}
+                                        key={part.text || ""}
                                         className="prose prose-sm dark:prose-invert min-w-0 max-w-none"
                                         style={{
                                           wordBreak: "break-word",
                                           overflowWrap: "anywhere",
                                         }}
                                       >
-                                        <Markdown>{part.text}</Markdown>
+                                        <Markdown>{part.text || ""}</Markdown>
                                       </div>
                                     ) : (
                                       <p
-                                        key={part.text}
+                                        key={part.text || ""}
                                         className="whitespace-pre-wrap"
                                       >
-                                        {part.text}
+                                        {part.text || ""}
                                       </p>
                                     ),
                                   ];

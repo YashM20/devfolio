@@ -20,7 +20,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import React, { useEffect, useState } from "react";
-import { toast } from "sonner";
 
 import {
   CommandDialog,
@@ -34,11 +33,8 @@ import {
 import { SOCIAL_LINKS } from "@/features/profile/data/social-links";
 import { cn } from "@/lib/utils";
 import type { Post } from "@/types/blog";
-import { copyText } from "@/utils/copy";
 
 import { ChanhDaiMark } from "./chanhdai-mark";
-import { getMarkSVG } from "@/lib/brand-assets";
-import { getWordmarkSVG } from "./chanhdai-wordmark";
 import { Icons } from "./icons";
 import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
@@ -156,12 +152,6 @@ export function CommandMenu({ posts }: { posts: Post[] }) {
     } else {
       router.push(href as any);
     }
-  };
-
-  const handleCopyText = (text: string, message: string) => {
-    setOpen(false);
-    copyText(text);
-    toast.success(message);
   };
 
   const handleThemeChange = (theme: "light" | "dark" | "system") => {
