@@ -1,6 +1,6 @@
 "use client";
 
-import { Children, isValidElement, useRef, type ReactNode } from "react";
+import { Children, isValidElement, useState, type ReactNode } from "react";
 import { ParentSize } from "@visx/responsive";
 import type { Transition } from "motion/react";
 
@@ -79,7 +79,7 @@ interface ChartInnerProps {
   enterTransition?: Transition;
   revealSignature?: string;
   children: ReactNode;
-  containerRef: React.RefObject<HTMLDivElement | null>;
+  containerNode: HTMLDivElement | null;
 }
 
 function ChartInner({
@@ -93,7 +93,7 @@ function ChartInner({
   enterTransition,
   revealSignature,
   children,
-  containerRef,
+  containerNode,
 }: ChartInnerProps) {
   const lines = extractLineConfigs(children);
 
@@ -102,7 +102,7 @@ function ChartInner({
       animationDuration={animationDuration}
       animationEasing={animationEasing}
       clipPathId="chart-grow-clip"
-      containerRef={containerRef}
+      containerNode={containerNode}
       data={data}
       enterTransition={enterTransition}
       height={height}
@@ -129,13 +129,13 @@ export function LineChart({
   className = "",
   children,
 }: LineChartProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [containerNode, setContainerNode] = useState<HTMLDivElement | null>(null);
   const margin = { ...DEFAULT_MARGIN, ...marginProp };
 
   return (
     <div
       className={cn("relative w-full", className)}
-      ref={containerRef}
+      ref={setContainerNode}
       style={{ aspectRatio, touchAction: "none" }}
     >
       <ParentSize debounceTime={10}>
@@ -143,7 +143,7 @@ export function LineChart({
           <ChartInner
             animationDuration={animationDuration}
             animationEasing={animationEasing}
-            containerRef={containerRef}
+            containerNode={containerNode}
             data={data}
             enterTransition={enterTransition}
             height={height}

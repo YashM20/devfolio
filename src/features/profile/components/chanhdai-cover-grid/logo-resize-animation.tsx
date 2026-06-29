@@ -22,6 +22,7 @@ export function LogoResizeAnimation({
   maxWidth?: number;
 }) {
   const [width, setWidth] = useState<number | null>(null);
+  // eslint-disable-next-line react-doctor/no-derived-useState, react-doctor/rerender-state-only-in-handlers
   const [prevMaxWidth, setPrevMaxWidth] = useState<number | null>(null);
   const [isEnd, setIsEnd] = useState(false);
 

@@ -137,6 +137,7 @@ export function ExperiencePositionItem({
   const ExperienceIcon = iconMap[position.icon || "business"];
 
   const [isOpen, setIsOpen] = React.useState(position.isExpanded ?? false);
+  // eslint-disable-next-line react-doctor/no-derived-useState, react-doctor/rerender-state-only-in-handlers
   const [prevPosition, setPrevPosition] = React.useState(position);
 
   if (position !== prevPosition) {

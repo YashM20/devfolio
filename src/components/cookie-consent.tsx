@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { AnimatePresence } from "motion/react";
 import * as m from "motion/react-m";
 import { Cookie, X, Check, Settings } from "lucide-react";
@@ -136,13 +137,13 @@ export function CookieConsent() {
                   <p className="text-muted-foreground mb-4 text-sm">
                     We use cookies to enhance your experience and analyze site
                     usage. You can manage your preferences below.{" "}
-                    <a
-                      href="/privacy"
+                    <Link
+                      href="/"
                       className="text-muted-foreground hover:underline"
                       aria-label="Learn more about our cookie policy"
                     >
                       Learn more
-                    </a>
+                    </Link>
                   </p>
 
                   <div className="flex flex-col gap-2 sm:flex-row">

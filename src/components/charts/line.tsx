@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useId, useState } from "react";
+import { useId, useState } from "react";
 import { curveNatural } from "@visx/curve";
 import { LinePath } from "@visx/shape";
 import { useMotionValue, useSpring, useTransform } from "motion/react";
@@ -55,7 +55,6 @@ export function Line({
     xAccessor,
   } = useChart();
 
-  const [pathLength, setPathLength] = useState(0);
   const [pathElement, setPathElement] = useState<SVGPathElement | null>(null);
   const pathLengthMV = useMotionValue(0);
 
@@ -63,48 +62,41 @@ export function Line({
   const id = useId();
   const gradientId = `line-gradient-${dataKey}-${id}`;
 
-  const onPathMeasure = useCallback((len: number) => {
-    setPathLength(len);
-  }, []);
+  // Springs for smooth highlight animation (both offset AND segment length)
+  const springConfig = { stiffness: 180, damping: 28 };
+  const offsetSpring = useSpring(0, springConfig);
+  const segmentLengthSpring = useSpring(0, springConfig);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: data, innerWidth
-  useEffect(() => {
-    if (pathElement && animate) {
-      const len = pathElement.getTotalLength();
-      if (len > 0) {
-        onPathMeasure(len);
-        pathLengthMV.set(len);
-      }
-    }
-  }, [animate, data, innerWidth, pathElement, pathLengthMV, onPathMeasure]);
-
-  // Binary search to find path length at a given X coordinate
-  const findLengthAtX = (targetX: number): number => {
-    const path = pathElement;
-    if (!path || pathLength === 0) {
-      return 0;
-    }
-    let low = 0;
-    let high = pathLength;
-    const tolerance = 0.5;
-
-    while (high - low > tolerance) {
-      const mid = (low + high) / 2;
-      const point = path.getPointAtLength(mid);
-      if (point.x < targetX) {
-        low = mid;
-      } else {
-        high = mid;
-      }
-    }
-    return (low + high) / 2;
-  };
-
-  // Calculate segment bounds for highlight from either selection or hover
+  // Calculate segment bounds and update springs inline during render
   const segmentBounds = (() => {
-    if (!pathElement || pathLength === 0) {
-      return { startLength: 0, segmentLength: 0, isActive: false };
+    if (!pathElement) {
+      return { startLength: 0, segmentLength: 0 };
     }
+
+    const pathLength = pathElement.getTotalLength();
+    pathLengthMV.set(pathLength);
+
+    if (pathLength === 0) {
+      return { startLength: 0, segmentLength: 0 };
+    }
+
+    // Helper: Binary search to find path length at a given X coordinate
+    const findLengthAtX = (targetX: number): number => {
+      let low = 0;
+      let high = pathLength;
+      const tolerance = 0.5;
+
+      while (high - low > tolerance) {
+        const mid = (low + high) / 2;
+        const point = pathElement.getPointAtLength(mid);
+        if (point.x < targetX) {
+          low = mid;
+        } else {
+          high = mid;
+        }
+      }
+      return (low + high) / 2;
+    };
 
     // Selection takes priority over hover
     if (selection?.active) {
@@ -113,12 +105,11 @@ export function Line({
       return {
         startLength,
         segmentLength: endLength - startLength,
-        isActive: true,
       };
     }
 
     if (!tooltipData) {
-      return { startLength: 0, segmentLength: 0, isActive: false };
+      return { startLength: 0, segmentLength: 0 };
     }
 
     const idx = tooltipData.index;
@@ -128,7 +119,7 @@ export function Line({
     const startPoint = data[startIdx];
     const endPoint = data[endIdx];
     if (!(startPoint && endPoint)) {
-      return { startLength: 0, segmentLength: 0, isActive: false };
+      return { startLength: 0, segmentLength: 0 };
     }
 
     const startX = xScale(xAccessor(startPoint)) ?? 0;
@@ -140,25 +131,12 @@ export function Line({
     return {
       startLength,
       segmentLength: endLength - startLength,
-      isActive: true,
     };
   })();
 
-  // Springs for smooth highlight animation (both offset AND segment length)
-  const springConfig = { stiffness: 180, damping: 28 };
-  const offsetSpring = useSpring(0, springConfig);
-  const segmentLengthSpring = useSpring(0, springConfig);
-
-  // Update springs when segment bounds change
-  useEffect(() => {
-    offsetSpring.set(-segmentBounds.startLength);
-    segmentLengthSpring.set(segmentBounds.segmentLength);
-  }, [
-    segmentBounds.startLength,
-    segmentBounds.segmentLength,
-    offsetSpring,
-    segmentLengthSpring,
-  ]);
+  // Set spring targets directly during rendering
+  offsetSpring.set(-segmentBounds.startLength);
+  segmentLengthSpring.set(segmentBounds.segmentLength);
 
   const animatedDasharray = useTransform(
     [segmentLengthSpring, pathLengthMV],

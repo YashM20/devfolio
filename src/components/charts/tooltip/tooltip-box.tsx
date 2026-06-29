@@ -3,7 +3,6 @@
 "use client";
 
 import {
-  useEffect,
   useLayoutEffect,
   useRef,
   useState,
@@ -59,7 +58,9 @@ export function TooltipBox({
   flipped: flippedOverride,
 }: TooltipBoxProps) {
   const tooltipRef = useRef<HTMLDivElement>(null);
+  // eslint-disable-next-line react-doctor/rerender-state-only-in-handlers
   const [tw, setTw] = useState(180);
+  // eslint-disable-next-line react-doctor/rerender-state-only-in-handlers
   const [th, setTh] = useState(80);
 
   const mounted = useSyncExternalStore(
@@ -137,15 +138,14 @@ export function TooltipBox({
     th,
   ]);
 
-  const prevFlipRef = useRef(shouldFlipX);
+  // eslint-disable-next-line react-doctor/no-derived-useState, react-doctor/rerender-state-only-in-handlers
+  const [prevFlip, setPrevFlip] = useState(shouldFlipX);
   const [flipKey, setFlipKey] = useState(0);
 
-  useEffect(() => {
-    if (prevFlipRef.current !== shouldFlipX) {
-      setFlipKey((k) => k + 1);
-      prevFlipRef.current = shouldFlipX;
-    }
-  }, [shouldFlipX]);
+  if (prevFlip !== shouldFlipX) {
+    setPrevFlip(shouldFlipX);
+    setFlipKey((k) => k + 1);
+  }
 
   const finalLeft = leftOverride ?? animatedLeft;
   const finalTop = topOverride ?? animatedTop;

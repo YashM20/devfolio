@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
   // This is required to support PostHog trailing slash API requests
   skipTrailingSlashRedirect: true,
   cacheComponents: true,
+  partialPrefetching: true,
   experimental: {
     viewTransition: true,
     mdxRs: true,

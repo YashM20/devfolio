@@ -5,7 +5,7 @@ import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { AnimatePresence } from "motion/react";
 import * as m from "motion/react-m";
-import { useChat } from "@ai-sdk/react";
+import { useChat, type Message } from "@ai-sdk/react";
 import { Send, MessageCircle, X, Bot, User, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -15,10 +15,10 @@ type AiAssistantContextProps = {
   setIsOpen: (open: boolean) => void;
   isTyping: boolean;
   setIsTyping: (typing: boolean) => void;
-  messages: any[];
+  messages: Message[];
   sendMessage: (message: any) => void;
-  setMessages: (messages: any[]) => void;
-  error: any;
+  setMessages: (messages: Message[]) => void;
+  error: Error | undefined;
   onMessageSent?: (message: string) => void;
   onResponse?: (response: string) => void;
   onError?: (error: string) => void;
@@ -67,7 +67,10 @@ function AiAssistantProvider({
       if (lastMessage && lastMessage.role === "assistant") {
         if (lastMessage.parts) {
           const textParts = lastMessage.parts
-            .flatMap((part: any) => (part.type === "text" ? [part.text] : []))
+            .flatMap((partItem) => {
+              const part = partItem as { type: string; text?: string };
+              return part.type === "text" ? [part.text] : [];
+            })
             .join("");
           onResponse?.(textParts);
         }
@@ -470,19 +473,20 @@ function AiAssistantMessageList({
 }
 
 // Helper component to render message content
-function RenderMessageContent({ message }: { message: any }) {
+function RenderMessageContent({ message }: { message: Message }) {
   if (message.parts) {
     return (
       <>
-        {message.parts.flatMap((part: any) =>
-          part.type === "text"
+        {message.parts.flatMap((partItem) => {
+          const part = partItem as { type: string; text?: string };
+          return part.type === "text"
             ? [
-                <div key={part.text} className="whitespace-pre-wrap">
-                  {part.text}
+                <div key={part.text || ""} className="whitespace-pre-wrap">
+                  {part.text || ""}
                 </div>,
               ]
-            : []
-        )}
+            : [];
+        })}
       </>
     );
   }
@@ -494,7 +498,7 @@ function AiAssistantMessage({
   message,
   className,
   ...props
-}: React.ComponentProps<typeof m.div> & { message: any }) {
+}: React.ComponentProps<typeof m.div> & { message: Message }) {
   return (
     <m.div
       initial={{ opacity: 0, y: 10 }}

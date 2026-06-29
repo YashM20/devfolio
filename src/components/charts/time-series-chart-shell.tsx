@@ -3,7 +3,6 @@
 import {
   Children,
   isValidElement,
-  useCallback,
   useEffect,
   useState,
   type ReactElement,
@@ -50,7 +49,7 @@ export interface TimeSeriesChartInnerProps {
   /** Signature of motion URL state — triggers reveal replay when it changes. */
   revealSignature?: string;
   children: ReactNode;
-  containerRef: React.RefObject<HTMLDivElement | null>;
+  containerNode: HTMLDivElement | null;
   /** Series keys driving y-domain and tooltip (Line / Area / SeriesBar configs). */
   lines: LineConfig[];
   /** SVG clipPath id for grow animation. */
@@ -78,7 +77,7 @@ export function TimeSeriesChartInner({
   enterTransition,
   revealSignature = "",
   children,
-  containerRef,
+  containerNode,
   lines,
   composedBarDataKeys,
   composedBarSize,
@@ -94,20 +93,6 @@ export function TimeSeriesChartInner({
     revealEpoch: 0,
   });
   const { isLoaded, revealEpoch } = loadState;
-
-  const [containerNode, setContainerNode] = useState<HTMLDivElement | null>(
-    null
-  );
-
-  const syncContainerNode = useCallback((node: HTMLDivElement | null) => {
-    setContainerNode(node);
-  }, []);
-
-  useEffect(() => {
-    if (containerRef?.current !== containerNode) {
-      syncContainerNode(containerRef.current);
-    }
-  }, [containerRef, containerNode, syncContainerNode]);
 
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
@@ -163,16 +148,25 @@ export function TimeSeriesChartInner({
     })
   );
 
-  useEffect(() => {
+  // eslint-disable-next-line react-doctor/no-derived-useState, react-doctor/rerender-state-only-in-handlers
+  const [prevRevealSignature, setPrevRevealSignature] = useState(revealSignature);
+
+  if (revealSignature !== prevRevealSignature) {
+    setPrevRevealSignature(revealSignature);
     setLoadState((s) => ({
       revealEpoch: s.revealEpoch + 1,
       isLoaded: false,
     }));
-    const timer = setTimeout(() => {
-      setLoadState((s) => ({ ...s, isLoaded: true }));
-    }, animationDuration);
-    return () => clearTimeout(timer);
-  }, [animationDuration, revealSignature]);
+  }
+
+  useEffect(() => {
+    if (!loadState.isLoaded) {
+      const timer = setTimeout(() => {
+        setLoadState((s) => ({ ...s, isLoaded: true }));
+      }, animationDuration);
+      return () => clearTimeout(timer);
+    }
+  }, [loadState.isLoaded, animationDuration]);
 
   const canInteract = isLoaded;
 
@@ -231,7 +225,7 @@ export function TimeSeriesChartInner({
     columnWidth,
     tooltipData,
     setTooltipData,
-    containerRef,
+    containerRef: { current: containerNode },
     containerNode,
     lines,
     isLoaded,
