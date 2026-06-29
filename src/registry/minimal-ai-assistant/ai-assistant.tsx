@@ -5,9 +5,16 @@ import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { AnimatePresence } from "motion/react";
 import * as m from "motion/react-m";
-import { useChat, type Message } from "@ai-sdk/react";
+import { useChat } from "@ai-sdk/react";
 import { Send, MessageCircle, X, Bot, User, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+
+export interface ChatMessage {
+  id: string;
+  role: "system" | "user" | "assistant" | "data";
+  content?: string;
+  parts?: Array<{ type: string; text?: string }>;
+}
 
 // Context for AI Assistant
 type AiAssistantContextProps = {
@@ -15,9 +22,9 @@ type AiAssistantContextProps = {
   setIsOpen: (open: boolean) => void;
   isTyping: boolean;
   setIsTyping: (typing: boolean) => void;
-  messages: Message[];
+  messages: ChatMessage[];
   sendMessage: (message: any) => void;
-  setMessages: (messages: Message[]) => void;
+  setMessages: (messages: ChatMessage[]) => void;
   error: Error | undefined;
   onMessageSent?: (message: string) => void;
   onResponse?: (response: string) => void;
@@ -87,9 +94,9 @@ function AiAssistantProvider({
     setIsOpen,
     isTyping,
     setIsTyping,
-    messages,
+    messages: messages as ChatMessage[],
     sendMessage,
-    setMessages,
+    setMessages: setMessages as unknown as (messages: ChatMessage[]) => void,
     error,
     onMessageSent,
     onResponse,
@@ -473,7 +480,7 @@ function AiAssistantMessageList({
 }
 
 // Helper component to render message content
-function RenderMessageContent({ message }: { message: Message }) {
+function RenderMessageContent({ message }: { message: ChatMessage }) {
   if (message.parts) {
     return (
       <>
@@ -498,7 +505,7 @@ function AiAssistantMessage({
   message,
   className,
   ...props
-}: React.ComponentProps<typeof m.div> & { message: Message }) {
+}: React.ComponentProps<typeof m.div> & { message: ChatMessage }) {
   return (
     <m.div
       initial={{ opacity: 0, y: 10 }}
