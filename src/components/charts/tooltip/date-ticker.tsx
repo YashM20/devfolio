@@ -1,75 +1,75 @@
 /* eslint-disable react-hooks/refs */
-"use client"
+"use client";
 
-import { useEffect, useRef } from "react"
-import { useSpring } from "motion/react"
-import * as m from "motion/react-m"
+import { useEffect, useRef } from "react";
+import { useSpring } from "motion/react";
+import * as m from "motion/react-m";
 
-const TICKER_ITEM_HEIGHT = 24
+const TICKER_ITEM_HEIGHT = 24;
 
 export interface DateTickerProps {
-  currentIndex: number
-  labels: string[]
-  visible: boolean
+  currentIndex: number;
+  labels: string[];
+  visible: boolean;
 }
 
 export function DateTicker({ currentIndex, labels, visible }: DateTickerProps) {
   // Parse labels into month and day parts
   const parsedLabels = labels.map((label, index) => {
-    const parts = label.split(" ")
-    const month = parts[0] || ""
-    const day = parts[1] || ""
-    return { month, day, full: label, key: `${label}::${index}` }
-  })
+    const parts = label.split(" ");
+    const month = parts[0] || "";
+    const day = parts[1] || "";
+    return { month, day, full: label, key: `${label}::${index}` };
+  });
 
   // Month segments: one entry per consecutive run (Jan → Feb → …), keyed by start index
   const monthSegments = (() => {
-    const segments: { month: string; key: string; startIndex: number }[] = []
+    const segments: { month: string; key: string; startIndex: number }[] = [];
 
     parsedLabels.forEach((label, index) => {
-      const prev = segments.at(-1)
+      const prev = segments.at(-1);
       if (!prev || prev.month !== label.month) {
         segments.push({
           month: label.month,
           key: `${label.month}-${index}`,
           startIndex: index,
-        })
+        });
       }
-    })
+    });
 
-    return segments
-  })()
+    return segments;
+  })();
 
   // Index into monthSegments for the current data point
   const currentMonthIndex = (() => {
     if (currentIndex < 0 || currentIndex >= parsedLabels.length) {
-      return 0
+      return 0;
     }
     for (let i = monthSegments.length - 1; i >= 0; i--) {
-      const segment = monthSegments[i]
+      const segment = monthSegments[i];
       if (segment && segment.startIndex <= currentIndex) {
-        return i
+        return i;
       }
     }
-    return 0
-  })()
+    return 0;
+  })();
 
   // Animated Y offsets
-  const dayY = useSpring(0, { stiffness: 400, damping: 35 })
-  const monthY = useSpring(0, { stiffness: 400, damping: 35 })
+  const dayY = useSpring(0, { stiffness: 400, damping: 35 });
+  const monthY = useSpring(0, { stiffness: 400, damping: 35 });
 
   useEffect(() => {
-    dayY.set(-currentIndex * TICKER_ITEM_HEIGHT)
-  }, [currentIndex, dayY])
+    dayY.set(-currentIndex * TICKER_ITEM_HEIGHT);
+  }, [currentIndex, dayY]);
 
   useEffect(() => {
     if (currentMonthIndex >= 0) {
-      monthY.set(-currentMonthIndex * TICKER_ITEM_HEIGHT)
+      monthY.set(-currentMonthIndex * TICKER_ITEM_HEIGHT);
     }
-  }, [currentMonthIndex, monthY])
+  }, [currentMonthIndex, monthY]);
 
   if (!visible || labels.length === 0) {
-    return null
+    return null;
   }
 
   return (
@@ -110,7 +110,7 @@ export function DateTicker({ currentIndex, labels, visible }: DateTickerProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-DateTicker.displayName = "DateTicker"
+DateTicker.displayName = "DateTicker";

@@ -33,8 +33,7 @@ export const USER = {
       website: "https://reactopia.me",
     },
   ],
-  about:
-    `    I’m a Software Engineer with 4+ years of experience building frontend interfaces, backend services, and mobile applications using JavaScript frameworks and libraries like Next.js, React, React Native, Expo, and Node.js.
+  about: `    I’m a Software Engineer with 4+ years of experience building frontend interfaces, backend services, and mobile applications using JavaScript frameworks and libraries like Next.js, React, React Native, Expo, and Node.js.
   
     I build frontends that are not only easy to use but also thoughtfully designed with user experience in mind, along with strong backend systems that work well at scale.
 

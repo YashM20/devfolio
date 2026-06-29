@@ -5,7 +5,18 @@ role: "Backend Developer (Node.js)"
 duration: "Apr 2024 - May 2024"
 industry: "Digital Media / News"
 client: "Legit (Naij.com Media Limited)"
-skills: ["Node.js", "Express.js", "MongoDB", "jsonwebtoken", "bcrypt", "OpenAI SDK", "Docker", "node-cron", "AWS"]
+skills:
+  [
+    "Node.js",
+    "Express.js",
+    "MongoDB",
+    "jsonwebtoken",
+    "bcrypt",
+    "OpenAI SDK",
+    "Docker",
+    "node-cron",
+    "AWS",
+  ]
 createdAt: "2024-04-01"
 updatedAt: "2024-05-31"
 ---
@@ -21,6 +32,7 @@ The client required a unified, scalable backend platform that could automaticall
 ## Project Objective
 
 Build a production-ready Node.js REST API backend to power the Legit mobile application with an intelligent, secure, and scalable news ecosystem:
+
 - Automated hourly ingestion of news from multiple RSS sources
 - Smart article categorization through configurable keyword intelligence
 - AI-powered fact-checking chatbot using GPT-3.5 Turbo
@@ -75,6 +87,7 @@ Designed a secure authentication system using JWT access/refresh tokens, bcrypt 
 ## Challenges & Solutions
 
 ### Challenges
+
 - Concurrent RSS pipelines creating duplicates.
 - Designing a flexible categorization engine.
 - Missing article images in RSS feeds.
@@ -84,6 +97,7 @@ Designed a secure authentication system using JWT access/refresh tokens, bcrypt 
 - Date consistency across pipelines.
 
 ### Solutions
+
 - GUID-based deduplication checks before database write.
 - Two-tier category fallback system.
 - Random image fallback mechanism for posts without images.
@@ -118,9 +132,11 @@ Designed a secure authentication system using JWT access/refresh tokens, bcrypt 
 ## Architecture & Scalability
 
 ### Architecture Summary
+
 Monolithic Express.js REST API with modular routes, MongoDB data layer, cron-based ingestion pipelines, JWT auth, OpenAI integration, SMTP recovery flow, structured logging, and Dockerized deployment.
 
 ### Scalability Improvements
+
 - Database-driven categories and prompts.
 - Runtime configurable token expiry.
 - Modular route architecture.

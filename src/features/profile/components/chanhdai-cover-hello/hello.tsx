@@ -2,7 +2,7 @@
 
 import { RepeatIcon } from "lucide-react";
 import { AnimatePresence } from "motion/react";
-import * as m from "motion/react-m";;
+import * as m from "motion/react-m";
 import React, { useCallback, useEffect, useState } from "react";
 
 import { ChanhDaiMark } from "@/components/chanhdai-mark";

@@ -29,17 +29,16 @@ export function Projects() {
           className="text-muted-foreground active:scale-[0.96] transition-transform"
           asChild
         >
-          <Link href="/projects" className="flex items-center gap-1 font-mono text-xs">
+          <Link
+            href="/projects"
+            className="flex items-center gap-1 font-mono text-xs"
+          >
             view all <ArrowRightIcon className="size-3" />
           </Link>
         </Button>
       </PanelHeader>
 
-      <CollapsibleList
-        items={PROJECTS}
-        max={4}
-        renderItem={ProjectListItem}
-      />
+      <CollapsibleList items={PROJECTS} max={4} renderItem={ProjectListItem} />
     </Panel>
   );
 }

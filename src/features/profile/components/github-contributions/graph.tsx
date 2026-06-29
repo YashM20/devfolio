@@ -1,15 +1,15 @@
-"use client"
+"use client";
 
-import { use } from "react"
-import { format } from "date-fns"
-import { LoaderIcon } from "lucide-react"
+import { use } from "react";
+import { format } from "date-fns";
+import { LoaderIcon } from "lucide-react";
 
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
-import type { Activity } from "@/registry/contribution-graph"
+} from "@/components/ui/tooltip";
+import type { Activity } from "@/registry/contribution-graph";
 import {
   ContributionGraph,
   ContributionGraphBlock,
@@ -17,14 +17,14 @@ import {
   ContributionGraphFooter,
   ContributionGraphLegend,
   ContributionGraphTotalCount,
-} from "@/registry/contribution-graph"
+} from "@/registry/contribution-graph";
 
 export function GitHubContributionGraph({
   contributions,
 }: {
-  contributions: Promise<Activity[]>
+  contributions: Promise<Activity[]>;
 }) {
-  const data = use(contributions)
+  const data = use(contributions);
 
   return (
     <ContributionGraph
@@ -74,7 +74,7 @@ export function GitHubContributionGraph({
         <ContributionGraphLegend aria-hidden />
       </ContributionGraphFooter>
     </ContributionGraph>
-  )
+  );
 }
 
 export function GitHubContributionFallback() {
@@ -82,5 +82,5 @@ export function GitHubContributionFallback() {
     <div className="flex h-45 w-full items-center justify-center">
       <LoaderIcon className="animate-spin text-muted-foreground" />
     </div>
-  )
+  );
 }

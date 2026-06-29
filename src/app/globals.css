@@ -310,4 +310,3 @@
 @utility animate-fade-in-up {
   animation: fadeInUp 400ms cubic-bezier(0.23, 1, 0.32, 1) forwards;
 }
-

@@ -63,8 +63,19 @@ export function ProjectImage({
   const aspectClass = aspectMap[aspect] || aspectMap.video;
 
   return (
-    <figure className={cn("my-6 overflow-hidden rounded-2xl border border-edge bg-muted/20 p-2", aspect === "portrait" && "max-w-[336px] mx-auto", className)}>
-      <div className={cn("relative overflow-hidden rounded-lg bg-muted", aspectClass)}>
+    <figure
+      className={cn(
+        "my-6 overflow-hidden rounded-2xl border border-edge bg-muted/20 p-2",
+        aspect === "portrait" && "max-w-[336px] mx-auto",
+        className
+      )}
+    >
+      <div
+        className={cn(
+          "relative overflow-hidden rounded-lg bg-muted",
+          aspectClass
+        )}
+      >
         <Image
           src={src}
           alt={alt}
@@ -99,8 +110,19 @@ export function ProjectVideo({
   const aspectClass = aspectMap[aspect] || aspectMap.video;
 
   return (
-    <figure className={cn("my-6 overflow-hidden rounded-2xl border border-edge bg-muted/20 p-2", aspect === "portrait" && "max-w-[336px] mx-auto", className)}>
-      <div className={cn("relative overflow-hidden rounded-lg bg-muted", aspectClass)}>
+    <figure
+      className={cn(
+        "my-6 overflow-hidden rounded-2xl border border-edge bg-muted/20 p-2",
+        aspect === "portrait" && "max-w-[336px] mx-auto",
+        className
+      )}
+    >
+      <div
+        className={cn(
+          "relative overflow-hidden rounded-lg bg-muted",
+          aspectClass
+        )}
+      >
         <video
           src={src}
           controls
@@ -131,7 +153,12 @@ export function ProjectIframe({
   className?: string;
 }) {
   return (
-    <div className={cn("relative my-6 aspect-video w-full overflow-hidden rounded-2xl border border-edge bg-muted/20 p-2", className)}>
+    <div
+      className={cn(
+        "relative my-6 aspect-video w-full overflow-hidden rounded-2xl border border-edge bg-muted/20 p-2",
+        className
+      )}
+    >
       <div className="relative h-full w-full overflow-hidden rounded-lg bg-background">
         <iframe
           src={src}
@@ -161,7 +188,9 @@ export function ProjectGrid({
     <div
       className={cn(
         "my-6 grid gap-4",
-        cols === 3 ? "grid-cols-1 md:grid-cols-3" : "grid-cols-1 md:grid-cols-2",
+        cols === 3
+          ? "grid-cols-1 md:grid-cols-3"
+          : "grid-cols-1 md:grid-cols-2",
         className
       )}
     >
@@ -191,11 +220,22 @@ function SliderCarousel({
   const aspectClass = aspectMap[aspect] || aspectMap.video;
 
   return (
-    <div className={cn("relative my-6 overflow-hidden rounded-2xl border border-edge bg-muted/20 p-2", aspect === "portrait" && "max-w-[336px] mx-auto")}>
-      <div className={cn("overflow-hidden rounded-lg bg-muted", aspectClass)} ref={emblaRef}>
+    <div
+      className={cn(
+        "relative my-6 overflow-hidden rounded-2xl border border-edge bg-muted/20 p-2",
+        aspect === "portrait" && "max-w-[336px] mx-auto"
+      )}
+    >
+      <div
+        className={cn("overflow-hidden rounded-lg bg-muted", aspectClass)}
+        ref={emblaRef}
+      >
         <div className="flex h-full w-full">
           {images.map((src) => (
-            <div className="relative h-full w-full min-w-0 flex-[0_0_100%]" key={src}>
+            <div
+              className="relative h-full w-full min-w-0 flex-[0_0_100%]"
+              key={src}
+            >
               <Image
                 src={src}
                 alt="Slide"
@@ -245,7 +285,12 @@ export function ProjectSlider({
 
   if (!isMounted) {
     return (
-      <div className={cn("relative my-6 overflow-hidden rounded-2xl border border-edge bg-muted/20 p-2", aspect === "portrait" && "max-w-[336px] mx-auto")}>
+      <div
+        className={cn(
+          "relative my-6 overflow-hidden rounded-2xl border border-edge bg-muted/20 p-2",
+          aspect === "portrait" && "max-w-[336px] mx-auto"
+        )}
+      >
         <div className={cn("overflow-hidden rounded-lg bg-muted", aspectClass)}>
           <div className="flex h-full w-full">
             <div className="relative w-full h-full bg-muted">

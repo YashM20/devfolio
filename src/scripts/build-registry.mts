@@ -8,8 +8,11 @@ import { registrySchema } from "shadcn/registry";
 import * as configModule from "../config/registry";
 import * as registryModule from "../registry/index";
 
-const registryConfig = (configModule as any).default?.registryConfig || (configModule as any).registryConfig;
-const registry = (registryModule as any).default?.registry || (registryModule as any).registry;
+const registryConfig =
+  (configModule as any).default?.registryConfig ||
+  (configModule as any).registryConfig;
+const registry =
+  (registryModule as any).default?.registry || (registryModule as any).registry;
 
 if (!registryConfig) {
   throw new Error("Could not load registryConfig from ../config/registry");

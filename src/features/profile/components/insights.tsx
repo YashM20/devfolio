@@ -1,24 +1,19 @@
-import { format } from "date-fns"
+import { format } from "date-fns";
 
-import { cn } from "@/lib/utils"
-import Grid from "@/components/charts/grid"
-import LineChart, { Line } from "@/components/charts/line-chart"
-import { ChartTooltip } from "@/components/charts/tooltip"
-import {
-  Panel,
-  PanelHeader,
-  PanelTitle,
-  PanelTitleSup,
-} from "./panel"
-import { getInsights } from "../data/insights"
+import { cn } from "@/lib/utils";
+import Grid from "@/components/charts/grid";
+import LineChart, { Line } from "@/components/charts/line-chart";
+import { ChartTooltip } from "@/components/charts/tooltip";
+import { Panel, PanelHeader, PanelTitle, PanelTitleSup } from "./panel";
+import { getInsights } from "../data/insights";
 
-const ID = "insights"
+const ID = "insights";
 
 export async function Insights() {
-  const data = await getInsights()
+  const data = await getInsights();
 
   if (data === null) {
-    return null
+    return null;
   }
 
   return (
@@ -103,7 +98,7 @@ export async function Insights() {
         </figcaption>
       </figure>
     </Panel>
-  )
+  );
 }
 
 function Metric({ className, ...props }: React.ComponentProps<"div">) {
@@ -117,7 +112,7 @@ function Metric({ className, ...props }: React.ComponentProps<"div">) {
       )}
       {...props}
     />
-  )
+  );
 }
 
 function MetricLabel({ className, ...props }: React.ComponentProps<"div">) {
@@ -127,7 +122,7 @@ function MetricLabel({ className, ...props }: React.ComponentProps<"div">) {
       className={cn("text-sm leading-none text-muted-foreground", className)}
       {...props}
     />
-  )
+  );
 }
 
 function MetricValue({ className, ...props }: React.ComponentProps<"div">) {
@@ -140,9 +135,9 @@ function MetricValue({ className, ...props }: React.ComponentProps<"div">) {
       )}
       {...props}
     />
-  )
+  );
 }
 
 function InsightsSkeleton() {
-  return <Panel className="h-90.75" />
+  return <Panel className="h-90.75" />;
 }

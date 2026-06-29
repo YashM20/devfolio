@@ -1,64 +1,64 @@
-"use client"
+"use client";
 
-import { useSpring } from "motion/react"
-import * as m from "motion/react-m"
+import { useSpring } from "motion/react";
+import * as m from "motion/react-m";
 
-import { chartCssVars } from "../chart-theme"
+import { chartCssVars } from "../chart-theme";
 
 // Faster spring for crosshair - responsive to mouse movement
-const crosshairSpringConfig = { stiffness: 300, damping: 30 }
+const crosshairSpringConfig = { stiffness: 300, damping: 30 };
 
 export type IndicatorWidth =
   | number // Pixel width
   | "line" // 1px line (default)
   | "thin" // 2px
   | "medium" // 4px
-  | "thick" // 8px
+  | "thick"; // 8px
 
 export interface TooltipIndicatorProps {
   /** X position in pixels (center of the indicator) */
-  x: number
+  x: number;
   /** Height of the indicator */
-  height: number
+  height: number;
   /** Whether the indicator is visible */
-  visible: boolean
+  visible: boolean;
   /**
    * Width of the indicator - number (pixels) or preset.
    * Ignored if `span` is provided.
    */
-  width?: IndicatorWidth
+  width?: IndicatorWidth;
   /**
    * Number of columns/days to span, with current point centered.
    * Requires `columnWidth` to be set.
    */
-  span?: number
+  span?: number;
   /** Width of a single column/day in pixels. Required when using `span`. */
-  columnWidth?: number
+  columnWidth?: number;
   /** Primary color at edges (10% and 90%) */
-  colorEdge?: string
+  colorEdge?: string;
   /** Secondary color at center (50%) */
-  colorMid?: string
+  colorMid?: string;
   /** Whether to fade to transparent at 0% and 100% */
-  fadeEdges?: boolean
+  fadeEdges?: boolean;
   /** Unique ID for the gradient */
-  gradientId?: string
+  gradientId?: string;
 }
 
 function resolveWidth(width: IndicatorWidth): number {
   if (typeof width === "number") {
-    return width
+    return width;
   }
   switch (width) {
     case "line":
-      return 1
+      return 1;
     case "thin":
-      return 2
+      return 2;
     case "medium":
-      return 4
+      return 4;
     case "thick":
-      return 8
+      return 8;
     default:
-      return 1
+      return 1;
   }
 }
 
@@ -77,17 +77,17 @@ export function TooltipIndicator({
   const pixelWidth =
     span !== undefined && columnWidth !== undefined
       ? span * columnWidth
-      : resolveWidth(width)
+      : resolveWidth(width);
 
-  const animatedX = useSpring(x - pixelWidth / 2, crosshairSpringConfig)
+  const animatedX = useSpring(x - pixelWidth / 2, crosshairSpringConfig);
 
-  animatedX.set(x - pixelWidth / 2)
+  animatedX.set(x - pixelWidth / 2);
 
   if (!visible) {
-    return null
+    return null;
   }
 
-  const edgeOpacity = fadeEdges ? 0 : 1
+  const edgeOpacity = fadeEdges ? 0 : 1;
 
   return (
     <g>
@@ -114,7 +114,7 @@ export function TooltipIndicator({
         y={0}
       />
     </g>
-  )
+  );
 }
 
-TooltipIndicator.displayName = "TooltipIndicator"
+TooltipIndicator.displayName = "TooltipIndicator";

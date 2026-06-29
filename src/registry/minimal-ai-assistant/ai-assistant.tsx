@@ -67,7 +67,7 @@ function AiAssistantProvider({
       if (lastMessage && lastMessage.role === "assistant") {
         if (lastMessage.parts) {
           const textParts = lastMessage.parts
-            .flatMap((part: any) => part.type === "text" ? [part.text] : [])
+            .flatMap((part: any) => (part.type === "text" ? [part.text] : []))
             .join("");
           onResponse?.(textParts);
         }
@@ -141,8 +141,9 @@ const aiAssistantTriggerVariants = cva(
 );
 
 // Trigger component
-interface AiAssistantTriggerProps
-  extends VariantProps<typeof aiAssistantTriggerVariants> {
+interface AiAssistantTriggerProps extends VariantProps<
+  typeof aiAssistantTriggerVariants
+> {
   asChild?: boolean;
   className?: string;
   children?: React.ReactNode;
@@ -253,7 +254,8 @@ const aiAssistantChatVariants = cva(
 
 // Chat container component
 interface AiAssistantChatProps
-  extends React.ComponentProps<typeof m.div>,
+  extends
+    React.ComponentProps<typeof m.div>,
     VariantProps<typeof aiAssistantChatVariants> {}
 
 function AiAssistantChat({
@@ -493,7 +495,6 @@ function AiAssistantMessage({
   className,
   ...props
 }: React.ComponentProps<typeof m.div> & { message: any }) {
-
   return (
     <m.div
       initial={{ opacity: 0, y: 10 }}

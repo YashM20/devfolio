@@ -2,7 +2,7 @@
 
 import { ChevronUpIcon } from "lucide-react";
 import { AnimatePresence, useMotionValueEvent, useScroll } from "motion/react";
-import * as m from "motion/react-m";;
+import * as m from "motion/react-m";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";

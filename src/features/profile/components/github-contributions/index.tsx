@@ -1,11 +1,11 @@
-import { Suspense } from "react"
+import { Suspense } from "react";
 
-import { getGitHubContributions } from "@/features/profile/data/github-contributions"
+import { getGitHubContributions } from "@/features/profile/data/github-contributions";
 
-import { GitHubContributionFallback, GitHubContributionGraph } from "./graph"
+import { GitHubContributionFallback, GitHubContributionGraph } from "./graph";
 
 export function GitHubContributions() {
-  const contributions = getGitHubContributions()
+  const contributions = getGitHubContributions();
 
   return (
     <div className="border-x border-edge">
@@ -17,5 +17,5 @@ export function GitHubContributions() {
 
       <div className="h-px" />
     </div>
-  )
+  );
 }

@@ -16,4 +16,4 @@ export const chartCssVars = {
   badgeForeground: "var(--chart-marker-badge-foreground)",
   segmentBackground: "var(--chart-segment-background)",
   segmentLine: "var(--chart-segment-line)",
-} as const
+} as const;

@@ -1,7 +1,7 @@
 import type { Project } from "../types/projects";
 
 export const PROJECTS: Project[] = [
-    {
+  {
     id: "video-live-streaming-platform",
     title: "LivCast",
     period: {

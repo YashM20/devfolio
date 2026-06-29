@@ -19,6 +19,7 @@ The client operates a complex financial intelligence platform handling private e
 ## Project Objective
 
 To design and build a robust, scalable User Access Management (UAM) system that enables:
+
 - Fine-grained access control
 - Secure multi-tenant user management
 - Efficient permission handling across products and entities
@@ -53,20 +54,24 @@ Developed a scalable frontend-driven UAM module using Angular that enables admin
 - Migrated test suite from Jasmine/Karma to Vitest for faster and modern testing.
 
 ### Notification System
+
 - Infinite scroll
 - Polling-based updates (no WebSockets)
 - Dynamic state handling (success/pending/failure)
 - Auto-refresh for pending operations
 
 ### Bulk User Creation
+
 - Background processing
 - Global modal (minimize/maximize across app)
 
 ### Access & Hierarchy
+
 - Implemented SSO configuration UI at organization level.
 - Designed entity hierarchical access system featuring dynamic parent-child relationships, accordion-based recursive UI, multi-parent support, and access sync across hierarchy.
 
 ### Permissions & Performance
+
 - Built permission propagation logic (single node vs entire hierarchy).
 - Optimized checkbox state updates in deep hierarchies.
 - Used `localForage` for handling large datasets client-side.
@@ -78,6 +83,7 @@ Developed a scalable frontend-driven UAM module using Angular that enables admin
 ## Challenges & Solutions
 
 ### Challenges
+
 - Managing deeply nested and dynamic hierarchical data structures.
 - Handling large datasets (thousands of nodes/users) without UI lag.
 - Syncing access across multi-parent hierarchical relationships.
@@ -86,6 +92,7 @@ Developed a scalable frontend-driven UAM module using Angular that enables admin
 - Tech debt from legacy Angular architecture (NgModules, Karma).
 
 ### Solutions
+
 - Designed recursive, optimized hierarchical data models with memoization.
 - Implemented efficient state updates and batching strategies.
 - Introduced `localForage` caching for large datasets.
@@ -118,12 +125,14 @@ Developed a scalable frontend-driven UAM module using Angular that enables admin
 ## Architecture & Scalability
 
 ### Architecture Summary
+
 - Angular-based modular frontend.
 - API-driven permission and user management.
 - Hierarchical data model for entity relationships.
 - Polling-based real-time updates for async operations.
 
 ### Scalability Improvements
+
 - Designed UI to handle deep, dynamic hierarchies without re-render bottlenecks.
 - Implemented client-side caching (`localForage`) for large data.
 - Modular architecture enabling easy addition of new entities/products.

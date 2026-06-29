@@ -1,34 +1,34 @@
-"use client"
+"use client";
 
-import { useId } from "react"
-import { GridColumns, GridRows } from "@visx/grid"
+import { useId } from "react";
+import { GridColumns, GridRows } from "@visx/grid";
 
-import { useChart } from "./chart-context"
-import { chartCssVars } from "./chart-theme"
+import { useChart } from "./chart-context";
+import { chartCssVars } from "./chart-theme";
 
 export interface GridProps {
   /** Show horizontal grid lines. Default: true */
-  horizontal?: boolean
+  horizontal?: boolean;
   /** Show vertical grid lines. Default: false */
-  vertical?: boolean
+  vertical?: boolean;
   /** Number of horizontal grid lines. Default: 5 */
-  numTicksRows?: number
+  numTicksRows?: number;
   /** Number of vertical grid lines. Default: 10 */
-  numTicksColumns?: number
+  numTicksColumns?: number;
   /** Explicit tick values for horizontal grid lines. Overrides numTicksRows. */
-  rowTickValues?: number[]
+  rowTickValues?: number[];
   /** Grid line stroke color. Default: var(--chart-grid) */
-  stroke?: string
+  stroke?: string;
   /** Grid line stroke opacity. Default: 1 */
-  strokeOpacity?: number
+  strokeOpacity?: number;
   /** Grid line stroke width. Default: 1 */
-  strokeWidth?: number
+  strokeWidth?: number;
   /** Grid line dash array. Default: "4,4" for dashed lines */
-  strokeDasharray?: string
+  strokeDasharray?: string;
   /** Enable horizontal fade effect on grid rows (fades at left/right). Default: true */
-  fadeHorizontal?: boolean
+  fadeHorizontal?: boolean;
   /** Enable vertical fade effect on grid columns (fades at top/bottom). Default: false */
-  fadeVertical?: boolean
+  fadeVertical?: boolean;
 }
 
 export function Grid({
@@ -45,25 +45,25 @@ export function Grid({
   fadeVertical = false,
 }: GridProps) {
   const { xScale, yScale, innerWidth, innerHeight, orientation, barScale } =
-    useChart()
+    useChart();
 
   // For bar charts, determine which scale to use for grid lines
   // Horizontal bar charts: vertical grid should use yScale (value scale)
   // Vertical bar charts: horizontal grid uses yScale (value scale)
-  const isHorizontalBarChart = orientation === "horizontal" && barScale
+  const isHorizontalBarChart = orientation === "horizontal" && barScale;
 
   // For vertical grid lines in horizontal bar charts, use yScale (the value scale)
   // For time-based charts, use xScale
-  const columnScale = isHorizontalBarChart ? yScale : xScale
-  const uniqueId = useId()
+  const columnScale = isHorizontalBarChart ? yScale : xScale;
+  const uniqueId = useId();
 
   // Horizontal fade mask (for grid rows - fades left/right)
-  const hMaskId = `grid-rows-fade-${uniqueId}`
-  const hGradientId = `${hMaskId}-gradient`
+  const hMaskId = `grid-rows-fade-${uniqueId}`;
+  const hGradientId = `${hMaskId}-gradient`;
 
   // Vertical fade mask (for grid columns - fades top/bottom)
-  const vMaskId = `grid-cols-fade-${uniqueId}`
-  const vGradientId = `${vMaskId}-gradient`
+  const vMaskId = `grid-cols-fade-${uniqueId}`;
+  const vGradientId = `${vMaskId}-gradient`;
 
   return (
     <g className="chart-grid">
@@ -143,9 +143,9 @@ export function Grid({
         </g>
       )}
     </g>
-  )
+  );
 }
 
-Grid.displayName = "Grid"
+Grid.displayName = "Grid";
 
-export default Grid
+export default Grid;

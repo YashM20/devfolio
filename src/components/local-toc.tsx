@@ -15,7 +15,10 @@ interface TOCItem {
   depth: number;
 }
 
-export function LocalTOC({ className, ...props }: React.ComponentProps<typeof Collapsible>) {
+export function LocalTOC({
+  className,
+  ...props
+}: React.ComponentProps<typeof Collapsible>) {
   const [items, setItems] = useState<TOCItem[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -23,11 +26,13 @@ export function LocalTOC({ className, ...props }: React.ComponentProps<typeof Co
     if (!containerRef.current) return;
 
     // Find the closest ancestor that represents the active tab panel (or the prose container)
-    const parent = containerRef.current.closest('[role="tabpanel"], .prose') || document.body;
-    
+    const parent =
+      containerRef.current.closest('[role="tabpanel"], .prose') ||
+      document.body;
+
     // Find h2 and h3 elements under that parent
     const headingElements = parent.querySelectorAll("h2, h3");
-    
+
     const parsedItems: TOCItem[] = [];
     headingElements.forEach((el) => {
       const title = el.textContent || "";
@@ -52,7 +57,10 @@ export function LocalTOC({ className, ...props }: React.ComponentProps<typeof Co
   return (
     <div ref={containerRef} className="not-prose my-6">
       <Collapsible
-        className={cn("bg-code rounded-lg font-sans border border-edge/30", className)}
+        className={cn(
+          "bg-code rounded-lg font-sans border border-edge/30",
+          className
+        )}
         {...props}
       >
         <CollapsibleTrigger className="group/toc inline-flex w-full items-center justify-between px-4 py-3 text-sm font-medium">

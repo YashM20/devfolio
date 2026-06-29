@@ -6,9 +6,7 @@ export function useMetaColor() {
   const { resolvedTheme } = useTheme();
 
   const metaColor =
-    resolvedTheme !== "dark"
-      ? META_THEME_COLORS.light
-      : META_THEME_COLORS.dark;
+    resolvedTheme !== "dark" ? META_THEME_COLORS.light : META_THEME_COLORS.dark;
 
   const setMetaColor = (color: string) => {
     document

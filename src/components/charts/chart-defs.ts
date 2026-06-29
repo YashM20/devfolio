@@ -3,13 +3,13 @@ import {
   isValidElement,
   type ReactElement,
   type ReactNode,
-} from "react"
+} from "react";
 
 function getChartChildComponentName(child: ReactElement): string {
-  const childType = child.type as { displayName?: string; name?: string }
+  const childType = child.type as { displayName?: string; name?: string };
   return typeof child.type === "function"
     ? childType.displayName || childType.name || ""
-    : ""
+    : "";
 }
 
 const VISX_PATTERN_COMPONENT_NAMES = new Set([
@@ -19,54 +19,54 @@ const VISX_PATTERN_COMPONENT_NAMES = new Set([
   "Hexagons",
   "Path",
   "Pattern",
-])
+]);
 
 /** @visx/pattern default exports use short names (e.g. `Lines`); also match *Pattern* displayNames. */
 export function isPatternDefComponent(child: ReactElement): boolean {
-  const name = getChartChildComponentName(child)
-  return name.includes("Pattern") || VISX_PATTERN_COMPONENT_NAMES.has(name)
+  const name = getChartChildComponentName(child);
+  return name.includes("Pattern") || VISX_PATTERN_COMPONENT_NAMES.has(name);
 }
 
 export function isGradientDefComponent(child: ReactElement): boolean {
-  const name = getChartChildComponentName(child)
+  const name = getChartChildComponentName(child);
   return (
     name.includes("Gradient") ||
     name === "LinearGradient" ||
     name === "RadialGradient"
-  )
+  );
 }
 
 function isChartDefsComponent(child: ReactElement): boolean {
-  return isPatternDefComponent(child) || isGradientDefComponent(child)
+  return isPatternDefComponent(child) || isGradientDefComponent(child);
 }
 
 /** Split hoisted defs: @visx/pattern nodes already wrap `<defs>` and render at the svg root. */
 function partitionChartDefNodes(defNodes: ReactElement[]): {
-  patternDefNodes: ReactElement[]
-  gradientDefNodes: ReactElement[]
+  patternDefNodes: ReactElement[];
+  gradientDefNodes: ReactElement[];
 } {
-  const patternDefNodes: ReactElement[] = []
-  const gradientDefNodes: ReactElement[] = []
+  const patternDefNodes: ReactElement[] = [];
+  const gradientDefNodes: ReactElement[] = [];
 
   for (const node of defNodes) {
     if (isPatternDefComponent(node)) {
-      patternDefNodes.push(node)
+      patternDefNodes.push(node);
     } else {
-      gradientDefNodes.push(node)
+      gradientDefNodes.push(node);
     }
   }
 
-  return { patternDefNodes, gradientDefNodes }
+  return { patternDefNodes, gradientDefNodes };
 }
 
 function collectChartDefsChildren(children: ReactNode): ReactElement[] {
-  const defNodes: ReactElement[] = []
+  const defNodes: ReactElement[] = [];
 
   Children.forEach(children, (child) => {
     if (isValidElement(child) && isChartDefsComponent(child)) {
-      defNodes.push(child)
+      defNodes.push(child);
     }
-  })
+  });
 
-  return defNodes
+  return defNodes;
 }

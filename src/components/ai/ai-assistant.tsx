@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { AnimatePresence } from "motion/react";
-import * as m from "motion/react-m";;
+import * as m from "motion/react-m";
 import { useChat } from "@ai-sdk/react";
 import { useQueryState, parseAsBoolean } from "nuqs";
 import {
@@ -503,9 +503,7 @@ export function AiAssistant() {
                                       className="mb-1 mt-2 text-xs opacity-70"
                                     >
                                       <div className="flex items-center gap-1 text-blue-500 dark:text-blue-400">
-                                        <span className="animate-spin">
-                                          ⚙️
-                                        </span>
+                                        <span className="animate-spin">⚙️</span>
                                         <span>Using {part.toolName}...</span>
                                       </div>
                                     </div>,
@@ -520,7 +518,9 @@ export function AiAssistant() {
                                 case "tool-generateCodeSnippet":
                                   return [
                                     <div
-                                      key={part.toolCallId || JSON.stringify(part)}
+                                      key={
+                                        part.toolCallId || JSON.stringify(part)
+                                      }
                                       className="mt-2 text-xs opacity-70"
                                     >
                                       <details>
@@ -546,7 +546,13 @@ export function AiAssistant() {
                                   }
 
                                   return [
-                                    <div key={typeof part === "string" ? part : JSON.stringify(part)}>
+                                    <div
+                                      key={
+                                        typeof part === "string"
+                                          ? part
+                                          : JSON.stringify(part)
+                                      }
+                                    >
                                       {typeof part === "string" ? (
                                         message.role === "assistant" ? (
                                           <div className="prose prose-sm dark:prose-invert max-w-none overflow-x-auto">

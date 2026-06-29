@@ -1,6 +1,6 @@
 "use client";
 
-import * as m from "motion/react-m";;
+import * as m from "motion/react-m";
 import { useState } from "react";
 
 import { ChanhDaiMark } from "@/components/chanhdai-mark";

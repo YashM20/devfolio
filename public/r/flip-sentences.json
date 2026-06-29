@@ -4,12 +4,8 @@
   "type": "registry:component",
   "title": "Flip Sentences",
   "author": "yash_mhj",
-  "dependencies": [
-    "motion"
-  ],
-  "registryDependencies": [
-    "https://yash.reactopia.me/r/utils.json"
-  ],
+  "dependencies": ["motion"],
+  "registryDependencies": ["https://yash.reactopia.me/r/utils.json"],
   "files": [
     {
       "path": "src/registry/flip-sentences/flip-sentences.tsx",

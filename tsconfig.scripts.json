@@ -17,8 +17,5 @@
     "./src/registry/**/*.ts",
     "./src/config/**/*.ts"
   ],
-  "exclude": [
-    "node_modules",
-    "./src/__registry__"
-  ]
+  "exclude": ["node_modules", "./src/__registry__"]
 }

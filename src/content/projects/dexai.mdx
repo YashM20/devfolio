@@ -5,7 +5,20 @@ role: "Full Stack Developer"
 duration: "Sept 2024 - Dec 2025"
 industry: "SaaS / Enterprise Document Intelligence"
 client: "PromeTechAi Innovations Pvt Ltd"
-skills: ["Next.js", "React", "TypeScript", "Zustand", "Tailwind CSS", "FastAPI", "Python", "YOLOv10", "PaddleOCR", "MongoDB", "AWS"]
+skills:
+  [
+    "Next.js",
+    "React",
+    "TypeScript",
+    "Zustand",
+    "Tailwind CSS",
+    "FastAPI",
+    "Python",
+    "YOLOv10",
+    "PaddleOCR",
+    "MongoDB",
+    "AWS",
+  ]
 createdAt: "2024-09-01"
 updatedAt: "2025-12-31"
 ---
@@ -19,6 +32,7 @@ Enterprises deal with massive volumes of unstructured documents, scanned PDFs, p
 ## Project Objective
 
 Build a fully self-hosted AI-powered document intelligence platform that:
+
 - Detects document layout structure
 - Extracts multilingual text accurately
 - Converts complex tables into structured HTML/JSON
@@ -33,6 +47,7 @@ Build a fully self-hosted AI-powered document intelligence platform that:
 Developed an AI-based document processing platform utilizing custom offline pipelines. The platform ingests documents natively, detects structural layouts (headers, tables, charts) using DocLayout YOLO, extracts text via multilingual PaddleOCR, and provides an intelligent semantic search interface through a Next.js frontend and Python FastAPI backend.
 
 Built a two-product platform using Next.js 16 frontend and Python FastAPI backend:
+
 - **Product 1: Document Processor**: Users upload PDFs or images. The backend runs a three-stage AI pipeline (DocLayout-YOLO for layout detection, PaddleOCR for multilingual OCR, and PP-StructureV3 for table extraction). The frontend provides a split-panel viewer with bounding boxes, overlays, extracted data inspection, and AI chat.
 - **Product 2: Schema Extraction**: Users define schemas or auto-generate them using AI. The system extracts structured values matching schemas, allows editing, exports JSON/CSV/XML, and routes data into APIs, databases, email, or cloud storage.
 
@@ -68,6 +83,7 @@ Built a two-product platform using Next.js 16 frontend and Python FastAPI backen
 ## Challenges & Solutions
 
 ### Challenges
+
 - Heavy memory usage for PDFs during layout analysis.
 - Long-running inference requests causing client connection timeouts.
 - Duplicate detections from object detection models overlapping on text blocks.
@@ -77,6 +93,7 @@ Built a two-product platform using Next.js 16 frontend and Python FastAPI backen
 - Large ML Docker image size making deployments slow.
 
 ### Solutions
+
 - Proactive `psutil` memory monitoring with thresholds to control queue flow.
 - `StreamingResponse` with keep-alive heartbeat tokens to keep connections open.
 - IoU-based duplicate filtering to clean up overlapping bounding boxes.
@@ -111,9 +128,11 @@ Built a two-product platform using Next.js 16 frontend and Python FastAPI backen
 ## Architecture & Scalability
 
 ### Architecture Summary
+
 Frontend (Next.js) handles UI, uploads, workflows, and AI chat. Backend (FastAPI) runs OCR and extraction pipelines. MongoDB stores history and schemas. Supabase manages auth and credits. AWS S3 + CloudFront store and serve assets. Dockerized deployment across environments.
 
 ### Scalability Improvements
+
 - Streaming responses instead of full buffering.
 - Page-by-page PDF processing.
 - Threaded CPU-bound inference.

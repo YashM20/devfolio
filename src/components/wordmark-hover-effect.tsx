@@ -1,6 +1,6 @@
 "use client";
 
-import * as m from "motion/react-m";;
+import * as m from "motion/react-m";
 import React, { useEffect, useRef, useState } from "react";
 
 function WordmarkPaths() {
@@ -35,8 +35,10 @@ export function WordmarkHoverEffect() {
       onMouseMove={(e) => {
         if (containerRef.current) {
           const svgRect = containerRef.current.getBoundingClientRect();
-          const cxPercentage = ((e.clientX - svgRect.left) / svgRect.width) * 100;
-          const cyPercentage = ((e.clientY - svgRect.top) / svgRect.height) * 100;
+          const cxPercentage =
+            ((e.clientX - svgRect.left) / svgRect.width) * 100;
+          const cyPercentage =
+            ((e.clientY - svgRect.top) / svgRect.height) * 100;
           setMaskPosition({
             cx: `${cxPercentage}%`,
             cy: `${cyPercentage}%`,

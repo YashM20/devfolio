@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence } from "motion/react";
-import * as m from "motion/react-m";;
+import * as m from "motion/react-m";
 import { useEffect, useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";

@@ -7,54 +7,70 @@
 import React from "react";
 
 export const Index: Record<string, any> = {
-  "utils": {
+  utils: {
     name: "utils",
     description: "",
     type: "registry:lib",
-    files: [{
-      path: "src/registry/src/lib/utils.ts",
-      type: "registry:lib",
-    }],
+    files: [
+      {
+        path: "src/registry/src/lib/utils.ts",
+        type: "registry:lib",
+      },
+    ],
   },
   "use-controllable-state": {
     name: "use-controllable-state",
     description: "",
     type: "registry:hook",
-    files: [{
-      path: "src/registry/src/hooks/use-layout-effect.tsx",
-      type: "registry:hook",
-    },{
-      path: "src/registry/src/hooks/use-controllable-state.ts",
-      type: "registry:hook",
-    }],
+    files: [
+      {
+        path: "src/registry/src/hooks/use-layout-effect.tsx",
+        type: "registry:hook",
+      },
+      {
+        path: "src/registry/src/hooks/use-controllable-state.ts",
+        type: "registry:hook",
+      },
+    ],
   },
   "minimal-ai-assistant": {
     name: "minimal-ai-assistant",
-    description: "A minimal, customizable AI assistant component with multiple themes and chat functionality.",
+    description:
+      "A minimal, customizable AI assistant component with multiple themes and chat functionality.",
     type: "registry:component",
-    files: [{
-      path: "src/registry/minimal-ai-assistant/ai-assistant.tsx",
-      type: "registry:component",
-    }],
+    files: [
+      {
+        path: "src/registry/minimal-ai-assistant/ai-assistant.tsx",
+        type: "registry:component",
+      },
+    ],
   },
   "minimal-ai-assistant-demo": {
     name: "minimal-ai-assistant-demo",
     description: "",
     type: "registry:example",
-    files: [{
-      path: "src/registry/examples/minimal-ai-assistant-demo.tsx",
-      type: "registry:example",
-    }],
-    component: React.lazy(() => import("@/registry/examples/minimal-ai-assistant-demo.tsx")),
+    files: [
+      {
+        path: "src/registry/examples/minimal-ai-assistant-demo.tsx",
+        type: "registry:example",
+      },
+    ],
+    component: React.lazy(
+      () => import("@/registry/examples/minimal-ai-assistant-demo.tsx")
+    ),
   },
   "simple-chat-api-route": {
     name: "simple-chat-api-route",
     description: "",
     type: "registry:example",
-    files: [{
-      path: "src/registry/examples/simple-chat-api-route.ts",
-      type: "registry:example",
-    }],
-    component: React.lazy(() => import("@/registry/examples/simple-chat-api-route.ts")),
+    files: [
+      {
+        path: "src/registry/examples/simple-chat-api-route.ts",
+        type: "registry:example",
+      },
+    ],
+    component: React.lazy(
+      () => import("@/registry/examples/simple-chat-api-route.ts")
+    ),
   },
-}
+};

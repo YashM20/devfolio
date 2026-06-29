@@ -5,14 +5,8 @@
   "title": "Minimal AI Assistant",
   "author": "yash_mhj",
   "description": "A minimal, customizable AI assistant component with multiple themes and chat functionality.",
-  "dependencies": [
-    "motion",
-    "@ai-sdk/react",
-    "lucide-react"
-  ],
-  "registryDependencies": [
-    "https://yash.reactopia.me/r/utils.json"
-  ],
+  "dependencies": ["motion", "@ai-sdk/react", "lucide-react"],
+  "registryDependencies": ["https://yash.reactopia.me/r/utils.json"],
   "files": [
     {
       "path": "src/registry/minimal-ai-assistant/ai-assistant.tsx",

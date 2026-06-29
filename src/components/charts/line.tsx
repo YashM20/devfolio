@@ -1,35 +1,35 @@
-"use client"
+"use client";
 
-import { useCallback, useEffect, useId, useState } from "react"
-import { curveNatural } from "@visx/curve"
-import { LinePath } from "@visx/shape"
+import { useCallback, useEffect, useId, useState } from "react";
+import { curveNatural } from "@visx/curve";
+import { LinePath } from "@visx/shape";
 import { useMotionValue, useSpring, useTransform } from "motion/react";
 import * as m from "motion/react-m";
 
-import { useChart } from "./chart-context"
-import { chartCssVars } from "./chart-theme"
-import { ChartRevealClip } from "./chart-reveal-clip"
+import { useChart } from "./chart-context";
+import { chartCssVars } from "./chart-theme";
+import { ChartRevealClip } from "./chart-reveal-clip";
 
 // CurveFactory type - simplified version compatible with visx
 // biome-ignore lint/suspicious/noExplicitAny: d3 curve factory type
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type CurveFactory = any
+type CurveFactory = any;
 
 export interface LineProps {
   /** Key in data to use for y values */
-  dataKey: string
+  dataKey: string;
   /** Stroke color. Default: var(--chart-line-primary) */
-  stroke?: string
+  stroke?: string;
   /** Stroke width. Default: 2.5 */
-  strokeWidth?: number
+  strokeWidth?: number;
   /** Curve function. Default: curveNatural */
-  curve?: CurveFactory
+  curve?: CurveFactory;
   /** Whether to animate the line. Default: true */
-  animate?: boolean
+  animate?: boolean;
   /** Whether to fade edges with gradient. Default: true */
-  fadeEdges?: boolean
+  fadeEdges?: boolean;
   /** Whether to show highlight segment on hover. Default: true */
-  showHighlight?: boolean
+  showHighlight?: boolean;
 }
 
 export function Line({
@@ -53,127 +53,125 @@ export function Line({
     enterTransition,
     revealEpoch,
     xAccessor,
-  } = useChart()
+  } = useChart();
 
-  const [pathLength, setPathLength] = useState(0)
-  const [pathElement, setPathElement] = useState<SVGPathElement | null>(null)
-  const pathLengthMV = useMotionValue(0)
+  const [pathLength, setPathLength] = useState(0);
+  const [pathElement, setPathElement] = useState<SVGPathElement | null>(null);
+  const pathLengthMV = useMotionValue(0);
 
   // Unique gradient ID for this line
-  const id = useId()
-  const gradientId = `line-gradient-${dataKey}-${id}`
+  const id = useId();
+  const gradientId = `line-gradient-${dataKey}-${id}`;
 
   const onPathMeasure = useCallback((len: number) => {
-    setPathLength(len)
-  }, [])
+    setPathLength(len);
+  }, []);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: data, innerWidth
   useEffect(() => {
     if (pathElement && animate) {
-      const len = pathElement.getTotalLength()
+      const len = pathElement.getTotalLength();
       if (len > 0) {
-        onPathMeasure(len)
-        pathLengthMV.set(len)
+        onPathMeasure(len);
+        pathLengthMV.set(len);
       }
     }
-  }, [animate, data, innerWidth, pathElement, pathLengthMV, onPathMeasure])
+  }, [animate, data, innerWidth, pathElement, pathLengthMV, onPathMeasure]);
 
   // Binary search to find path length at a given X coordinate
   const findLengthAtX = (targetX: number): number => {
-    const path = pathElement
+    const path = pathElement;
     if (!path || pathLength === 0) {
-      return 0
+      return 0;
     }
-    let low = 0
-    let high = pathLength
-    const tolerance = 0.5
+    let low = 0;
+    let high = pathLength;
+    const tolerance = 0.5;
 
     while (high - low > tolerance) {
-      const mid = (low + high) / 2
-      const point = path.getPointAtLength(mid)
+      const mid = (low + high) / 2;
+      const point = path.getPointAtLength(mid);
       if (point.x < targetX) {
-        low = mid
+        low = mid;
       } else {
-        high = mid
+        high = mid;
       }
     }
-    return (low + high) / 2
-  }
+    return (low + high) / 2;
+  };
 
   // Calculate segment bounds for highlight from either selection or hover
   const segmentBounds = (() => {
     if (!pathElement || pathLength === 0) {
-      return { startLength: 0, segmentLength: 0, isActive: false }
+      return { startLength: 0, segmentLength: 0, isActive: false };
     }
 
     // Selection takes priority over hover
     if (selection?.active) {
-      const startLength = findLengthAtX(selection.startX)
-      const endLength = findLengthAtX(selection.endX)
+      const startLength = findLengthAtX(selection.startX);
+      const endLength = findLengthAtX(selection.endX);
       return {
         startLength,
         segmentLength: endLength - startLength,
         isActive: true,
-      }
+      };
     }
 
     if (!tooltipData) {
-      return { startLength: 0, segmentLength: 0, isActive: false }
+      return { startLength: 0, segmentLength: 0, isActive: false };
     }
 
-    const idx = tooltipData.index
-    const startIdx = Math.max(0, idx - 1)
-    const endIdx = Math.min(data.length - 1, idx + 1)
+    const idx = tooltipData.index;
+    const startIdx = Math.max(0, idx - 1);
+    const endIdx = Math.min(data.length - 1, idx + 1);
 
-    const startPoint = data[startIdx]
-    const endPoint = data[endIdx]
+    const startPoint = data[startIdx];
+    const endPoint = data[endIdx];
     if (!(startPoint && endPoint)) {
-      return { startLength: 0, segmentLength: 0, isActive: false }
+      return { startLength: 0, segmentLength: 0, isActive: false };
     }
 
-    const startX = xScale(xAccessor(startPoint)) ?? 0
-    const endX = xScale(xAccessor(endPoint)) ?? 0
+    const startX = xScale(xAccessor(startPoint)) ?? 0;
+    const endX = xScale(xAccessor(endPoint)) ?? 0;
 
-    const startLength = findLengthAtX(startX)
-    const endLength = findLengthAtX(endX)
+    const startLength = findLengthAtX(startX);
+    const endLength = findLengthAtX(endX);
 
     return {
       startLength,
       segmentLength: endLength - startLength,
       isActive: true,
-    }
-  })()
+    };
+  })();
 
   // Springs for smooth highlight animation (both offset AND segment length)
-  const springConfig = { stiffness: 180, damping: 28 }
-  const offsetSpring = useSpring(0, springConfig)
-  const segmentLengthSpring = useSpring(0, springConfig)
+  const springConfig = { stiffness: 180, damping: 28 };
+  const offsetSpring = useSpring(0, springConfig);
+  const segmentLengthSpring = useSpring(0, springConfig);
 
   // Update springs when segment bounds change
   useEffect(() => {
-    offsetSpring.set(-segmentBounds.startLength)
-    segmentLengthSpring.set(segmentBounds.segmentLength)
+    offsetSpring.set(-segmentBounds.startLength);
+    segmentLengthSpring.set(segmentBounds.segmentLength);
   }, [
     segmentBounds.startLength,
     segmentBounds.segmentLength,
     offsetSpring,
     segmentLengthSpring,
-  ])
-
-
+  ]);
 
   const animatedDasharray = useTransform(
     [segmentLengthSpring, pathLengthMV],
     ([latestSegment, latestLength]) => `${latestSegment} ${latestLength}`
-  )
+  );
 
   // Get y value for a data point
   const getY = (d: Record<string, unknown>) => {
-    const value = d[dataKey]
-    return typeof value === "number" ? (yScale(value) ?? 0) : 0
-  }
+    const value = d[dataKey];
+    return typeof value === "number" ? (yScale(value) ?? 0) : 0;
+  };
 
-  const isHovering = tooltipData !== null || selection?.active === true
+  const isHovering = tooltipData !== null || selection?.active === true;
 
   return (
     <>
@@ -244,7 +242,7 @@ export function Line({
         />
       )}
     </>
-  )
+  );
 }
 
-Line.displayName = "Line"
+Line.displayName = "Line";

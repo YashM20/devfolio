@@ -5,7 +5,15 @@ role: "Frontend Developer (React Native)"
 duration: "May 2022 - May 2023"
 industry: "Retail / Point of Sale (POS)"
 client: "PIPLI TECHNOLOGIES PRIVATE LIMITED"
-skills: ["React Native", "Expo SDK", "Redux", "AsyncStorage", "React Navigation", "Vitest"]
+skills:
+  [
+    "React Native",
+    "Expo SDK",
+    "Redux",
+    "AsyncStorage",
+    "React Navigation",
+    "Vitest",
+  ]
 createdAt: "2022-05-01"
 updatedAt: "2023-05-31"
 ---
@@ -64,6 +72,7 @@ Built a cross-platform React Native mobile POS application using Expo SDK. The a
 ## Challenges & Solutions
 
 ### Challenges
+
 - Managing extremely complex screens with multiple payment method states updating in real-time without UI lag.
 - Implementing split-payment math where 5 different payment amounts must be dynamically calculated as the user types.
 - Generating print-quality PDF invoices entirely on the client side without any server-side templating.
@@ -72,6 +81,7 @@ Built a cross-platform React Native mobile POS application using Expo SDK. The a
 - Coordinating with 6 different backend microservices on different IPs/ports with varying authentication requirements.
 
 ### Solutions
+
 - Used Redux Persist with AsyncStorage to ensure cart and auth state survive crashes and restarts.
 - Built a unified payment state calculator that recomputes `totalPaidAmount` across all 5 channels whenever any single amount changes.
 - Used `expo-print` to compile custom HTML strings with inline CSS and base64 images into standalone PDFs, then `expo-file-system` to read file metrics for upload.
@@ -104,9 +114,11 @@ Built a cross-platform React Native mobile POS application using Expo SDK. The a
 ## Architecture & Scalability
 
 ### Architecture Summary
+
 Atomically-structured React Native application using a Drawer + Stack navigation pattern with transparent modal overlays. State is managed centrally via Redux (2 reducers: User + Cart) with full disk persistence via Redux Persist. The app communicates with 6 distributed backend microservices (across Azure and GCP) through 8 dedicated API modules using fetch and Axios. Hardware integration covers camera (barcode scanner), GPS (location gating), file system (PDF storage/upload), and printing (receipt generation). The component layer follows an atoms/templates pattern for reusable UI elements.
 
 ### Scalability Improvements
+
 - Decoupled all API calls into 8 separate modules, each handling a single microservice; new services can be added without touching existing code.
 - Built heavily atomized components (AlertBox, LoginButton, PrincipalButton, MenuImage) used across all 15+ screens.
 - Centralized all backend URLs in `ApiConfig.js`; environment switching requires changing a single file.
