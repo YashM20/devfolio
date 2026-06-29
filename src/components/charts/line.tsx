@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useId, useState } from "react"
+import { useCallback, useEffect, useId, useState } from "react"
 import { curveNatural } from "@visx/curve"
 import { LinePath } from "@visx/shape"
 import { useMotionValue, useSpring, useTransform } from "motion/react";
@@ -55,7 +55,6 @@ export function Line({
     xAccessor,
   } = useChart()
 
-  // eslint-disable-next-line react-doctor/no-derived-state
   const [pathLength, setPathLength] = useState(0)
   const [pathElement, setPathElement] = useState<SVGPathElement | null>(null)
   const pathLengthMV = useMotionValue(0)
@@ -64,16 +63,20 @@ export function Line({
   const id = useId()
   const gradientId = `line-gradient-${dataKey}-${id}`
 
+  const onPathMeasure = useCallback((len: number) => {
+    setPathLength(len)
+  }, [])
+
   // biome-ignore lint/correctness/useExhaustiveDependencies: data, innerWidth
   useEffect(() => {
     if (pathElement && animate) {
       const len = pathElement.getTotalLength()
       if (len > 0) {
-        setPathLength(len)
+        onPathMeasure(len)
         pathLengthMV.set(len)
       }
     }
-  }, [animate, data, innerWidth, pathElement, pathLengthMV])
+  }, [animate, data, innerWidth, pathElement, pathLengthMV, onPathMeasure])
 
   // Binary search to find path length at a given X coordinate
   const findLengthAtX = (targetX: number): number => {

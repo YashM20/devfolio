@@ -18,6 +18,7 @@ export function RealismButton({
 }: RealismButtonProps) {
   return (
     <button
+      type="button"
       onClick={onClick}
       disabled={disabled}
       className={cn(

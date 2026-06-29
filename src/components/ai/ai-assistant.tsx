@@ -629,6 +629,7 @@ export function AiAssistant() {
                         <div className="max-w-[80%] rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-red-700 dark:border-red-400/20 dark:bg-red-500/10 dark:text-red-200">
                           <p className="text-sm">{error}</p>
                           <button
+                            type="button"
                             onClick={() => setError(null)}
                             className="mt-2 text-xs text-red-600 underline hover:text-red-800 dark:text-red-300 dark:hover:text-red-100"
                           >

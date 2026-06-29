@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { AnimatePresence } from "motion/react";
+import * as m from "motion/react-m";
 import { Cookie, X, Check, Settings } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -115,7 +116,7 @@ export function CookieConsent() {
 
   return (
     <AnimatePresence>
-      <motion.div
+      <m.div
         initial={{ opacity: 0, y: 100 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 100 }}
@@ -136,10 +137,8 @@ export function CookieConsent() {
                     We use cookies to enhance your experience and analyze site
                     usage. You can manage your preferences below.{" "}
                     <a
-                      href="#"
+                      href="/privacy"
                       className="text-muted-foreground hover:underline"
-                      target="_blank"
-                      rel="noopener noreferrer"
                       aria-label="Learn more about our cookie policy"
                     >
                       Learn more
@@ -279,7 +278,7 @@ export function CookieConsent() {
             </>
           )}
         </Card>
-      </motion.div>
+      </m.div>
     </AnimatePresence>
   );
 }

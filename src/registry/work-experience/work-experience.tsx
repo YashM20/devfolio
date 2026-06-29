@@ -137,10 +137,10 @@ export function ExperiencePositionItem({
   const ExperienceIcon = iconMap[position.icon || "business"];
 
   const [isOpen, setIsOpen] = React.useState(position.isExpanded ?? false);
-  const [prevIsExpanded, setPrevIsExpanded] = React.useState(position.isExpanded);
+  const [prevPosition, setPrevPosition] = React.useState(position);
 
-  if (position.isExpanded !== prevIsExpanded) {
-    setPrevIsExpanded(position.isExpanded);
+  if (position !== prevPosition) {
+    setPrevPosition(position);
     setIsOpen(position.isExpanded ?? false);
   }
 

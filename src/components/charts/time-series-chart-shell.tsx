@@ -3,6 +3,7 @@
 import {
   Children,
   isValidElement,
+  useCallback,
   useEffect,
   useState,
   type ReactElement,
@@ -91,14 +92,17 @@ export function TimeSeriesChartInner({
   const [loadState, setLoadState] = useState({ isLoaded: false, revealEpoch: 0 })
   const { isLoaded, revealEpoch } = loadState
 
-  // eslint-disable-next-line react-doctor/no-derived-state
   const [containerNode, setContainerNode] = useState<HTMLDivElement | null>(null)
+
+  const syncContainerNode = useCallback((node: HTMLDivElement | null) => {
+    setContainerNode(node)
+  }, [])
 
   useEffect(() => {
     if (containerRef?.current !== containerNode) {
-      setContainerNode(containerRef.current)
+      syncContainerNode(containerRef.current)
     }
-  }, [containerRef, containerNode])
+  }, [containerRef, containerNode, syncContainerNode])
 
   const innerWidth = width - margin.left - margin.right
   const innerHeight = height - margin.top - margin.bottom

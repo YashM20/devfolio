@@ -79,11 +79,16 @@ function Carousel({
     }
   };
 
+  const setApiRef = React.useRef(setApi);
   React.useEffect(() => {
-    if (!api || !setApi) return;
-    // eslint-disable-next-line react-doctor/no-pass-data-to-parent
-    setApi(api);
-  }, [api, setApi]);
+    setApiRef.current = setApi;
+  }, [setApi]);
+
+  React.useEffect(() => {
+    if (api && setApiRef.current) {
+      setApiRef.current(api);
+    }
+  }, [api]);
 
   React.useEffect(() => {
     if (!api) return;
@@ -124,6 +129,7 @@ function Carousel({
       <div
         onKeyDownCapture={handleKeyDown}
         className={cn("relative", className)}
+        // eslint-disable-next-line react-doctor/prefer-tag-over-role
         role="region"
         aria-roledescription="carousel"
         data-slot="carousel"
@@ -161,6 +167,7 @@ function CarouselItem({ className, ...props }: React.ComponentProps<"div">) {
 
   return (
     <div
+      // eslint-disable-next-line react-doctor/prefer-tag-over-role
       role="group"
       aria-roledescription="slide"
       data-slot="carousel-item"

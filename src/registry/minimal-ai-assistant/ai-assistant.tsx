@@ -338,6 +338,7 @@ function AiAssistantHeaderActions({
       {children || (
         <>
           <button
+            type="button"
             onClick={() => setMessages([])}
             className="hover:bg-accent rounded p-1 transition-colors"
             title="Clear chat"
@@ -345,6 +346,7 @@ function AiAssistantHeaderActions({
             <Trash2 className="h-4 w-4" />
           </button>
           <button
+            type="button"
             onClick={() => setIsOpen(false)}
             className="hover:bg-accent rounded p-1 transition-colors"
             title="Close"
@@ -435,6 +437,7 @@ function AiAssistantSuggestions({
       <p className="text-muted-foreground mb-2 text-sm">Try asking:</p>
       {suggestions.map((suggestion) => (
         <button
+          type="button"
           key={suggestion}
           onClick={() => handleSuggestionClick(suggestion)}
           className="hover:bg-accent block w-full rounded border p-2 text-left text-sm transition-colors"

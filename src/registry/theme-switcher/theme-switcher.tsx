@@ -21,6 +21,7 @@ function ThemeOption({
 }) {
   return (
     <button
+      type="button"
       className={cn(
         "relative flex size-8 cursor-default items-center justify-center rounded-full transition-all [&_svg]:size-4",
         isActive

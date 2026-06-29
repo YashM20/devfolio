@@ -106,7 +106,9 @@ export function ProjectVideo({
           controls
           aria-label={caption || "Project video"}
           className="h-full w-full object-cover"
-        />
+        >
+          <track kind="captions" />
+        </video>
         <div className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-inset ring-black/10 dark:ring-white/10" />
       </div>
       {caption && (
@@ -209,6 +211,7 @@ function SliderCarousel({
       </div>
 
       <button
+        type="button"
         onClick={scrollPrev}
         className="absolute left-4 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-edge bg-background/80 text-foreground backdrop-blur-xs transition-[background-color,border-color,transform] duration-150 ease-out hover:bg-background active:scale-[0.96] before:absolute before:-inset-2 before:content-['']"
         aria-label="Previous slide"
@@ -217,6 +220,7 @@ function SliderCarousel({
       </button>
 
       <button
+        type="button"
         onClick={scrollNext}
         className="absolute right-4 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-edge bg-background/80 text-foreground backdrop-blur-xs transition-[background-color,border-color,transform] duration-150 ease-out hover:bg-background active:scale-[0.96] before:absolute before:-inset-2 before:content-['']"
         aria-label="Next slide"
