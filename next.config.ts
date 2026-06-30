@@ -8,9 +8,12 @@ const nextConfig: NextConfig = {
   skipTrailingSlashRedirect: true,
   cacheComponents: true,
   partialPrefetching: true,
+  reactCompiler: true,
   experimental: {
     viewTransition: true,
     mdxRs: true,
+    turbopackFileSystemCacheForBuild: true,
+    turbopackRustReactCompiler: true,
   },
   logging: {
     browserToTerminal: true,

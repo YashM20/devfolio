@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
 @plugin "@tailwindcss/typography";
 
@@ -309,4 +310,26 @@
 
 @utility animate-fade-in-up {
   animation: fadeInUp 400ms cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+@utility no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility diagonal-stripes {
+  @apply [--pattern-foreground:var(--color-edge)]/56;
+  @apply bg-[repeating-linear-gradient(315deg,var(--pattern-foreground)_0,var(--pattern-foreground)_1px,transparent_0,transparent_50%)] bg-size-[10px_10px];
+}
+
+@utility stripe-divider {
+  @apply relative h-8;
+  &:before {
+    content: "";
+    @apply absolute left-[-100vw] -z-1 h-full w-[200vw] diagonal-stripes;
+  }
 }

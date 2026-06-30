@@ -16,6 +16,7 @@ export const maxDuration = 30;
 export async function POST(req: Request) {
   try {
     const { messages } = await req.json();
+    const modelMessages = await convertToModelMessages(messages);
 
     // Using createUIMessageStream for better streaming experience
     const stream = createUIMessageStream({
@@ -23,7 +24,7 @@ export async function POST(req: Request) {
         const result = streamText({
           model: google("gemini-2.5-flash"),
           system: "You are a helpful assistant. Be concise and friendly.",
-          messages: convertToModelMessages(messages),
+          messages: modelMessages,
         });
 
         result.consumeStream();

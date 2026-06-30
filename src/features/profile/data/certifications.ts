@@ -1,17 +1,38 @@
 import type { Certification } from "../types/certifications";
 
 export const CERTIFICATIONS: Certification[] = [
-  // {
-  //   title: "Certificate of Trademark Registration No. 543682",
-  //   issuer: "Intellectual Property Office of Viet Nam",
-  //   issuerLogoURL:
-  //     "https://assets.chanhdai.com/images/companies/ipvietnam.webp",
-  //   issueDate: "2025-05-08",
-  //   credentialID: "543682",
-  //   credentialURL:
-  //     "https://drive.google.com/file/d/1x7YzlK1kyz16h28ux9k3KAwnZFAabsvq/view?usp=sharing",
-  // },
-
+  {
+    title: "Claude Code in Action",
+    issuer: "Anthropic",
+    issuerIconName: "anthropic",
+    issueDate: "2026-06-29",
+    credentialID: "fczzvatnvfoa",
+    credentialURL: "https://verify.skilljar.com/c/fczzvatnvfoa",
+  },
+  {
+    title: "Building with the Claude API",
+    issuer: "Anthropic",
+    issuerIconName: "anthropic",
+    issueDate: "2026-06-29",
+    credentialID: "gius4dsdrjxx",
+    credentialURL: "https://verify.skilljar.com/c/gius4dsdrjxx",
+  },
+  {
+    title: "Introduction to Model Context Protocol",
+    issuer: "Anthropic",
+    issuerIconName: "anthropic",
+    issueDate: "2026-06-29",
+    credentialID: "wxz25enfjvdm",
+    credentialURL: "https://verify.skilljar.com/c/wxz25enfjvdm",
+  },
+  {
+    title: "Introduction to agent skills",
+    issuer: "Anthropic",
+    issuerIconName: "anthropic",
+    issueDate: "2026-06-02",
+    credentialID: "4vkyoin64j5d",
+    credentialURL: "https://verify.skilljar.com/c/4vkyoin64j5d",
+  },
   {
     title: "Next.js App Router Fundamentals",
     issuer: "Vercel",

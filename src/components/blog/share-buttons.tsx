@@ -7,7 +7,6 @@ import {
   XIcon,
   MailIcon,
   Share2Icon,
-  TwitterIcon,
 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -48,11 +47,13 @@ export function ShareButtons({
       toast.success("Link copied to clipboard");
       setIsOpen(false);
     } catch (error) {
+      console.error(error)
       toast.error("Failed to copy link");
     }
   };
 
   const handleShare = (shareUrl: string, platform: string) => {
+    console.log(platform)
     window.open(shareUrl, "_blank", "noopener,noreferrer");
     setIsOpen(false);
   };
