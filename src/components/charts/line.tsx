@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
-import { curveNatural } from "@visx/curve";
+import { curveNatural, curveMonotoneX } from "@visx/curve";
 import { LinePath } from "@visx/shape";
 import { useMotionValue, useSpring, useTransform } from "motion/react";
 import * as m from "motion/react-m";
@@ -36,7 +36,7 @@ export function Line({
   dataKey,
   stroke = chartCssVars.linePrimary,
   strokeWidth = 2.5,
-  curve = curveNatural,
+  curve = curveMonotoneX,
   animate = true,
   fadeEdges = true,
   showHighlight = true,

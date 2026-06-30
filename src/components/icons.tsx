@@ -129,6 +129,42 @@ export const Icons = {
       />
     </svg>
   ),
+  anthropic: (props: IconProps) => (
+    <svg viewBox="0 0 24 24" {...props}>
+      <path
+        d="M17.3 3.54h-3.67l6.7 16.92H24Zm-10.61 0L0 20.46h3.74l1.37-3.55h7.01l1.37 3.55h3.74L10.54 3.54Zm-.37 10.22 2.29-5.95 2.29 5.95Z"
+        fill="currentColor"
+      />
+    </svg>
+  ),
+  linkedin: (props: IconProps) => (
+    <svg viewBox="0 0 24 24" {...props}>
+      <path
+        d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67h-3.55V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.29zM5.34 7.43c-1.14 0-2.06-.93-2.06-2.07 0-1.14.92-2.06 2.06-2.06 1.14 0 2.06.93 2.06 2.06 0 1.14-.93 2.07-2.06 2.07zm1.78 13.02H3.56V9h3.56v11.45z"
+        fill="currentColor"
+      />
+    </svg>
+  ),
+  udemy: (props: IconProps) => (
+    <svg viewBox="0 0 24 24" {...props}>
+      <path
+        d="M12 0L5.81 3.57v3.57l6.19-3.57 6.19 3.57V3.57zM5.81 10.15v8.14c0 1.85.59 3.24 1.74 4.23S10.18 24 11.97 24s3.27-.48 4.45-1.47c1.18-.99 1.77-2.44 1.77-4.31v-8.06h-3.24v7.85c0 2.04-1.51 3.06-2.95 3.06-1.43 0-2.95-.99-2.95-3.03v-7.88z"
+        fill="currentColor"
+      />
+    </svg>
+  ),
+  scaler: (props: IconProps) => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <line x1="7" y1="20" x2="13" y2="4" />
+      <polyline points="16 7 21 12 16 17" />
+    </svg>
+  ),
+  creart: (props: IconProps) => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M12 20h9" />
+      <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
+    </svg>
+  ),
 
   shadcn: (props: IconProps) => (
     <svg viewBox="0 0 256 256" {...props}>
