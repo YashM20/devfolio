@@ -37,48 +37,6 @@ export function calculateReadingTime(content: string): {
 }
 
 /**
- * Extract headings from content for table of contents
- */
-function extractHeadings(content: string): Array<{
-  id: string;
-  text: string;
-  level: number;
-}> {
-  const headingRegex = /^(#{1,6})\s+(.+)$/gm;
-  const headings: Array<{ id: string; text: string; level: number }> = [];
-  let match;
-
-  while ((match = headingRegex.exec(content)) !== null) {
-    const level = match[1].length;
-    const text = match[2].trim();
-    const id = text
-      .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, "")
-      .replace(/\s+/g, "-")
-      .replace(/-+/g, "-")
-      .replace(/^-|-$/g, "");
-
-    headings.push({ id, text, level });
-  }
-
-  return headings;
-}
-
-/**
- * Get current reading progress based on scroll position
- */
-function getReadingProgress(element: HTMLElement | null): number {
-  if (!element) return 0;
-
-  const { scrollTop, scrollHeight, clientHeight } = element;
-  const denominator = scrollHeight - clientHeight;
-  if (denominator <= 0) return 0;
-  const progress = scrollTop / denominator;
-
-  return Math.min(Math.max(progress, 0), 1);
-}
-
-/**
  * Format social sharing URLs
  */
 export function getSocialShareUrls(

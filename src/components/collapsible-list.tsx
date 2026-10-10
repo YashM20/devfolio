@@ -26,7 +26,7 @@ export function CollapsibleList<T>({
       {items.slice(0, max).map((award, index) => (
         <div
           key={typeof keyExtractor === "function" ? keyExtractor(award) : index}
-          className="border-edge border-b"
+          className="border-b border-edge"
         >
           <RenderItem item={award} />
         </div>
@@ -40,7 +40,7 @@ export function CollapsibleList<T>({
                 ? keyExtractor(award)
                 : max + index
             }
-            className="border-edge border-b"
+            className="border-b border-edge"
           >
             <RenderItem item={award} />
           </div>

@@ -1,7 +1,6 @@
 "use client";
 
-import { DownloadIcon, TriangleDashedIcon, TypeIcon } from "lucide-react";
-import Link from "next/link";
+import { TypeIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 import { toast } from "sonner";
 

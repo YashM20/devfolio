@@ -16,12 +16,12 @@ export function ReadingTime({
   showIcon = true,
   showWords = false,
 }: ReadingTimeProps) {
-  const { minutes, words, text } = calculateReadingTime(content);
+  const { words, text } = calculateReadingTime(content);
 
   return (
     <div
       className={cn(
-        "text-muted-foreground flex items-center gap-1.5 text-sm",
+        "flex items-center gap-1.5 text-sm text-muted-foreground",
         className
       )}
     >

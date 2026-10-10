@@ -18,7 +18,7 @@ export default function MinimalAiAssistantDemo() {
     <div className="relative h-96 w-full rounded-lg border bg-gradient-to-br from-green-50 to-emerald-100 p-6 dark:from-green-950/20 dark:to-emerald-950/20">
       <div className="mb-4">
         <h3 className="font-semibold">AI Assistant Demo</h3>
-        <p className="text-muted-foreground text-sm">
+        <p className="text-sm text-muted-foreground">
           Built with composable components following shadcn/ui patterns
         </p>
       </div>
@@ -38,7 +38,7 @@ export default function MinimalAiAssistantDemo() {
           </AiAssistantTrigger>
 
           <AiAssistantTrigger variant="outline" position="static" asChild>
-            <button className="border-primary/50 hover:bg-primary/5 rounded-lg border-2 border-dashed px-4 py-2 text-sm font-medium transition-colors">
+            <button className="rounded-lg border-2 border-dashed border-primary/50 px-4 py-2 text-sm font-medium transition-colors hover:bg-primary/5">
               Custom Button
             </button>
           </AiAssistantTrigger>

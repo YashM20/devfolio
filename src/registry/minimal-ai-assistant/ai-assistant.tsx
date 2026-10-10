@@ -112,15 +112,15 @@ function AiAssistantProvider({
 
 // Trigger button variants
 const aiAssistantTriggerVariants = cva(
-  "focus-visible:ring-ring inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
         default: "bg-primary text-primary-foreground hover:bg-primary/90",
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+          "text-destructive-foreground bg-destructive hover:bg-destructive/90",
         outline:
-          "border-input bg-background hover:bg-accent hover:text-accent-foreground border",
+          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
@@ -133,12 +133,12 @@ const aiAssistantTriggerVariants = cva(
         icon: "h-10 w-10",
       },
       position: {
-        "bottom-right": "absolute bottom-4 right-4 z-50",
+        "bottom-right": "absolute right-4 bottom-4 z-50",
         "bottom-center": "absolute bottom-4 left-1/2 z-50 -translate-x-1/2",
         "bottom-left": "absolute bottom-4 left-4 z-50",
-        "top-right": "absolute right-4 top-4 z-50",
-        "top-center": "absolute left-1/2 top-4 z-50 -translate-x-1/2",
-        "top-left": "absolute left-4 top-4 z-50",
+        "top-right": "absolute top-4 right-4 z-50",
+        "top-center": "absolute top-4 left-1/2 z-50 -translate-x-1/2",
+        "top-left": "absolute top-4 left-4 z-50",
         static: "relative",
       },
     },
@@ -230,7 +230,7 @@ function AiAssistantTrigger({
 
 // Chat container variants
 const aiAssistantChatVariants = cva(
-  "bg-background flex flex-col overflow-hidden rounded-lg border shadow-lg transition-all duration-300",
+  "flex flex-col overflow-hidden rounded-lg border bg-background shadow-lg transition-all duration-300",
   {
     variants: {
       variant: {
@@ -245,12 +245,12 @@ const aiAssistantChatVariants = cva(
         full: "h-full w-full",
       },
       position: {
-        "bottom-right": "fixed bottom-4 right-4 z-50",
+        "bottom-right": "fixed right-4 bottom-4 z-50",
         "bottom-center": "fixed bottom-4 left-1/2 z-50 -translate-x-1/2",
         "bottom-left": "fixed bottom-4 left-4 z-50",
-        "top-right": "fixed right-4 top-4 z-50",
-        "top-center": "fixed left-1/2 top-4 z-50 -translate-x-1/2",
-        "top-left": "fixed left-4 top-4 z-50",
+        "top-right": "fixed top-4 right-4 z-50",
+        "top-center": "fixed top-4 left-1/2 z-50 -translate-x-1/2",
+        "top-left": "fixed top-4 left-4 z-50",
         static: "relative",
       },
     },
@@ -311,7 +311,7 @@ function AiAssistantHeader({
   return (
     <div
       className={cn(
-        "bg-muted/50 flex items-center justify-between border-b p-4",
+        "flex items-center justify-between border-b bg-muted/50 p-4",
         className
       )}
       {...props}
@@ -352,7 +352,7 @@ function AiAssistantHeaderActions({
           <button
             type="button"
             onClick={() => setMessages([])}
-            className="hover:bg-accent rounded p-1 transition-colors"
+            className="rounded p-1 transition-colors hover:bg-accent"
             title="Clear chat"
           >
             <Trash2 className="h-4 w-4" />
@@ -360,7 +360,7 @@ function AiAssistantHeaderActions({
           <button
             type="button"
             onClick={() => setIsOpen(false)}
-            className="hover:bg-accent rounded p-1 transition-colors"
+            className="rounded p-1 transition-colors hover:bg-accent"
             title="Close"
           >
             <X className="h-4 w-4" />
@@ -414,8 +414,8 @@ function AiAssistantEmptyState({
     <div className={cn("py-8 text-center", className)} {...props}>
       {children || (
         <>
-          <Bot className="text-muted-foreground mx-auto mb-4 h-12 w-12" />
-          <p className="text-muted-foreground mb-4">
+          <Bot className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
+          <p className="mb-4 text-muted-foreground">
             Hi! How can I help you today?
           </p>
           {suggestions.length > 0 && (
@@ -446,13 +446,13 @@ function AiAssistantSuggestions({
 
   return (
     <div className={cn("space-y-2", className)} {...props}>
-      <p className="text-muted-foreground mb-2 text-sm">Try asking:</p>
+      <p className="mb-2 text-sm text-muted-foreground">Try asking:</p>
       {suggestions.map((suggestion) => (
         <button
           type="button"
           key={suggestion}
           onClick={() => handleSuggestionClick(suggestion)}
-          className="hover:bg-accent block w-full rounded border p-2 text-left text-sm transition-colors"
+          className="block w-full rounded border p-2 text-left text-sm transition-colors hover:bg-accent"
         >
           {suggestion}
         </button>
@@ -535,7 +535,7 @@ function AiAssistantMessage({
       </div>
 
       {message.role === "user" && (
-        <div className="bg-muted flex h-8 w-8 shrink-0 items-center justify-center rounded-full">
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-muted">
           <User className="h-4 w-4" />
         </div>
       )}
@@ -554,7 +554,7 @@ function AiAssistantTypingIndicator({ className }: { className?: string }) {
       <div className="flex h-8 w-8 items-center justify-center rounded-full bg-linear-to-r from-blue-500 to-purple-500">
         <Bot className="h-4 w-4 text-white" />
       </div>
-      <div className="bg-muted rounded-lg px-3 py-2">
+      <div className="rounded-lg bg-muted px-3 py-2">
         <div className="flex gap-1">
           {[0, 1, 2].map((i) => (
             <m.div
@@ -583,7 +583,7 @@ function AiAssistantError({
   return (
     <div
       className={cn(
-        "border-destructive/50 bg-destructive/10 text-destructive rounded-lg border p-3 text-sm",
+        "rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive",
         className
       )}
       {...props}
@@ -651,20 +651,21 @@ function AiAssistantInput({
             onKeyDown={handleKeyDown}
             placeholder={placeholder}
             aria-label={placeholder || "Type a message"}
-            className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring max-h-[120px] min-h-11 w-full resize-none rounded-lg border p-3 pr-12 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            className="max-h-[120px] min-h-11 w-full resize-none rounded-lg border border-input bg-background p-3 pr-12 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
             disabled={isTyping}
             rows={1}
           />
           {input.length > maxLength * 0.8 && (
-            <div className="text-muted-foreground absolute bottom-2 right-2 text-xs">
+            <div className="absolute right-2 bottom-2 text-xs text-muted-foreground">
               {input.length}/{maxLength}
             </div>
           )}
         </div>
         <button
           type="submit"
+          aria-label="Send message"
           disabled={!input.trim() || isTyping}
-          className="bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:ring-ring inline-flex h-10 w-10 items-center justify-center rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
         >
           <Send className="h-4 w-4" />
         </button>

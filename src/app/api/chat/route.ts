@@ -6,8 +6,6 @@ import {
   createUIMessageStream,
   JsonToSseTransformStream,
   stepCountIs,
-  UIMessageStreamWriter,
-  smoothStream,
   generateId,
 } from "ai";
 import { z } from "zod";
@@ -46,6 +44,7 @@ export async function POST(req: Request) {
           system: personalContext,
           messages: convertToModelMessages(messages),
           stopWhen: stepCountIs(5),
+          maxOutputTokens: 2048,
           // experimental_transform: smoothStream({ chunking: "line" }),
           tools: {
             searchProjects: tool({

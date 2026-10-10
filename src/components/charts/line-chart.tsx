@@ -129,7 +129,9 @@ export function LineChart({
   className = "",
   children,
 }: LineChartProps) {
-  const [containerNode, setContainerNode] = useState<HTMLDivElement | null>(null);
+  const [containerNode, setContainerNode] = useState<HTMLDivElement | null>(
+    null
+  );
   const margin = { ...DEFAULT_MARGIN, ...marginProp };
 
   return (

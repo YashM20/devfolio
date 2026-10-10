@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/refs */
 "use client";
 
+import { useEffect } from "react";
 import { useSpring } from "motion/react";
 import * as m from "motion/react-m";
 
@@ -54,13 +55,21 @@ export function DateTicker({ currentIndex, labels, visible }: DateTickerProps) {
   })();
 
   // Animated Y offsets
-  const dayY = useSpring(-currentIndex * TICKER_ITEM_HEIGHT, { stiffness: 400, damping: 35 });
-  const monthY = useSpring(-currentMonthIndex * TICKER_ITEM_HEIGHT, { stiffness: 400, damping: 35 });
+  const dayY = useSpring(-currentIndex * TICKER_ITEM_HEIGHT, {
+    stiffness: 400,
+    damping: 35,
+  });
+  const monthY = useSpring(-currentMonthIndex * TICKER_ITEM_HEIGHT, {
+    stiffness: 400,
+    damping: 35,
+  });
 
-  dayY.set(-currentIndex * TICKER_ITEM_HEIGHT);
-  if (currentMonthIndex >= 0) {
-    monthY.set(-currentMonthIndex * TICKER_ITEM_HEIGHT);
-  }
+  useEffect(() => {
+    dayY.set(-currentIndex * TICKER_ITEM_HEIGHT);
+    if (currentMonthIndex >= 0) {
+      monthY.set(-currentMonthIndex * TICKER_ITEM_HEIGHT);
+    }
+  }, [currentIndex, currentMonthIndex, dayY, monthY]);
 
   if (!visible || labels.length === 0) {
     return null;

@@ -20,10 +20,11 @@ export function CodeCollapsibleWrapper({
       {...props}
     >
       <CollapsibleTrigger asChild>
-        <div className="absolute right-10 top-2 z-10 flex items-center gap-2">
+        <div className="absolute top-2 right-10 z-10 flex items-center gap-2">
           <Button className="size-6 rounded-md" variant="secondary" size="icon">
             <ChevronsDownUpIcon className="hidden group-data-[state=open]/collapsible:block" />
             <ChevronsUpDownIcon className="hidden group-data-[state=closed]/collapsible:block" />
+            <span className="sr-only">Toggle code</span>
           </Button>
 
           <Separator
@@ -40,7 +41,7 @@ export function CodeCollapsibleWrapper({
         {children}
       </CollapsibleContent>
 
-      <CollapsibleTrigger className="from-code text-muted-foreground absolute inset-x-0 bottom-0 flex h-24 items-end justify-center rounded-b-lg bg-gradient-to-t from-25% to-transparent pb-4 text-sm font-medium group-data-[state=open]/collapsible:hidden">
+      <CollapsibleTrigger className="absolute inset-x-0 bottom-0 flex h-24 items-end justify-center rounded-b-lg bg-gradient-to-t from-code from-25% to-transparent pb-4 text-sm font-medium text-muted-foreground group-data-[state=open]/collapsible:hidden">
         Expand
       </CollapsibleTrigger>
     </Collapsible>

@@ -1,0 +1,111 @@
+---
+title: "Admin Portal"
+description: "A React and Next.js admin portal for managing products, reports, and campaigns, with ApexCharts data visualization and AWS S3 asset storage."
+role: "Frontend Developer"
+duration: "2021 - 2022"
+industry: "Retail / Marketing Operations"
+client: "Confidential"
+skills: ["React", "Next.js", "Redux", "Apex Charts", "AWS S3"]
+createdAt: "2021-06-01"
+updatedAt: "2022-03-31"
+---
+
+## Problem Statement
+
+Operations teams were managing product catalogs, performance reports, and marketing campaigns through spreadsheets and separate internal tools. Data lived in different places, reports took time to prepare, and there was no single view of how products and campaigns were performing.
+
+The business needed one administrative interface where teams could manage day-to-day data and see the numbers that mattered without switching tools.
+
+---
+
+## Project Objective
+
+Build a centralized admin portal to:
+
+- Manage products and their media assets.
+- Create, schedule, and track marketing campaigns.
+- Generate and view operational reports.
+- Visualize key metrics through interactive charts.
+- Connect cleanly to existing backend APIs.
+
+---
+
+## Solution Summary
+
+Built a comprehensive admin portal using **React** and **Next.js**, with **Redux** for application state. The portal brings product, report, and campaign management into a single interface.
+
+Data visualization is handled with **ApexCharts**, turning API data into interactive dashboards. Product images and campaign assets are uploaded to **AWS S3**, and every module is wired to the existing backend APIs.
+
+---
+
+## Key Features
+
+- **Product management** with create, edit, and listing views.
+- **Campaign management** for setting up and tracking marketing campaigns.
+- **Reports module** with filters and date-range selection.
+- **Interactive dashboards** built with ApexCharts.
+- **Media uploads** for product and campaign assets to AWS S3.
+- **Reusable tables and forms** shared across modules.
+
+---
+
+## Individual Contribution
+
+- Built the portal frontend with React and Next.js.
+- Designed the Redux store and module-level slices.
+- Developed product and campaign management screens.
+- Built dashboards and charts with ApexCharts.
+- Implemented asset uploads to AWS S3.
+- Integrated backend APIs for every module.
+- Created reusable table, form, and filter components.
+- Focused on a clear, user-friendly layout for non-technical admins.
+
+---
+
+## Challenges & Solutions
+
+### Challenges
+
+- Turning raw API data into charts that were easy to read.
+- Keeping state consistent across product, campaign, and report views.
+- Handling large lists of products and campaigns in tables.
+- Uploading media files reliably from the browser.
+
+### Solutions
+
+- Wrote data-mapping helpers to shape API responses for ApexCharts.
+- Organized Redux state into separate slices per module.
+- Used pagination and filtering to keep tables responsive.
+- Uploaded assets directly to AWS S3 and stored the returned references.
+
+---
+
+## Outcomes
+
+- One portal replaced several disconnected tools and spreadsheets.
+- Teams could see product and campaign performance at a glance.
+- Faster report preparation through built-in filters and charts.
+- Reusable components sped up delivery of new admin screens.
+
+---
+
+## Business Impact
+
+- Gave operations and marketing teams a single source of truth.
+- Supported quicker, data-driven decisions on campaigns.
+- Reduced manual reporting effort.
+
+---
+
+## Architecture & Scalability
+
+### Architecture Summary
+
+A Next.js application with React components and Redux state management, communicating with backend REST APIs. ApexCharts powers the analytics views, and AWS S3 stores uploaded media.
+
+### Scalability Improvements
+
+- Module-based folder structure for products, campaigns, and reports.
+- Slice-based Redux state for independent modules.
+- Shared component library for tables, forms, and charts.
+- Cloud storage for media assets.

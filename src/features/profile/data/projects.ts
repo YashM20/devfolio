@@ -146,6 +146,7 @@ export const PROJECTS: Project[] = [
     logo: "https://assets.chanhdai.com/images/project-logos/quaricdotcom.svg",
     link: "",
     isExpanded: false,
+    hasCaseStudy: true,
   },
   {
     id: "admin-portal",
@@ -160,6 +161,7 @@ export const PROJECTS: Project[] = [
     logo: "https://assets.chanhdai.com/images/project-logos/quaricdotcom.svg",
     link: "",
     isExpanded: false,
+    hasCaseStudy: true,
   },
   {
     id: "mpos-react-native",
@@ -189,6 +191,7 @@ export const PROJECTS: Project[] = [
     logo: "https://assets.chanhdai.com/images/project-logos/quaricdotcom.svg",
     link: "",
     isExpanded: false,
+    hasCaseStudy: true,
   },
   {
     id: "pwa-wrapper-for-android",
@@ -203,5 +206,6 @@ export const PROJECTS: Project[] = [
     logo: "https://assets.chanhdai.com/images/project-logos/quaricdotcom.svg",
     link: "",
     isExpanded: false,
+    hasCaseStudy: true,
   },
 ];

@@ -16,7 +16,6 @@ import { SITE_INFO } from "@/config/site";
 import { findNeighbour, getPostBySlug, getPostsByCategory } from "@/data/blog";
 import { USER } from "@/data/user";
 import type { Post } from "@/types/blog";
-import { connection } from "next/server";
 
 export async function generateStaticParams() {
   const posts = getPostsByCategory("components");
@@ -68,7 +67,6 @@ export async function generateMetadata({
 }
 
 async function getPageJsonLd(post: Post): Promise<WithContext<PageSchema>> {
-  await connection();
   return {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
@@ -126,7 +124,7 @@ async function ComponentContent({
         }}
       />
       <div className="flex items-center justify-between p-2 pl-4">
-        <Button className="text-muted-foreground px-0" variant="link" asChild>
+        <Button className="px-0 text-muted-foreground" variant="link" asChild>
           <Link href="/components">
             <ArrowLeftIcon />
             Components
@@ -161,7 +159,7 @@ async function ComponentContent({
           {post.metadata.title}
         </h1>
 
-        <p className="lead mb-6 mt-6">{post.metadata.description}</p>
+        <p className="lead mt-6 mb-6">{post.metadata.description}</p>
 
         <InlineTOC items={toc} />
 
@@ -179,7 +177,7 @@ function ComponentContentSkeleton() {
   return (
     <>
       <div className="flex items-center justify-between p-2 pl-4">
-        <Button className="text-muted-foreground px-0" variant="link" asChild>
+        <Button className="px-0 text-muted-foreground" variant="link" asChild>
           <Link href="/components">
             <ArrowLeftIcon />
             Components

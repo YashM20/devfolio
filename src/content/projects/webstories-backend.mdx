@@ -1,0 +1,119 @@
+---
+title: "WebStories - Backend"
+description: "A scalable, module-based Node.js and TypeScript backend for a multimedia story platform with secure story management, schema validation, and automated content expiry."
+role: "Backend Developer (Node.js)"
+duration: "2022 - 2023"
+industry: "Media & Content Publishing"
+client: "Confidential"
+skills:
+  [
+    "Node.js",
+    "TypeScript",
+    "Express.js",
+    "MongoDB",
+    "Zod",
+    "Azure Key Vault",
+    "Vitest",
+  ]
+createdAt: "2022-06-01"
+updatedAt: "2023-06-30"
+---
+
+## Problem Statement
+
+Short-form visual stories need a backend that can store rich, multi-slide media content, serve it quickly through shareable links, and retire it once it is no longer relevant. Without a dedicated service, story data, media references, and publishing rules end up scattered across ad-hoc endpoints, with inconsistent validation and secrets kept in plain configuration files.
+
+The platform needed a clean, maintainable backend that could grow with new story formats while keeping content and credentials secure.
+
+---
+
+## Project Objective
+
+Build a production-ready backend for the WebStories platform that could:
+
+- Create, update, publish, and retire multi-slide stories.
+- Generate clean, URL-friendly links for every story.
+- Validate every request against strict schemas.
+- Automatically expire time-bound content.
+- Keep credentials and keys out of the codebase.
+- Stay easy to extend as new story features are added.
+
+---
+
+## Solution Summary
+
+Developed a scalable REST backend using **Node.js**, **Express.js**, and **TypeScript**, backed by **MongoDB**. The codebase follows a module-based architecture where each domain (stories, slides, media, users) owns its routes, controllers, services, and schemas.
+
+Request payloads are validated with **Zod**, giving a single source of truth for both runtime validation and TypeScript types. Scheduled cron jobs handle content expiration, and secrets are resolved at runtime from **Azure Key Vault** instead of environment files.
+
+---
+
+## Key Features
+
+- **Story management APIs** for creating, editing, publishing, and archiving multi-slide stories.
+- **URL-friendly slugs** generated for every story, with collision handling.
+- **Schema-first validation** using Zod for request bodies, params, and query strings.
+- **Automated content expiry** through scheduled cron jobs.
+- **Secure secret management** with Azure Key Vault.
+- **Typed service layer** shared across modules.
+- **Unit and integration tests** written with Vitest.
+
+---
+
+## Individual Contribution
+
+- Designed the module-based project structure and folder conventions.
+- Built the story, slide, and media REST endpoints with Express.js.
+- Modeled story data in MongoDB with indexes for slug and status lookups.
+- Implemented slug generation for clean, shareable story URLs.
+- Wrote Zod schemas and reusable validation middleware.
+- Set up cron jobs to find and expire outdated stories.
+- Integrated Azure Key Vault for runtime secret loading.
+- Added centralized error handling and consistent API response shapes.
+- Wrote Vitest test suites for services and route handlers.
+
+---
+
+## Challenges & Solutions
+
+### Challenges
+
+- Keeping validation rules and TypeScript types in sync across modules.
+- Generating unique, readable slugs from user-provided titles.
+- Expiring content reliably without blocking API traffic.
+- Removing secrets from configuration files and CI pipelines.
+- Preventing the codebase from becoming tangled as features grew.
+
+### Solutions
+
+- Used Zod schemas as the single source of truth and inferred types from them.
+- Normalized titles into slugs and appended short suffixes on collisions.
+- Ran expiry as background cron jobs using indexed status and date queries.
+- Loaded secrets from Azure Key Vault at startup through a small config module.
+- Enforced module boundaries so each feature owns its routes, services, and schemas.
+
+---
+
+## Outcomes
+
+- A clean, typed backend that new developers could navigate quickly.
+- Consistent, predictable API errors thanks to schema-driven validation.
+- Stale stories removed automatically with no manual cleanup.
+- No secrets stored in the repository or deployment configs.
+- Test coverage that made refactoring and feature additions safer.
+
+---
+
+## Architecture & Scalability
+
+### Architecture Summary
+
+A modular Express.js application written in TypeScript. Each module exposes routes, controllers, services, and Zod schemas, and talks to MongoDB through a data-access layer. Cron jobs run alongside the API for content lifecycle tasks, and configuration is resolved from Azure Key Vault at boot.
+
+### Scalability Improvements
+
+- Feature modules can be added or removed independently.
+- Stateless API layer suitable for horizontal scaling.
+- Indexed MongoDB queries for slug and expiry lookups.
+- Shared validation and error-handling middleware.
+- Centralized, vault-backed configuration.

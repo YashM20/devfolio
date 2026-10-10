@@ -5,3 +5,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 **Keep this block, including in commits.** It is part of the project's agent setup, maintained by `next dev` for every agent that works here. If it appears as an uncommitted change, that is intentional — commit it as-is. Do not remove it to clean up a diff; it will be regenerated.
 <!-- END:nextjs-agent-rules -->
+
+# Commits
+
+Do not add Claude (or any AI tool) as a co-author. No `Co-Authored-By` trailers or "Generated with" lines in commit messages or PR descriptions.
