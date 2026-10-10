@@ -33,21 +33,21 @@ export function AwardItem({
       <div className={className}>
         <div className="flex items-center">
           <div
-            className="text-muted-foreground mx-4 flex size-6 shrink-0 items-center justify-center"
+            className="mx-4 flex size-6 shrink-0 items-center justify-center text-muted-foreground"
             aria-hidden
           >
             <Icons.award className="size-5" />
           </div>
 
-          <div className="border-edge flex-1 border-l border-dashed">
-            <CollapsibleTrigger className="group/award flex w-full select-none items-center justify-between gap-4 p-4 pr-2 text-left">
+          <div className="flex-1 border-l border-dashed border-edge">
+            <CollapsibleTrigger className="group/award flex w-full items-center justify-between gap-4 p-4 pr-2 text-left select-none">
               <div>
-                <h3 className="mb-1 flex items-center gap-2 text-balance font-medium leading-snug">
+                <h3 className="mb-1 flex items-center gap-2 leading-snug font-medium text-balance">
                   {award.title}
                   {award.referenceLink && (
                     <SimpleTooltip content="Open Reference Attachment">
                       <a
-                        className="text-muted-foreground hover:text-foreground flex shrink-0"
+                        className="flex shrink-0 text-muted-foreground hover:text-foreground"
                         href={award.referenceLink}
                         target="_blank"
                         rel="noopener"
@@ -64,7 +64,7 @@ export function AwardItem({
                   )}
                 </h3>
 
-                <div className="text-muted-foreground flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
                   <div>
                     <dt className="sr-only">Prize</dt>
                     <dd>{award.prize}</dd>
@@ -98,7 +98,7 @@ export function AwardItem({
 
               {canExpand && (
                 <div
-                  className="text-muted-foreground shrink-0 [&_svg]:size-4"
+                  className="shrink-0 text-muted-foreground [&_svg]:size-4"
                   aria-hidden
                 >
                   <ChevronsDownUpIcon className="hidden group-data-[state=open]/award:block" />
@@ -110,8 +110,8 @@ export function AwardItem({
         </div>
 
         {canExpand && (
-          <CollapsibleContent className="data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down overflow-hidden duration-300">
-            <Prose className="border-edge border-t border-dashed p-4">
+          <CollapsibleContent className="overflow-hidden duration-300 data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
+            <Prose className="border-t border-dashed border-edge p-4">
               <Markdown>{award.description}</Markdown>
             </Prose>
           </CollapsibleContent>

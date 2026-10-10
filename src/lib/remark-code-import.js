@@ -34,7 +34,9 @@ function extractLines(
 
 export function remarkCodeImport(options = {}) {
   // Default rootDir is the "src" directory in the current working directory
-  const rootDir = options.rootDir || path.join(/* turbopackIgnore: true */ process.cwd(), "src");
+  const rootDir =
+    options.rootDir ||
+    path.join(/* turbopackIgnore: true */ process.cwd(), "src");
 
   if (!path.isAbsolute(rootDir)) {
     throw new Error(`"rootDir" has to be an absolute path`);
@@ -98,7 +100,10 @@ export function remarkCodeImport(options = {}) {
         );
       }
 
-      const fileContent = fs.readFileSync(/* turbopackIgnore: true */ fileAbsPath, "utf8");
+      const fileContent = fs.readFileSync(
+        /* turbopackIgnore: true */ fileAbsPath,
+        "utf8"
+      );
 
       node.value = extractLines(
         fileContent,

@@ -126,7 +126,7 @@ async function ComponentContent({
         }}
       />
       <div className="flex items-center justify-between p-2 pl-4">
-        <Button className="text-muted-foreground px-0" variant="link" asChild>
+        <Button className="px-0 text-muted-foreground" variant="link" asChild>
           <Link href="/components">
             <ArrowLeftIcon />
             Components
@@ -161,7 +161,7 @@ async function ComponentContent({
           {post.metadata.title}
         </h1>
 
-        <p className="lead mb-6 mt-6">{post.metadata.description}</p>
+        <p className="lead mt-6 mb-6">{post.metadata.description}</p>
 
         <InlineTOC items={toc} />
 
@@ -179,7 +179,7 @@ function ComponentContentSkeleton() {
   return (
     <>
       <div className="flex items-center justify-between p-2 pl-4">
-        <Button className="text-muted-foreground px-0" variant="link" asChild>
+        <Button className="px-0 text-muted-foreground" variant="link" asChild>
           <Link href="/components">
             <ArrowLeftIcon />
             Components

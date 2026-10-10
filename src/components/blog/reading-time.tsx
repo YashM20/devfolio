@@ -21,7 +21,7 @@ export function ReadingTime({
   return (
     <div
       className={cn(
-        "text-muted-foreground flex items-center gap-1.5 text-sm",
+        "flex items-center gap-1.5 text-sm text-muted-foreground",
         className
       )}
     >

@@ -28,7 +28,7 @@ export function QuickActions() {
       <div className="h-14" />
 
       <m.div
-        className="bg-background fixed inset-x-0 bottom-0 z-50 pb-[calc(0.5rem+env(safe-area-inset-bottom,0px))]"
+        className="fixed inset-x-0 bottom-0 z-50 bg-background pb-[calc(0.5rem+env(safe-area-inset-bottom,0px))]"
         initial={{ opacity: 1 }}
         animate={{
           opacity: hidden ? 0.5 : 1,
@@ -39,7 +39,7 @@ export function QuickActions() {
       >
         <div className="screen-line-before before:z-1">
           <div className="mx-auto px-2 md:max-w-3xl">
-            <div className="border-edge border-x pt-2">
+            <div className="border-x border-edge pt-2">
               <div className="screen-line-before screen-line-after -mx-px grid grid-cols-[1fr_1fr_2.5rem] gap-2 sm:grid-cols-2 sm:gap-4">
                 <Button size="lg" asChild>
                   {/* eslint-disable-next-line react-doctor/nextjs-no-a-element */}

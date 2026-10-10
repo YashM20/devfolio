@@ -38,22 +38,22 @@ export function ExperiencePositionItem({
 
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen} asChild>
-      <div className="last:before:bg-background relative last:before:absolute last:before:h-full last:before:w-4">
-        <CollapsibleTrigger className="group/experience block w-full select-none text-left">
-          <span className="z-1 bg-background relative mb-1 flex items-center gap-3">
+      <div className="relative last:before:absolute last:before:h-full last:before:w-4 last:before:bg-background">
+        <CollapsibleTrigger className="group/experience block w-full text-left select-none">
+          <span className="relative z-1 mb-1 flex items-center gap-3 bg-background">
             <span
-              className="bg-muted text-muted-foreground flex size-6 shrink-0 items-center justify-center rounded-lg"
+              className="flex size-6 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground"
               aria-hidden
             >
               <ExperienceIcon className="size-4" icon={position.icon} />
             </span>
 
-            <span className="flex-1 text-balance font-medium">
+            <span className="flex-1 font-medium text-balance">
               {position.title}
             </span>
 
             <span
-              className="text-muted-foreground shrink-0 [&_svg]:size-4"
+              className="shrink-0 text-muted-foreground [&_svg]:size-4"
               aria-hidden
             >
               <ChevronsDownUpIcon className="hidden group-data-[state=open]/experience:block" />
@@ -61,7 +61,7 @@ export function ExperiencePositionItem({
             </span>
           </span>
 
-          <span className="text-muted-foreground flex flex-wrap items-center gap-x-2 gap-y-1 pl-9 text-sm">
+          <span className="flex flex-wrap items-center gap-x-2 gap-y-1 pl-9 text-sm text-muted-foreground">
             {position.employmentType && (
               <>
                 <span className="whitespace-nowrap">
@@ -97,15 +97,15 @@ export function ExperiencePositionItem({
           </span>
         </CollapsibleTrigger>
 
-        <CollapsibleContent className="data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down overflow-hidden duration-300">
+        <CollapsibleContent className="overflow-hidden duration-300 data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
           {position.description && (
-            <Prose className="pl-9 pt-2">
+            <Prose className="pt-2 pl-9">
               <Markdown>{position.description}</Markdown>
             </Prose>
           )}
 
           {Array.isArray(position.skills) && position.skills.length > 0 && (
-            <ul className="flex flex-wrap gap-1.5 pl-9 pt-2">
+            <ul className="flex flex-wrap gap-1.5 pt-2 pl-9">
               {position.skills.map((skill) => (
                 <li key={skill} className="flex">
                   <Tag>{skill}</Tag>

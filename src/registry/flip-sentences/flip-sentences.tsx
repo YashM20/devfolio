@@ -60,7 +60,7 @@ export function FlipSentences({
       <m.p
         key={`current-sentence-${currentSentence}`}
         className={cn(
-          "text-muted-foreground select-none text-balance font-mono text-sm",
+          "font-mono text-sm text-balance text-muted-foreground select-none",
           className
         )}
         initial={{

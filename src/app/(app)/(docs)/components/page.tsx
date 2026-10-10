@@ -14,23 +14,23 @@ function ComponentsPlaceholder() {
   return (
     <div className="flex min-h-fit flex-col items-center justify-center p-8 text-center">
       <div className="relative mb-6">
-        <div className="from-[--color-react]/10 to-[--color-react]/5 absolute inset-0 rounded-full bg-gradient-to-r blur-2xl" />
-        <div className="border-edge bg-background/50 relative flex h-20 w-20 items-center justify-center rounded-full border backdrop-blur-sm">
-          <PuzzleIcon className="text-muted-foreground h-8 w-8" />
+        <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[--color-react]/10 to-[--color-react]/5 blur-2xl" />
+        <div className="relative flex h-20 w-20 items-center justify-center rounded-full border border-edge bg-background/50 backdrop-blur-sm">
+          <PuzzleIcon className="h-8 w-8 text-muted-foreground" />
         </div>
       </div>
 
-      <h3 className="text-foreground mb-2 text-xl font-medium">
+      <h3 className="mb-2 text-xl font-medium text-foreground">
         No Components Yet
       </h3>
-      <p className="text-muted-foreground mb-4 max-w-md text-balance text-sm">
+      <p className="mb-4 max-w-md text-sm text-balance text-muted-foreground">
         This collection will feature reusable React components, UI elements, and
         interactive demos. Stay tuned for useful building blocks!
       </p>
 
-      <div className="border-edge bg-muted/30 flex items-center gap-2 rounded-md border px-3 py-2">
-        <ComponentIcon className="text-muted-foreground h-4 w-4" />
-        <span className="text-muted-foreground font-mono text-xs">
+      <div className="flex items-center gap-2 rounded-md border border-edge bg-muted/30 px-3 py-2">
+        <ComponentIcon className="h-4 w-4 text-muted-foreground" />
+        <span className="font-mono text-xs text-muted-foreground">
           In Development
         </span>
       </div>
@@ -48,7 +48,7 @@ export default function Page() {
       </div>
 
       <div className="screen-line-after p-4">
-        <p className="text-muted-foreground text-balance font-mono text-sm">
+        <p className="font-mono text-sm text-balance text-muted-foreground">
           {metadata.description}
         </p>
       </div>
@@ -58,16 +58,16 @@ export default function Page() {
           <Link
             key={post.slug}
             href={`/components/${post.slug}`}
-            className="group/post border-edge flex items-center border-b pr-4"
+            className="group/post flex items-center border-b border-edge pr-4"
           >
             <Icons.react
-              className="text-(--color-react) mx-4 size-5 shrink-0"
+              className="mx-4 size-5 shrink-0 text-(--color-react)"
               aria-hidden
             />
 
-            <div className="border-edge border-l border-dashed p-4">
+            <div className="border-l border-dashed border-edge p-4">
               <h2
-                className="text-balance font-medium leading-snug underline-offset-4 group-hover/post:underline"
+                className="leading-snug font-medium text-balance underline-offset-4 group-hover/post:underline"
                 style={{ viewTransitionName: `component-title-${post.slug}` }}
               >
                 {post.metadata.title}
@@ -76,7 +76,7 @@ export default function Page() {
 
             {post.metadata.new && (
               <span
-                className="bg-info text-shadow-xs shrink-0 rounded-md px-1.5 font-mono text-sm font-medium text-white"
+                className="shrink-0 rounded-md bg-info px-1.5 font-mono text-sm font-medium text-white text-shadow-xs"
                 aria-hidden
               >
                 New

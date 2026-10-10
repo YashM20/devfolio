@@ -11,7 +11,7 @@ export function Experiences() {
         <PanelTitle>Experience</PanelTitle>
       </PanelHeader>
 
-      <div className="pl-4 pr-2">
+      <div className="pr-2 pl-4">
         {EXPERIENCES.map((experience) => (
           <ExperienceItem key={experience.id} experience={experience} />
         ))}

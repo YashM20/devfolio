@@ -122,7 +122,7 @@ async function BlogContent({ params }: { params: Promise<{ slug: string }> }) {
         }}
       />
       <div className="flex items-center justify-between p-2 pl-4">
-        <Button className="text-muted-foreground px-0" variant="link" asChild>
+        <Button className="px-0 text-muted-foreground" variant="link" asChild>
           <Link href="/blog">
             <ArrowLeftIcon />
             Blog
@@ -165,7 +165,7 @@ async function BlogContent({ params }: { params: Promise<{ slug: string }> }) {
         </h1>
 
         <div className="mb-6 flex items-center justify-between">
-          <p className="text-muted-foreground text-sm">
+          <p className="text-sm text-muted-foreground">
             <time dateTime={dayjs(post.metadata.createdAt).toISOString()}>
               {dayjs(post.metadata.createdAt).format("MMMM DD, YYYY")}
             </time>
@@ -198,7 +198,7 @@ function BlogContentSkeleton() {
   return (
     <>
       <div className="flex items-center justify-between p-2 pl-4">
-        <Button className="text-muted-foreground px-0" variant="link" asChild>
+        <Button className="px-0 text-muted-foreground" variant="link" asChild>
           <Link href="/blog">
             <ArrowLeftIcon />
             Blog
@@ -257,9 +257,9 @@ function Separator({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "border-edge relative flex h-8 w-full border-x",
-        "before:-z-1 before:absolute before:-left-[100vw] before:h-8 before:w-[200vw]",
-        "before:bg-size-[10px_10px] before:[--pattern-foreground:var(--color-edge)]/56 before:bg-[repeating-linear-gradient(315deg,var(--pattern-foreground)_0,var(--pattern-foreground)_1px,transparent_0,transparent_50%)]",
+        "relative flex h-8 w-full border-x border-edge",
+        "before:absolute before:-left-[100vw] before:-z-1 before:h-8 before:w-[200vw]",
+        "before:bg-[repeating-linear-gradient(315deg,var(--pattern-foreground)_0,var(--pattern-foreground)_1px,transparent_0,transparent_50%)] before:bg-size-[10px_10px] before:[--pattern-foreground:var(--color-edge)]/56",
         className
       )}
     />
