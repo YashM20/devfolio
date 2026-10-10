@@ -1,0 +1,108 @@
+---
+title: "PWA Wrapper for Android"
+description: "A native Android app built with Jetpack Compose that wraps a React PWA and uses geofencing to deliver location-based promotions near retail stores."
+role: "Android Developer"
+duration: "2020 - 2021"
+industry: "Retail / Location-Based Marketing"
+client: "Confidential"
+skills: ["Android", "Jetpack Compose", "React", "PWA", "Geofencing"]
+createdAt: "2020-03-01"
+updatedAt: "2021-03-31"
+---
+
+## Problem Statement
+
+The retail experience was already available as a React Progressive Web App, but a PWA running in the browser can't reliably detect when a shopper is near a store. Without that, the business couldn't send timely, location-based offers, which are among the most effective ways to bring people into stores.
+
+The goal was to keep the existing PWA as the main experience while adding the native location features only an Android app can provide.
+
+---
+
+## Project Objective
+
+Build an Android application that could:
+
+- Deliver the existing React PWA inside a native app shell.
+- Provide native UI for app-level screens and permissions.
+- Detect when users are near participating retail stores.
+- Trigger personalized promotions based on proximity.
+- Respect user privacy and battery life.
+
+---
+
+## Solution Summary
+
+Developed an Android application that acts as a wrapper around the React PWA, with native screens built in **Jetpack Compose**.
+
+Using Android **geofencing**, the app registers areas around retail stores and is notified when a user enters one. It then shows a relevant promotion and opens the matching page inside the PWA.
+
+---
+
+## Key Features
+
+- **PWA wrapper** that loads the existing React web app inside the native app.
+- **Native UI** with Jetpack Compose for onboarding and permission screens.
+- **Store geofences** registered around retail locations.
+- **Proximity-based promotions** triggered on geofence entry.
+- **Deep links** from notifications into specific PWA pages.
+- **Runtime permission handling** for location access.
+
+---
+
+## Individual Contribution
+
+- Built the Android app shell and Jetpack Compose screens.
+- Integrated the React PWA into the native wrapper.
+- Implemented geofence registration for retail store locations.
+- Handled geofence transition events and promotion triggers.
+- Built notification flows that deep-link into the PWA.
+- Implemented location permission requests and fallbacks.
+- Worked with the web team to connect native events to the PWA.
+
+---
+
+## Challenges & Solutions
+
+### Challenges
+
+- Communicating between native Android code and the web app.
+- Android limits on how many geofences an app can register.
+- Background location restrictions on newer Android versions.
+- Balancing location accuracy with battery usage.
+
+### Solutions
+
+- Used a bridge between the native layer and the PWA to pass events and data.
+- Registered geofences only for the stores closest to the user and refreshed them as the user moved.
+- Guided users through location permissions with clear in-app explanations.
+- Relied on the system geofencing APIs instead of continuous GPS tracking.
+
+---
+
+## Outcomes
+
+- Reused the existing PWA instead of rebuilding the experience natively.
+- Added location-aware features that the browser alone couldn't support.
+- Delivered timely promotions when shoppers were close to a store.
+
+---
+
+## Business Impact
+
+- Created a new channel for in-store promotions.
+- Improved the shopping experience with personalized, relevant offers.
+- Kept development efficient by sharing one web codebase.
+
+---
+
+## Architecture & Scalability
+
+### Architecture Summary
+
+A native Android shell built with Jetpack Compose hosts the React PWA. A geofencing layer registers store regions and listens for transitions, then triggers notifications that deep-link into the PWA.
+
+### Scalability Improvements
+
+- New PWA features ship without app store updates.
+- Store locations loaded dynamically for geofence registration.
+- Native and web layers kept separate for independent changes.

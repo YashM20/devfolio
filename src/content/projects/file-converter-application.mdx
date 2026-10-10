@@ -1,0 +1,97 @@
+---
+title: "File Converter Application"
+description: "A full-stack web application for uploading, converting, and downloading files across formats, built with React, Redux, Node.js, Express.js, and AWS S3."
+role: "Full Stack Developer"
+duration: "2020 - 2021"
+industry: "Productivity / Utilities"
+client: "Confidential"
+skills: ["React", "Redux", "Node.js", "Express.js", "AWS S3"]
+createdAt: "2020-06-01"
+updatedAt: "2021-03-31"
+---
+
+## Problem Statement
+
+Converting files between formats usually means installing desktop software or juggling several single-purpose websites. Users wanted one simple place to upload a file, pick a target format, and download the result without worrying about where their files ended up.
+
+---
+
+## Project Objective
+
+Build a full-stack file converter that could:
+
+- Accept file uploads from the browser.
+- Convert files into a range of target formats.
+- Store source and converted files securely.
+- Show users the progress and status of each conversion.
+- Let users download converted files easily.
+
+---
+
+## Solution Summary
+
+Created a full-stack application with a **React** and **Redux** frontend and a **Node.js** / **Express.js** backend. Users upload a file, choose an output format, and the backend runs the conversion and returns a download link.
+
+Uploaded and converted files are stored in **AWS S3**, keeping the API server stateless and file storage durable.
+
+---
+
+## Key Features
+
+- **Drag-and-drop uploads** with file type and size checks.
+- **Format selection** based on the uploaded file type.
+- **Conversion status tracking** in the UI.
+- **Download links** for converted files.
+- **AWS S3 storage** for source and output files.
+- **Clear error messages** for unsupported or failed conversions.
+
+---
+
+## Individual Contribution
+
+- Built the React frontend and the Redux store for upload and conversion state.
+- Implemented the upload flow with client-side validation.
+- Developed Express.js endpoints for upload, conversion, and download.
+- Integrated conversion logic on the Node.js backend.
+- Set up AWS S3 storage for incoming and converted files.
+- Handled errors and edge cases across the full upload-to-download flow.
+
+---
+
+## Challenges & Solutions
+
+### Challenges
+
+- Handling large files without overloading the server.
+- Keeping the UI in sync with long-running conversions.
+- Supporting many input and output format combinations.
+- Storing files safely and cleaning them up.
+
+### Solutions
+
+- Streamed files to and from AWS S3 instead of holding them in memory.
+- Tracked conversion state in Redux and updated the UI as jobs progressed.
+- Mapped each input type to its supported output formats.
+- Organized files in S3 by job so they were easy to manage and remove.
+
+---
+
+## Outcomes
+
+- A single, simple workflow for uploading, converting, and downloading files.
+- A stateless backend that relies on S3 for storage.
+- Clear feedback to users at each step of the process.
+
+---
+
+## Architecture & Scalability
+
+### Architecture Summary
+
+A React single-page application using Redux for state, talking to a Node.js / Express.js REST API. The API handles uploads, runs conversions, and reads and writes files in AWS S3.
+
+### Scalability Improvements
+
+- Stateless API layer that can be scaled horizontally.
+- Cloud object storage for all files.
+- Format support organized so new conversions can be added easily.
