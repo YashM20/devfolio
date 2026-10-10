@@ -103,7 +103,7 @@ function ProjectCard({
     !project.logo || project.logo.includes("quaricdotcom.svg");
 
   const logoNode = !isGenericLogo ? (
-    <div className="relative size-8 shrink-0 overflow-hidden rounded-lg border border-border bg-muted/30 transition-all duration-200">
+    <div className="relative size-8 shrink-0 overflow-hidden rounded-lg border border-border bg-muted/30 transition-[border-color,background-color] duration-200">
       <Image
         src={project.logo!}
         alt={project.title}
@@ -115,7 +115,7 @@ function ProjectCard({
       <div className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-black/10 ring-inset dark:ring-white/10" />
     </div>
   ) : (
-    <div className="flex size-8 shrink-0 items-center justify-center rounded-lg border border-border bg-muted/30 text-muted-foreground transition-all duration-200 select-none group-hover/project:border-foreground/10 group-hover/project:bg-muted group-hover/project:text-foreground">
+    <div className="flex size-8 shrink-0 items-center justify-center rounded-lg border border-border bg-muted/30 text-muted-foreground transition-[border-color,background-color,color] duration-200 select-none group-hover/project:border-foreground/10 group-hover/project:bg-muted group-hover/project:text-foreground">
       <IconComponent className="size-4.5" />
     </div>
   );
@@ -133,7 +133,7 @@ function ProjectCard({
             >
               <span>{project.title}</span>
               {isClickable && (
-                <ArrowUpRightIcon className="inline-block size-3.5 align-baseline text-muted-foreground/60 transition-all duration-150 ease-out group-hover/project:translate-x-0.5 group-hover/project:-translate-y-0.5 group-hover/project:text-foreground" />
+                <ArrowUpRightIcon className="inline-block size-3.5 align-baseline text-muted-foreground/60 transition-[color,translate] duration-150 ease-out group-hover/project:translate-x-0.5 group-hover/project:-translate-y-0.5 group-hover/project:text-foreground" />
               )}
             </h3>
 

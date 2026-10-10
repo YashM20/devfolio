@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { curveMonotoneX } from "@visx/curve";
 import { LinePath } from "@visx/shape";
 import { useMotionValue, useSpring, useTransform } from "motion/react";
@@ -67,14 +67,12 @@ export function Line({
   const offsetSpring = useSpring(0, springConfig);
   const segmentLengthSpring = useSpring(0, springConfig);
 
-  // Calculate segment bounds and update springs inline during render
+  // Path length and highlighted segment bounds, derived during render
+  const pathLength = pathElement ? pathElement.getTotalLength() : 0;
   const segmentBounds = (() => {
     if (!pathElement) {
       return { startLength: 0, segmentLength: 0 };
     }
-
-    const pathLength = pathElement.getTotalLength();
-    pathLengthMV.set(pathLength);
 
     if (pathLength === 0) {
       return { startLength: 0, segmentLength: 0 };
@@ -134,9 +132,19 @@ export function Line({
     };
   })();
 
-  // Set spring targets directly during rendering
-  offsetSpring.set(-segmentBounds.startLength);
-  segmentLengthSpring.set(segmentBounds.segmentLength);
+  // Push targets to the motion values after render, not during it
+  useEffect(() => {
+    pathLengthMV.set(pathLength);
+    offsetSpring.set(-segmentBounds.startLength);
+    segmentLengthSpring.set(segmentBounds.segmentLength);
+  }, [
+    pathLength,
+    segmentBounds.startLength,
+    segmentBounds.segmentLength,
+    pathLengthMV,
+    offsetSpring,
+    segmentLengthSpring,
+  ]);
 
   const animatedDasharray = useTransform(
     [segmentLengthSpring, pathLengthMV],

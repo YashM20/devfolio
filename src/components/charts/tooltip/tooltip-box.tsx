@@ -2,7 +2,13 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 "use client";
 
-import { useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import { useSpring } from "motion/react";
 import * as m from "motion/react-m";
 
@@ -74,12 +80,14 @@ export function TooltipBox({
     Math.min(y - th / 2, containerHeight - th - offset)
   );
 
-  if (leftOverride === undefined) {
-    animatedLeft.set(targetX);
-  }
-  if (topOverride === undefined) {
-    animatedTop.set(targetY);
-  }
+  useEffect(() => {
+    if (leftOverride === undefined) {
+      animatedLeft.set(targetX);
+    }
+    if (topOverride === undefined) {
+      animatedTop.set(targetY);
+    }
+  }, [leftOverride, topOverride, targetX, targetY, animatedLeft, animatedTop]);
 
   useLayoutEffect(() => {
     if (!(visible && tooltipRef.current)) {

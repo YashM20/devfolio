@@ -663,6 +663,7 @@ function AiAssistantInput({
         </div>
         <button
           type="submit"
+          aria-label="Send message"
           disabled={!input.trim() || isTyping}
           className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
         >

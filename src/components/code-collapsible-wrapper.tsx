@@ -24,6 +24,7 @@ export function CodeCollapsibleWrapper({
           <Button className="size-6 rounded-md" variant="secondary" size="icon">
             <ChevronsDownUpIcon className="hidden group-data-[state=open]/collapsible:block" />
             <ChevronsUpDownIcon className="hidden group-data-[state=closed]/collapsible:block" />
+            <span className="sr-only">Toggle code</span>
           </Button>
 
           <Separator

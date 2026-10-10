@@ -392,7 +392,7 @@ export function AiAssistant() {
                                 onClick={() =>
                                   handleSuggestionClick(suggestion)
                                 }
-                                className="rounded-full border border-primary/30 bg-gradient-to-r from-primary/20 to-primary/10 px-3 py-1.5 text-xs text-primary transition-all duration-200 hover:scale-105 hover:border-primary/50 hover:from-primary/30 hover:to-primary/20 dark:border-cyan-400/30 dark:from-cyan-500/20 dark:to-blue-500/20 dark:text-cyan-300 dark:hover:border-cyan-400/50 dark:hover:from-cyan-500/30 dark:hover:to-blue-500/30"
+                                className="rounded-full border border-primary/30 bg-gradient-to-r from-primary/20 to-primary/10 px-3 py-1.5 text-xs text-primary transition-[scale,border-color,--tw-gradient-from,--tw-gradient-to] duration-200 hover:scale-105 hover:border-primary/50 hover:from-primary/30 hover:to-primary/20 dark:border-cyan-400/30 dark:from-cyan-500/20 dark:to-blue-500/20 dark:text-cyan-300 dark:hover:border-cyan-400/50 dark:hover:from-cyan-500/30 dark:hover:to-blue-500/30"
                               >
                                 {suggestion}
                               </m.button>
@@ -667,7 +667,7 @@ export function AiAssistant() {
                       className={cn(
                         "h-10 max-h-32 resize-none border-border bg-background/50 text-foreground placeholder:text-muted-foreground dark:border-white/10 dark:bg-white/5 dark:placeholder:text-white/50",
                         "focus:border-primary/20 focus:ring-0 dark:focus:border-white/20",
-                        "rounded-2xl px-4 py-3 transition-all duration-200",
+                        "rounded-2xl px-4 py-3 transition-colors duration-200",
                         input.length >= WARNING_THRESHOLD &&
                           "border-yellow-400/50 dark:border-yellow-400/50",
                         input.length >= MAX_INPUT_LENGTH &&
@@ -699,11 +699,12 @@ export function AiAssistant() {
                   </div>
                   <button
                     type="submit"
+                    aria-label="Send message"
                     disabled={isTyping || !input.trim()}
                     className={cn(
                       "relative transform-gpu cursor-pointer rounded-full border-none p-[1.5px] text-[1rem]",
                       "bg-[radial-gradient(circle_40px_at_80%_-10%,#ffffff,#181b1b)] dark:bg-[radial-gradient(circle_40px_at_80%_-10%,#ffffff,#181b1b)]",
-                      "transition-all duration-300 ease-out hover:scale-[1.02] active:scale-[0.99]",
+                      "transition-[scale] duration-300 ease-out hover:scale-[1.02] active:scale-[0.99]",
                       "hover:shadow-[0_8px_30px_rgba(0,81,255,0.12)] dark:hover:shadow-[0_8px_30px_rgba(0,225,255,0.12)]",
                       "disabled:cursor-not-allowed disabled:opacity-50",
                       "h-10 w-10"

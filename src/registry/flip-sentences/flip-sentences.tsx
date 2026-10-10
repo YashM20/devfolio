@@ -21,6 +21,9 @@ export function FlipSentences({
     let activeInterval: NodeJS.Timeout | null = null;
 
     const startAnimation = () => {
+      if (activeInterval) {
+        clearInterval(activeInterval);
+      }
       activeInterval = setInterval(() => {
         setCurrentSentence((prev) => (prev + 1) % sentences.length);
       }, 3500);

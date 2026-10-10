@@ -9,6 +9,9 @@ export async function GET() {
     },
     next: { revalidate: 86400 }, // Cache for 1 day (86400 seconds)
   });
+  if (!data.ok) {
+    return Response.json({ stargazers_count: -1 });
+  }
   const json = await data.json();
   return Response.json({
     stargazers_count: json?.stargazers_count ?? -1,

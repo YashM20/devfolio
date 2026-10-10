@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/refs */
 "use client";
 
+import { useEffect } from "react";
 import { useSpring } from "motion/react";
 import * as m from "motion/react-m";
 
@@ -63,10 +64,12 @@ export function DateTicker({ currentIndex, labels, visible }: DateTickerProps) {
     damping: 35,
   });
 
-  dayY.set(-currentIndex * TICKER_ITEM_HEIGHT);
-  if (currentMonthIndex >= 0) {
-    monthY.set(-currentMonthIndex * TICKER_ITEM_HEIGHT);
-  }
+  useEffect(() => {
+    dayY.set(-currentIndex * TICKER_ITEM_HEIGHT);
+    if (currentMonthIndex >= 0) {
+      monthY.set(-currentMonthIndex * TICKER_ITEM_HEIGHT);
+    }
+  }, [currentIndex, currentMonthIndex, dayY, monthY]);
 
   if (!visible || labels.length === 0) {
     return null;
