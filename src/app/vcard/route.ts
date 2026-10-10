@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import VCard from "vcard-creator";
 
 import { USER } from "@/data/user";
-import { decodeEmail, decodePhoneNumber } from "@/utils/string";
+import { decodeEmail } from "@/utils/string";
 
 export async function GET() {
   const card = new VCard();

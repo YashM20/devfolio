@@ -26,7 +26,7 @@ export function CodeBlockCommand({
   };
 
   return (
-    <div className="bg-code relative overflow-hidden rounded-lg">
+    <div className="relative overflow-hidden rounded-lg bg-code">
       <Tabs
         className="gap-0"
         value={packageManager}
@@ -38,14 +38,14 @@ export function CodeBlockCommand({
         }}
       >
         <div className="border-b px-4">
-          <TabsList className="[&_svg]:text-muted-foreground h-auto translate-y-px gap-3 rounded-none bg-transparent p-0 dark:bg-transparent [&_svg]:size-4">
+          <TabsList className="h-auto translate-y-px gap-3 rounded-none bg-transparent p-0 dark:bg-transparent [&_svg]:size-4 [&_svg]:text-muted-foreground">
             {getIconForPackageManager(packageManager)}
 
             {Object.entries(tabs).map(([key]) => {
               return (
                 <TabsTrigger
                   key={key}
-                  className="data-[state=active]:border-foreground h-10 rounded-none border-b border-transparent p-0 font-mono data-[state=active]:bg-transparent data-[state=active]:shadow-none dark:data-[state=active]:bg-transparent"
+                  className="h-10 rounded-none border-b border-transparent p-0 font-mono data-[state=active]:border-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none dark:data-[state=active]:bg-transparent"
                   value={key}
                 >
                   {key}
@@ -62,7 +62,7 @@ export function CodeBlockCommand({
                 <code
                   data-slot="code-block"
                   data-language="bash"
-                  className="text-code-foreground font-mono text-sm leading-none"
+                  className="font-mono text-sm leading-none text-code-foreground"
                 >
                   {value}
                 </code>
@@ -73,7 +73,7 @@ export function CodeBlockCommand({
       </Tabs>
 
       <CopyButton
-        className="absolute right-2 top-2"
+        className="absolute top-2 right-2"
         value={tabs[packageManager] || ""}
       />
     </div>

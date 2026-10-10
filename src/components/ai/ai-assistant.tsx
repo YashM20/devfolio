@@ -5,15 +5,7 @@ import { AnimatePresence } from "motion/react";
 import * as m from "motion/react-m";
 import { useChat } from "@ai-sdk/react";
 import { useQueryState, parseAsBoolean } from "nuqs";
-import {
-  Send,
-  MessageCircle,
-  X,
-  Sparkles,
-  User,
-  Bot,
-  Trash2,
-} from "lucide-react";
+import { Send, X, Sparkles, User, Bot, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -109,14 +101,6 @@ export function AiAssistant() {
       messageStartTimeRef.current = null;
     },
   });
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  useEffect(() => {
-    // scrollToBottom();
-  }, [messages]);
 
   // Auto-resize textarea
   useEffect(() => {
@@ -275,7 +259,7 @@ export function AiAssistant() {
           >
             {/* Backdrop */}
             <m.div
-              className="z-1 absolute inset-0 bg-black/20 backdrop-blur-sm dark:bg-black/20"
+              className="absolute inset-0 z-1 bg-black/20 backdrop-blur-sm dark:bg-black/20"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -285,8 +269,8 @@ export function AiAssistant() {
             {/* Chat Container */}
             <m.div
               className={cn(
-                "z-2 relative flex h-full max-h-[98vh] w-full max-w-[clamp(300px,800px,95vw)] flex-col",
-                "bg-background/95 border-border border backdrop-blur-md dark:border-white/10 dark:bg-[radial-gradient(circle_200px_at_50%_0%,#1a1a1a,#0a0a0a)]",
+                "relative z-2 flex h-full max-h-[98vh] w-full max-w-[clamp(300px,800px,95vw)] flex-col",
+                "border border-border bg-background/95 backdrop-blur-md dark:border-white/10 dark:bg-[radial-gradient(circle_200px_at_50%_0%,#1a1a1a,#0a0a0a)]",
                 "overflow-hidden rounded-3xl shadow-2xl"
               )}
               initial={{
@@ -314,17 +298,17 @@ export function AiAssistant() {
               }}
             >
               {/* Header */}
-              <div className="border-border bg-muted/50 flex items-center justify-between border-b p-4 dark:border-white/5 dark:bg-gradient-to-r dark:from-white/5 dark:to-transparent">
+              <div className="flex items-center justify-between border-b border-border bg-muted/50 p-4 dark:border-white/5 dark:bg-gradient-to-r dark:from-white/5 dark:to-transparent">
                 <div className="flex items-center gap-3">
                   <div className="relative">
-                    <Avatar className="border-primary/30 h-10 w-10 border-2 dark:border-cyan-400/30">
+                    <Avatar className="h-10 w-10 border-2 border-primary/30 dark:border-cyan-400/30">
                       <AvatarImage
                         src={USER.avatar}
                         alt={USER.displayName}
                         width={40}
                         height={40}
                       />
-                      <AvatarFallback className="from-primary to-primary/80 text-primary-foreground bg-gradient-to-br dark:from-cyan-500 dark:to-blue-500">
+                      <AvatarFallback className="bg-gradient-to-br from-primary to-primary/80 text-primary-foreground dark:from-cyan-500 dark:to-blue-500">
                         {USER.displayName
                           .split(" ")
                           .map((n) => n[0])
@@ -332,16 +316,16 @@ export function AiAssistant() {
                       </AvatarFallback>
                     </Avatar>
                     <m.div
-                      className="border-background absolute -bottom-1 -right-1 h-4 w-4 rounded-full border-2 bg-green-500 dark:border-black dark:bg-cyan-400"
+                      className="absolute -right-1 -bottom-1 h-4 w-4 rounded-full border-2 border-background bg-green-500 dark:border-black dark:bg-cyan-400"
                       animate={{ scale: [1, 1.2, 1] }}
                       transition={{ duration: 2, repeat: Infinity }}
                     />
                   </div>
                   <div>
-                    <h3 className="text-foreground font-semibold">
+                    <h3 className="font-semibold text-foreground">
                       AI Assistant
                     </h3>
-                    <p className="text-muted-foreground text-sm dark:text-cyan-300/70">
+                    <p className="text-sm text-muted-foreground dark:text-cyan-300/70">
                       Ask me about {USER.firstName}
                     </p>
                   </div>
@@ -352,7 +336,7 @@ export function AiAssistant() {
                       variant="ghost"
                       size="sm"
                       onClick={handleClearChat}
-                      className="text-muted-foreground hover:text-foreground hover:bg-muted dark:text-white/70 dark:hover:bg-cyan-400/10 dark:hover:text-cyan-300"
+                      className="text-muted-foreground hover:bg-muted hover:text-foreground dark:text-white/70 dark:hover:bg-cyan-400/10 dark:hover:text-cyan-300"
                       title="Clear chat"
                     >
                       <Trash2 className="h-4 w-4" />
@@ -362,7 +346,7 @@ export function AiAssistant() {
                     variant="ghost"
                     size="sm"
                     onClick={() => setIsOpen(false)}
-                    className="text-muted-foreground hover:text-foreground hover:bg-muted dark:text-white/70 dark:hover:bg-cyan-400/10 dark:hover:text-cyan-300"
+                    className="text-muted-foreground hover:bg-muted hover:text-foreground dark:text-white/70 dark:hover:bg-cyan-400/10 dark:hover:text-cyan-300"
                     title="Close chat"
                   >
                     <X className="h-4 w-4" />
@@ -382,20 +366,20 @@ export function AiAssistant() {
                         className="px-4 py-8 text-center"
                       >
                         <div className="relative mb-6">
-                          <div className="from-primary/20 to-primary/10 absolute inset-0 rounded-full bg-gradient-to-r blur-2xl dark:from-cyan-400/20 dark:to-blue-500/20" />
-                          <Sparkles className="text-primary relative z-10 mx-auto h-12 w-12 dark:text-cyan-400" />
+                          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/20 to-primary/10 blur-2xl dark:from-cyan-400/20 dark:to-blue-500/20" />
+                          <Sparkles className="relative z-10 mx-auto h-12 w-12 text-primary dark:text-cyan-400" />
                         </div>
 
-                        <h3 className="text-foreground mb-2 text-lg font-semibold">
+                        <h3 className="mb-2 text-lg font-semibold text-foreground">
                           Hi! I&apos;m {USER.firstName}&apos;s AI assistant
                         </h3>
-                        <p className="text-muted-foreground mb-6 text-sm">
+                        <p className="mb-6 text-sm text-muted-foreground">
                           Ask me anything about his experience, projects, or
                           skills!
                         </p>
 
                         <div className="mb-6 space-y-3">
-                          <p className="text-primary/60 text-xs font-medium dark:text-cyan-300/60">
+                          <p className="text-xs font-medium text-primary/60 dark:text-cyan-300/60">
                             Try asking:
                           </p>
                           <div className="flex flex-wrap justify-center gap-2">
@@ -408,7 +392,7 @@ export function AiAssistant() {
                                 onClick={() =>
                                   handleSuggestionClick(suggestion)
                                 }
-                                className="from-primary/20 to-primary/10 border-primary/30 text-primary hover:from-primary/30 hover:to-primary/20 hover:border-primary/50 rounded-full border bg-gradient-to-r px-3 py-1.5 text-xs transition-all duration-200 hover:scale-105 dark:border-cyan-400/30 dark:from-cyan-500/20 dark:to-blue-500/20 dark:text-cyan-300 dark:hover:border-cyan-400/50 dark:hover:from-cyan-500/30 dark:hover:to-blue-500/30"
+                                className="rounded-full border border-primary/30 bg-gradient-to-r from-primary/20 to-primary/10 px-3 py-1.5 text-xs text-primary transition-all duration-200 hover:scale-105 hover:border-primary/50 hover:from-primary/30 hover:to-primary/20 dark:border-cyan-400/30 dark:from-cyan-500/20 dark:to-blue-500/20 dark:text-cyan-300 dark:hover:border-cyan-400/50 dark:hover:from-cyan-500/30 dark:hover:to-blue-500/30"
                               >
                                 {suggestion}
                               </m.button>
@@ -416,12 +400,12 @@ export function AiAssistant() {
                           </div>
                         </div>
 
-                        <div className="text-muted-foreground space-y-2 text-xs">
+                        <div className="space-y-2 text-xs text-muted-foreground">
                           <p>💡 Tips:</p>
                           <div className="space-y-1 text-center">
                             <p>
                               • Press{" "}
-                              <kbd className="bg-muted border-border rounded border px-1.5 py-0.5 text-xs">
+                              <kbd className="rounded border border-border bg-muted px-1.5 py-0.5 text-xs">
                                 Ctrl+I
                               </kbd>{" "}
                               to quickly open this chat
@@ -445,7 +429,7 @@ export function AiAssistant() {
                         )}
                       >
                         {message.role === "assistant" && (
-                          <Avatar className="border-primary/30 h-8 w-8 border dark:border-cyan-400/30">
+                          <Avatar className="h-8 w-8 border border-primary/30 dark:border-cyan-400/30">
                             <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-emerald-600 text-xs text-white dark:from-emerald-500 dark:to-emerald-900">
                               <Bot className="h-4 w-4" />
                             </AvatarFallback>
@@ -454,15 +438,20 @@ export function AiAssistant() {
 
                         <div
                           className={cn(
-                            "min-w-0 max-w-[85%] overflow-hidden rounded-2xl px-4 py-3 text-sm",
+                            "max-w-[85%] min-w-0 overflow-hidden rounded-2xl px-4 py-3 text-sm",
                             message.role === "user"
-                              ? "from-primary/20 to-primary/10 text-foreground border-primary/30 border bg-gradient-to-r dark:border-cyan-400/30 dark:from-cyan-500/20 dark:to-blue-500/20"
-                              : "bg-muted/50 text-foreground border-border border dark:border-white/10 dark:bg-gradient-to-r dark:from-white/10 dark:to-white/5"
+                              ? "border border-primary/30 bg-gradient-to-r from-primary/20 to-primary/10 text-foreground dark:border-cyan-400/30 dark:from-cyan-500/20 dark:to-blue-500/20"
+                              : "border border-border bg-muted/50 text-foreground dark:border-white/10 dark:bg-gradient-to-r dark:from-white/10 dark:to-white/5"
                           )}
                         >
                           {message.parts ? (
                             message.parts.flatMap((partItem: unknown) => {
-                              const part = partItem as { type: string; text?: string; toolCallId?: string; toolName?: string };
+                              const part = partItem as {
+                                type: string;
+                                text?: string;
+                                toolCallId?: string;
+                                toolName?: string;
+                              };
                               // Filter out step-related parts and empty content
                               if (typeof part === "object" && part.type) {
                                 if (
@@ -480,7 +469,7 @@ export function AiAssistant() {
                                     message.role === "assistant" ? (
                                       <div
                                         key={part.text || ""}
-                                        className="prose prose-sm dark:prose-invert min-w-0 max-w-none"
+                                        className="prose prose-sm max-w-none min-w-0 dark:prose-invert"
                                         style={{
                                           wordBreak: "break-word",
                                           overflowWrap: "anywhere",
@@ -501,7 +490,7 @@ export function AiAssistant() {
                                   return [
                                     <div
                                       key={part.toolCallId}
-                                      className="mb-1 mt-2 text-xs opacity-70"
+                                      className="mt-2 mb-1 text-xs opacity-70"
                                     >
                                       <div className="flex items-center gap-1 text-blue-500 dark:text-blue-400">
                                         <span className="animate-spin">⚙️</span>
@@ -556,7 +545,7 @@ export function AiAssistant() {
                                     >
                                       {typeof part === "string" ? (
                                         message.role === "assistant" ? (
-                                          <div className="prose prose-sm dark:prose-invert max-w-none overflow-x-auto">
+                                          <div className="prose prose-sm max-w-none overflow-x-auto dark:prose-invert">
                                             <Markdown>{part}</Markdown>
                                           </div>
                                         ) : (
@@ -577,7 +566,7 @@ export function AiAssistant() {
                               }
                             })
                           ) : message.role === "assistant" ? (
-                            <div className="prose prose-sm dark:prose-invert max-w-none overflow-x-auto">
+                            <div className="prose prose-sm max-w-none overflow-x-auto dark:prose-invert">
                               <Markdown>{message.content}</Markdown>
                             </div>
                           ) : (
@@ -588,8 +577,8 @@ export function AiAssistant() {
                         </div>
 
                         {message.role === "user" && (
-                          <Avatar className="border-primary/30 h-8 w-8 border dark:border-cyan-400/30">
-                            <AvatarFallback className="from-primary to-primary/80 text-primary-foreground bg-gradient-to-br text-xs dark:from-cyan-500 dark:to-blue-900">
+                          <Avatar className="h-8 w-8 border border-primary/30 dark:border-cyan-400/30">
+                            <AvatarFallback className="bg-gradient-to-br from-primary to-primary/80 text-xs text-primary-foreground dark:from-cyan-500 dark:to-blue-900">
                               <User className="h-4 w-4" />
                             </AvatarFallback>
                           </Avatar>
@@ -603,12 +592,12 @@ export function AiAssistant() {
                         animate={{ opacity: 1, y: 0 }}
                         className="flex gap-3"
                       >
-                        <Avatar className="border-primary/30 h-8 w-8 border dark:border-white/20">
+                        <Avatar className="h-8 w-8 border border-primary/30 dark:border-white/20">
                           <AvatarFallback className="bg-gradient-to-br from-purple-500 to-purple-600 text-xs text-white dark:from-purple-500 dark:to-blue-500">
                             <Bot className="h-4 w-4" />
                           </AvatarFallback>
                         </Avatar>
-                        <div className="bg-muted/50 text-foreground border-border rounded-2xl border px-4 py-3 dark:border-white/10 dark:bg-black/20">
+                        <div className="rounded-2xl border border-border bg-muted/50 px-4 py-3 text-foreground dark:border-white/10 dark:bg-black/20">
                           <m.div
                             className="flex gap-1"
                             animate={{ opacity: [0.5, 1, 0.5] }}
@@ -650,12 +639,12 @@ export function AiAssistant() {
                 </ScrollArea>
 
                 {/* Progressive Blur Overlays */}
-                <div className="from-background/40 via-background/20 pointer-events-none absolute -top-1 left-0 right-0 z-10 h-2 bg-gradient-to-bl to-transparent backdrop-blur-sm dark:from-black/40 dark:via-black/20 dark:to-transparent" />
-                <div className="from-background/40 via-background/20 pointer-events-none absolute -bottom-1 left-0 right-0 z-10 h-2 bg-gradient-to-tr to-transparent backdrop-blur-sm dark:from-black/40 dark:via-black/20 dark:to-transparent" />
+                <div className="pointer-events-none absolute -top-1 right-0 left-0 z-10 h-2 bg-gradient-to-bl from-background/40 via-background/20 to-transparent backdrop-blur-sm dark:from-black/40 dark:via-black/20 dark:to-transparent" />
+                <div className="pointer-events-none absolute right-0 -bottom-1 left-0 z-10 h-2 bg-gradient-to-tr from-background/40 via-background/20 to-transparent backdrop-blur-sm dark:from-black/40 dark:via-black/20 dark:to-transparent" />
               </div>
 
               {/* Input */}
-              <div className="border-border bg-muted/50 flex border-t p-4 dark:border-white/5 dark:bg-gradient-to-r dark:from-white/5 dark:to-transparent">
+              <div className="flex border-t border-border bg-muted/50 p-4 dark:border-white/5 dark:bg-gradient-to-r dark:from-white/5 dark:to-transparent">
                 <form
                   onSubmit={handleFormSubmit}
                   className="flex w-full items-end gap-2"
@@ -676,7 +665,7 @@ export function AiAssistant() {
                       onKeyDown={handleKeyDown}
                       placeholder="Ask me anything... "
                       className={cn(
-                        "bg-background/50 border-border text-foreground placeholder:text-muted-foreground h-10 max-h-32 resize-none dark:border-white/10 dark:bg-white/5 dark:placeholder:text-white/50",
+                        "h-10 max-h-32 resize-none border-border bg-background/50 text-foreground placeholder:text-muted-foreground dark:border-white/10 dark:bg-white/5 dark:placeholder:text-white/50",
                         "focus:border-primary/20 focus:ring-0 dark:focus:border-white/20",
                         "rounded-2xl px-4 py-3 transition-all duration-200",
                         input.length >= WARNING_THRESHOLD &&
@@ -694,7 +683,7 @@ export function AiAssistant() {
                     {input.trim() && input.length > WARNING_THRESHOLD / 1.5 && (
                       <div
                         className={cn(
-                          "absolute bottom-2 right-2 text-xs",
+                          "absolute right-2 bottom-2 text-xs",
                           input.length >= WARNING_THRESHOLD &&
                             input.length < MAX_INPUT_LENGTH &&
                             "text-yellow-500 dark:text-yellow-400",
@@ -724,11 +713,11 @@ export function AiAssistant() {
                     <div className="absolute bottom-0 left-0 h-full w-[40px] rounded-full bg-[radial-gradient(circle_30px_at_0%_100%,#3fe9ff,#0000ff80,transparent)] shadow-[-6px_6px_15px_#0051ff1a]" />
 
                     <div className="relative z-[3] flex items-center justify-center rounded-full bg-[radial-gradient(circle_40px_at_80%_-50%,#777777,#0f1111)] px-[10px] py-[10px] font-medium text-white">
-                      <span className="absolute left-0 top-0 h-full w-full rounded-full bg-[radial-gradient(circle_30px_at_0%_100%,#00e1ff1a,#0000ff11,transparent)]" />
+                      <span className="absolute top-0 left-0 h-full w-full rounded-full bg-[radial-gradient(circle_30px_at_0%_100%,#00e1ff1a,#0000ff11,transparent)]" />
                       <Send className="relative z-10 h-4 w-4" />
                     </div>
 
-                    <div className="absolute right-0 top-0 z-[-1] h-[50%] w-[55%] rounded-[80px] shadow-[0_0_15px_#ffffff25]" />
+                    <div className="absolute top-0 right-0 z-[-1] h-[50%] w-[55%] rounded-[80px] shadow-[0_0_15px_#ffffff25]" />
                   </button>
                 </form>
               </div>

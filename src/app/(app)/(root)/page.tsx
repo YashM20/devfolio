@@ -1,10 +1,10 @@
 import dayjs from "dayjs";
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import type { ProfilePage as PageSchema, WithContext } from "schema-dts";
 
 import { USER } from "@/data/user";
 import { About } from "@/features/profile/components/about";
-import { Awards } from "@/features/profile/components/awards";
 import { Blog } from "@/features/profile/components/blog";
 import { Certifications } from "@/features/profile/components/certifications";
 import { Experiences } from "@/features/profile/components/experiences";
@@ -18,6 +18,12 @@ import { GitHubContributions } from "@/features/profile/components/github-contri
 import { Insights } from "@/features/profile/components/insights";
 import { cn } from "@/lib/utils";
 import { DynamicDate } from "@/components/dynamic-date";
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "/",
+  },
+};
 
 export default function Page() {
   return (
@@ -54,9 +60,6 @@ export default function Page() {
 
         <Blog />
         <Separator />
-
-        {/* <Awards />
-        <Separator /> */}
 
         <Certifications />
         <Separator />
@@ -98,9 +101,9 @@ function Separator({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "border-edge relative flex h-8 w-full border-x",
-        "before:-z-1 before:absolute before:-left-[100vw] before:h-8 before:w-[200vw]",
-        "before:bg-size-[10px_10px] before:[--pattern-foreground:var(--color-edge)]/56 before:bg-[repeating-linear-gradient(315deg,var(--pattern-foreground)_0,var(--pattern-foreground)_1px,transparent_0,transparent_50%)]",
+        "relative flex h-8 w-full border-x border-edge",
+        "before:absolute before:-left-[100vw] before:-z-1 before:h-8 before:w-[200vw]",
+        "before:bg-[repeating-linear-gradient(315deg,var(--pattern-foreground)_0,var(--pattern-foreground)_1px,transparent_0,transparent_50%)] before:bg-size-[10px_10px] before:[--pattern-foreground:var(--color-edge)]/56",
         className
       )}
     />

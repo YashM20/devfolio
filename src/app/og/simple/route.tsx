@@ -10,7 +10,7 @@ const robotoCondensedMediumPromise = readFile(
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
 
-  const title = searchParams.get("title");
+  const title = searchParams.get("title")?.slice(0, 100);
 
   const robotoCondensedMedium = await robotoCondensedMediumPromise;
 

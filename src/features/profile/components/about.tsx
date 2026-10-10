@@ -1,4 +1,3 @@
-import ReactMarkdown from "react-markdown";
 import { Prose } from "@/components/ui/typography";
 import { USER } from "@/data/user";
 
