@@ -7,11 +7,7 @@
   "trailingComma": "es5",
   "bracketSpacing": true,
   "sortTailwindcss": {
-    "functions": [
-      "clsx",
-      "cn",
-      "cva"
-    ],
+    "functions": ["clsx", "cn", "cva"],
     "stylesheet": "./src/app/globals.css"
   },
   "ignorePatterns": [
