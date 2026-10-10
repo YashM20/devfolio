@@ -11,7 +11,6 @@ import { Card } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
 
 import {
   type CookiePreferences,
@@ -122,19 +121,19 @@ export function CookieConsent() {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 100 }}
         transition={{ duration: 0.3 }}
-        className="fixed bottom-4 left-4 right-4 z-50 md:left-auto md:right-4 md:max-w-md"
+        className="fixed right-4 bottom-4 left-4 z-50 md:right-4 md:left-auto md:max-w-md"
       >
         <Card className="border-border bg-background/95 p-4 shadow-lg backdrop-blur-md">
           {!showSettings ? (
             <>
               {/* Banner Content */}
               <div className="flex items-start gap-3">
-                <Cookie className="text-foreground mt-1 h-5 w-5 shrink-0" />
+                <Cookie className="mt-1 h-5 w-5 shrink-0 text-foreground" />
                 <div className="flex-1">
-                  <h3 className="text-foreground mb-2 font-semibold">
+                  <h3 className="mb-2 font-semibold text-foreground">
                     Cookie Preferences
                   </h3>
-                  <p className="text-muted-foreground mb-4 text-sm">
+                  <p className="mb-4 text-sm text-muted-foreground">
                     We use cookies to enhance your experience and analyze site
                     usage. You can manage your preferences below.{" "}
                     <Link
@@ -188,7 +187,7 @@ export function CookieConsent() {
             <>
               {/* Settings Content */}
               <div className="mb-4 flex items-center justify-between">
-                <h3 className="text-foreground font-semibold">
+                <h3 className="font-semibold text-foreground">
                   Cookie Settings
                 </h3>
                 <Button
@@ -207,7 +206,7 @@ export function CookieConsent() {
                     <Label htmlFor="necessary" className="font-medium">
                       Necessary Cookies
                     </Label>
-                    <p className="text-muted-foreground text-xs">
+                    <p className="text-xs text-muted-foreground">
                       Required for basic site functionality
                     </p>
                   </div>
@@ -227,7 +226,7 @@ export function CookieConsent() {
                     <Label htmlFor="analytics" className="font-medium">
                       Analytics Cookies
                     </Label>
-                    <p className="text-muted-foreground text-xs">
+                    <p className="text-xs text-muted-foreground">
                       Help us understand site usage and performance
                     </p>
                   </div>
@@ -249,7 +248,7 @@ export function CookieConsent() {
                     <Label htmlFor="marketing" className="font-medium">
                       Marketing Cookies
                     </Label>
-                    <p className="text-muted-foreground text-xs">
+                    <p className="text-xs text-muted-foreground">
                       Used for personalized advertising and content
                     </p>
                   </div>

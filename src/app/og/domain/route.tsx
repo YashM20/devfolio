@@ -14,7 +14,7 @@ const robotoMediumPromise = readFile(
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
 
-  const domain = searchParams.get("domain");
+  const domain = searchParams.get("domain")?.slice(0, 64);
   const isForSale = searchParams.get("sale") === "true";
 
   const [magistralMedium, robotoMedium] = await Promise.all([

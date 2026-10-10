@@ -45,12 +45,12 @@ export function CodeBlock({
     return (
       <div className="not-prose group relative my-4 flex w-full min-w-0 flex-col">
         {/* Language label and copy button */}
-        <div className="bg-muted text-muted-foreground border-border flex flex-shrink-0 items-center justify-between rounded-t-md border-b px-3 py-2 text-xs">
+        <div className="flex flex-shrink-0 items-center justify-between rounded-t-md border-b border-border bg-muted px-3 py-2 text-xs text-muted-foreground">
           <span className="font-medium">{language}</span>
           <button
             type="button"
             onClick={() => handleCopy(code)}
-            className="hover:bg-background/50 flex flex-shrink-0 items-center gap-1 rounded px-2 py-1 opacity-0 transition-colors group-hover:opacity-100"
+            className="flex flex-shrink-0 items-center gap-1 rounded px-2 py-1 opacity-0 transition-colors group-hover:opacity-100 hover:bg-background/50"
             title={copied ? "Copied!" : "Copy code"}
           >
             {copied ? (
@@ -125,7 +125,7 @@ export function CodeBlock({
   } else {
     return (
       <code
-        className={`${className} bg-muted rounded-md px-1 py-0.5 font-mono text-sm`}
+        className={`${className} rounded-md bg-muted px-1 py-0.5 font-mono text-sm`}
         {...props}
       >
         {children}

@@ -149,7 +149,8 @@ export function TimeSeriesChartInner({
   );
 
   // eslint-disable-next-line react-doctor/no-derived-useState, react-doctor/rerender-state-only-in-handlers
-  const [prevRevealSignature, setPrevRevealSignature] = useState(revealSignature);
+  const [prevRevealSignature, setPrevRevealSignature] =
+    useState(revealSignature);
 
   if (revealSignature !== prevRevealSignature) {
     setPrevRevealSignature(revealSignature);

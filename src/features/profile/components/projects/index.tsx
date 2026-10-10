@@ -26,7 +26,7 @@ export function Projects() {
         <Button
           variant="ghost"
           size="sm"
-          className="text-muted-foreground active:scale-[0.96] transition-transform"
+          className="text-muted-foreground transition-transform active:scale-[0.96]"
           asChild
         >
           <Link

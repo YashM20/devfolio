@@ -24,7 +24,7 @@ export function PostItem({
       )}
     >
       {post.metadata.image && (
-        <div className="[&_img]:aspect-1200/630 relative select-none [&_img]:rounded-xl">
+        <div className="relative select-none [&_img]:aspect-1200/630 [&_img]:rounded-xl">
           <Image
             src={validateImageUrl(post.metadata.image)}
             alt={post.metadata.title}
@@ -35,10 +35,10 @@ export function PostItem({
             unoptimized
           />
 
-          <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-black/10 dark:ring-white/10" />
+          <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-black/10 ring-inset dark:ring-white/10" />
 
           {post.metadata.new && (
-            <span className="bg-info text-shadow-xs absolute right-1.5 top-1.5 rounded-md px-1.5 font-mono text-sm font-medium text-white">
+            <span className="absolute top-1.5 right-1.5 rounded-md bg-info px-1.5 font-mono text-sm font-medium text-white text-shadow-xs">
               New
             </span>
           )}
@@ -47,7 +47,7 @@ export function PostItem({
 
       <div className="flex flex-col gap-1 p-2">
         <h3
-          className="text-balance text-lg font-medium leading-snug underline-offset-4 group-hover/post:underline"
+          className="text-lg leading-snug font-medium text-balance underline-offset-4 group-hover/post:underline"
           style={{ viewTransitionName: `blog-title-${post.slug}` }}
         >
           {post.metadata.title}
@@ -56,7 +56,7 @@ export function PostItem({
         <div className="flex items-center justify-between">
           <dl>
             <dt className="sr-only">Published on</dt>
-            <dd className="text-muted-foreground text-sm">
+            <dd className="text-sm text-muted-foreground">
               <time dateTime={dayjs(post.metadata.createdAt).toISOString()}>
                 {dayjs(post.metadata.createdAt).format("DD.MM.YYYY")}
               </time>

@@ -13,7 +13,14 @@ const CertificationListItem = ({
   item: (typeof CERTIFICATIONS)[number];
 }) => <CertificationItem certification={item} />;
 
-const CATEGORIES = ["All", "Anthropic", "Vercel", "LinkedIn", "Udemy", "Others"];
+const CATEGORIES = [
+  "All",
+  "Anthropic",
+  "Vercel",
+  "LinkedIn",
+  "Udemy",
+  "Others",
+];
 
 export function Certifications() {
   const [activeCategory, setActiveCategory] = useState<string>("All");
@@ -36,7 +43,7 @@ export function Certifications() {
       <PanelHeader>
         <PanelTitle>
           Certifications
-          <sup className="text-muted-foreground ml-1 select-none font-mono text-sm font-medium">
+          <sup className="ml-1 font-mono text-sm font-medium text-muted-foreground select-none">
             ({filteredCertifications.length})
           </sup>
         </PanelTitle>
@@ -45,7 +52,7 @@ export function Certifications() {
       <div className="h-4" />
 
       <div className="screen-line-before screen-line-after">
-        <nav className="scroll-fade-x scroll-fade-24 border-edge flex -mx-px overflow-x-auto no-scrollbar whitespace-nowrap">
+        <nav className="-mx-px no-scrollbar flex scroll-fade-x overflow-x-auto border-edge whitespace-nowrap scroll-fade-24">
           {CATEGORIES.map((cat) => {
             const count = CERTIFICATIONS.filter((c) => {
               if (cat === "All") return true;
@@ -70,7 +77,7 @@ export function Certifications() {
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
                 data-active={isActive}
-                className="border-r border-edge px-4 py-3 font-mono text-[.8125rem]/4 font-medium tracking-wide text-muted-foreground uppercase transition-[color,background-color] ease-out hover:bg-accent/50 hover:text-foreground data-[active=true]:bg-accent data-[active=true]:text-foreground cursor-pointer select-none"
+                className="cursor-pointer border-r border-edge px-4 py-3 font-mono text-[.8125rem]/4 font-medium tracking-wide text-muted-foreground uppercase transition-[color,background-color] ease-out select-none hover:bg-accent/50 hover:text-foreground data-[active=true]:bg-accent data-[active=true]:text-foreground"
               >
                 {cat} ({count})
               </button>

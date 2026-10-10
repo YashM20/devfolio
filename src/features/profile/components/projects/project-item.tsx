@@ -85,24 +85,24 @@ export function ProjectItem({
             />
           ) : (
             <div
-              className="text-muted-foreground mx-4 flex size-6 shrink-0 items-center justify-center"
+              className="mx-4 flex size-6 shrink-0 items-center justify-center text-muted-foreground"
               aria-hidden="true"
             >
               <IconComponent className="size-5" />
             </div>
           )}
 
-          <div className="border-edge flex-1 border-l border-dashed">
-            <CollapsibleTrigger className="group/project flex w-full select-none items-center justify-between gap-4 p-4 pr-2 text-left">
+          <div className="flex-1 border-l border-dashed border-edge">
+            <CollapsibleTrigger className="group/project flex w-full items-center justify-between gap-4 p-4 pr-2 text-left select-none">
               <div className="flex-1">
                 <h3
-                  className="text-balance font-medium leading-snug"
+                  className="leading-snug font-medium text-balance"
                   style={{ viewTransitionName: `project-title-${project.id}` }}
                 >
                   {project.title}
                 </h3>
 
-                <div className="text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
                   <div className="flex shrink-0 items-center gap-1 whitespace-nowrap">
                     <CalendarIcon className="size-3" />
                     <span>{start}</span>
@@ -131,7 +131,7 @@ export function ProjectItem({
               {project.hasCaseStudy ? (
                 <SimpleTooltip content="Read Case Study">
                   <Link
-                    className="relative flex size-6 shrink-0 items-center justify-center text-muted-foreground hover:text-foreground active:scale-[0.96] transition-[color,transform] duration-150 ease-out before:absolute before:-inset-2 before:content-['']"
+                    className="relative flex size-6 shrink-0 items-center justify-center text-muted-foreground transition-[color,transform] duration-150 ease-out before:absolute before:-inset-2 before:content-[''] hover:text-foreground active:scale-[0.96]"
                     href={`/projects/${project.id}`}
                     onClick={(e) => e.stopPropagation()}
                   >
@@ -142,7 +142,7 @@ export function ProjectItem({
               ) : project.link ? (
                 <SimpleTooltip content="Open Project Link">
                   <a
-                    className="relative flex size-6 shrink-0 items-center justify-center text-muted-foreground hover:text-foreground active:scale-[0.96] transition-[color,transform] duration-150 ease-out before:absolute before:-inset-2 before:content-['']"
+                    className="relative flex size-6 shrink-0 items-center justify-center text-muted-foreground transition-[color,transform] duration-150 ease-out before:absolute before:-inset-2 before:content-[''] hover:text-foreground active:scale-[0.96]"
                     href={addQueryParams(project.link, UTM_PARAMS)}
                     target="_blank"
                     rel="noopener"
@@ -155,7 +155,7 @@ export function ProjectItem({
               ) : null}
 
               <div
-                className="text-muted-foreground shrink-0 [&_svg]:size-4"
+                className="shrink-0 text-muted-foreground [&_svg]:size-4"
                 aria-hidden
               >
                 <ChevronsDownUpIcon className="hidden group-data-[state=open]/project:block" />
@@ -165,12 +165,12 @@ export function ProjectItem({
           </div>
         </div>
 
-        <CollapsibleContent className="data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down overflow-hidden duration-300">
-          <div className="border-edge space-y-6 border-t border-dashed p-4">
+        <CollapsibleContent className="overflow-hidden duration-300 data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
+          <div className="space-y-6 border-t border-dashed border-edge p-4">
             {/* Project Description */}
             {project.description && (
               <div>
-                <h4 className="text-foreground mb-3 flex items-center gap-2 text-sm font-medium">
+                <h4 className="mb-3 flex items-center gap-2 text-sm font-medium text-foreground">
                   <IconComponent className="size-4" />
                   Project Overview
                 </h4>
@@ -182,7 +182,7 @@ export function ProjectItem({
 
             {/* Technology Stack */}
             <div>
-              <h4 className="text-foreground mb-3 flex items-center gap-2 text-sm font-medium">
+              <h4 className="mb-3 flex items-center gap-2 text-sm font-medium text-foreground">
                 <TagIcon className="size-4" />
                 Technology Stack
               </h4>
@@ -198,7 +198,7 @@ export function ProjectItem({
             {/* Project Links */}
             {(project.link || project.hasCaseStudy) && (
               <div>
-                <h4 className="text-foreground mb-3 flex items-center gap-2 text-sm font-medium">
+                <h4 className="mb-3 flex items-center gap-2 text-sm font-medium text-foreground">
                   <ExternalLinkIcon className="size-4" />
                   Project Links
                 </h4>
@@ -208,7 +208,7 @@ export function ProjectItem({
                       href={addQueryParams(project.link, UTM_PARAMS)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-primary bg-primary/10 hover:bg-primary/20 active:scale-[0.96] transition-[background-color,transform] duration-150 ease-out inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium"
+                      className="inline-flex items-center gap-2 rounded-md bg-primary/10 px-3 py-2 text-sm font-medium text-primary transition-[background-color,transform] duration-150 ease-out hover:bg-primary/20 active:scale-[0.96]"
                     >
                       <ArrowUpRightIcon className="size-3" />
                       View Project
@@ -217,7 +217,7 @@ export function ProjectItem({
                   {project.hasCaseStudy && (
                     <Link
                       href={`/projects/${project.id}`}
-                      className="text-foreground bg-muted hover:bg-muted/80 active:scale-[0.96] transition-[background-color,transform] duration-150 ease-out inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium"
+                      className="inline-flex items-center gap-2 rounded-md bg-muted px-3 py-2 text-sm font-medium text-foreground transition-[background-color,transform] duration-150 ease-out hover:bg-muted/80 active:scale-[0.96]"
                     >
                       <ArrowUpRightIcon className="size-3" />
                       Read Case Study

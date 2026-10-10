@@ -117,7 +117,7 @@ const components: MDXRemoteProps["components"] = {
 
         {__rawString__ && (
           <CopyButton
-            className="absolute right-2 top-2"
+            className="absolute top-2 right-2"
             value={__rawString__}
           />
         )}
@@ -131,7 +131,7 @@ const components: MDXRemoteProps["components"] = {
   CodeTabs,
   Steps: (props) => (
     <div
-      className="md:pl-7.5 prose-h3:text-wrap md:ml-3.5 md:border-l"
+      className="md:ml-3.5 md:border-l md:pl-7.5 prose-h3:text-wrap"
       {...props}
     />
   ),
@@ -215,6 +215,9 @@ const options: MDXRemoteProps["options"] = {
   },
 };
 
-export function MDX({ code }: { code: string }) {
+// Cached so MDX compilation (which reads the current time) happens at prerender
+// instead of forcing every content page to render on each request.
+export async function MDX({ code }: { code: string }) {
+  "use cache";
   return <MDXRemote source={code} components={components} options={options} />;
 }

@@ -54,8 +54,14 @@ export function DateTicker({ currentIndex, labels, visible }: DateTickerProps) {
   })();
 
   // Animated Y offsets
-  const dayY = useSpring(-currentIndex * TICKER_ITEM_HEIGHT, { stiffness: 400, damping: 35 });
-  const monthY = useSpring(-currentMonthIndex * TICKER_ITEM_HEIGHT, { stiffness: 400, damping: 35 });
+  const dayY = useSpring(-currentIndex * TICKER_ITEM_HEIGHT, {
+    stiffness: 400,
+    damping: 35,
+  });
+  const monthY = useSpring(-currentMonthIndex * TICKER_ITEM_HEIGHT, {
+    stiffness: 400,
+    damping: 35,
+  });
 
   dayY.set(-currentIndex * TICKER_ITEM_HEIGHT);
   if (currentMonthIndex >= 0) {

@@ -66,7 +66,7 @@ export function ProjectImage({
     <figure
       className={cn(
         "my-6 overflow-hidden rounded-2xl border border-edge bg-muted/20 p-2",
-        aspect === "portrait" && "max-w-[336px] mx-auto",
+        aspect === "portrait" && "mx-auto max-w-[336px]",
         className
       )}
     >
@@ -84,10 +84,10 @@ export function ProjectImage({
           className="object-cover"
           unoptimized
         />
-        <div className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-inset ring-black/10 dark:ring-white/10" />
+        <div className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-black/10 ring-inset dark:ring-white/10" />
       </div>
       {caption && (
-        <figcaption className="mt-2 text-center text-xs text-muted-foreground font-mono">
+        <figcaption className="mt-2 text-center font-mono text-xs text-muted-foreground">
           {caption}
         </figcaption>
       )}
@@ -113,7 +113,7 @@ export function ProjectVideo({
     <figure
       className={cn(
         "my-6 overflow-hidden rounded-2xl border border-edge bg-muted/20 p-2",
-        aspect === "portrait" && "max-w-[336px] mx-auto",
+        aspect === "portrait" && "mx-auto max-w-[336px]",
         className
       )}
     >
@@ -131,10 +131,10 @@ export function ProjectVideo({
         >
           <track kind="captions" />
         </video>
-        <div className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-inset ring-black/10 dark:ring-white/10" />
+        <div className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-black/10 ring-inset dark:ring-white/10" />
       </div>
       {caption && (
-        <figcaption className="mt-2 text-center text-xs text-muted-foreground font-mono">
+        <figcaption className="mt-2 text-center font-mono text-xs text-muted-foreground">
           {caption}
         </figcaption>
       )}
@@ -168,7 +168,7 @@ export function ProjectIframe({
           allowFullScreen
           sandbox="allow-scripts allow-presentation allow-forms allow-same-origin"
         />
-        <div className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-inset ring-black/10 dark:ring-white/10" />
+        <div className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-black/10 ring-inset dark:ring-white/10" />
       </div>
     </div>
   );
@@ -223,7 +223,7 @@ function SliderCarousel({
     <div
       className={cn(
         "relative my-6 overflow-hidden rounded-2xl border border-edge bg-muted/20 p-2",
-        aspect === "portrait" && "max-w-[336px] mx-auto"
+        aspect === "portrait" && "mx-auto max-w-[336px]"
       )}
     >
       <div
@@ -244,7 +244,7 @@ function SliderCarousel({
                 className="object-cover"
                 unoptimized
               />
-              <div className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-inset ring-black/10 dark:ring-white/10" />
+              <div className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-black/10 ring-inset dark:ring-white/10" />
             </div>
           ))}
         </div>
@@ -253,7 +253,7 @@ function SliderCarousel({
       <button
         type="button"
         onClick={scrollPrev}
-        className="absolute left-4 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-edge bg-background/80 text-foreground backdrop-blur-xs transition-[background-color,border-color,transform] duration-150 ease-out hover:bg-background active:scale-[0.96] before:absolute before:-inset-2 before:content-['']"
+        className="absolute top-1/2 left-4 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-edge bg-background/80 text-foreground backdrop-blur-xs transition-[background-color,border-color,transform] duration-150 ease-out before:absolute before:-inset-2 before:content-[''] hover:bg-background active:scale-[0.96]"
         aria-label="Previous slide"
       >
         <ChevronLeft className="size-4" />
@@ -262,7 +262,7 @@ function SliderCarousel({
       <button
         type="button"
         onClick={scrollNext}
-        className="absolute right-4 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-edge bg-background/80 text-foreground backdrop-blur-xs transition-[background-color,border-color,transform] duration-150 ease-out hover:bg-background active:scale-[0.96] before:absolute before:-inset-2 before:content-['']"
+        className="absolute top-1/2 right-4 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-edge bg-background/80 text-foreground backdrop-blur-xs transition-[background-color,border-color,transform] duration-150 ease-out before:absolute before:-inset-2 before:content-[''] hover:bg-background active:scale-[0.96]"
         aria-label="Next slide"
       >
         <ChevronRight className="size-4" />
@@ -288,12 +288,12 @@ export function ProjectSlider({
       <div
         className={cn(
           "relative my-6 overflow-hidden rounded-2xl border border-edge bg-muted/20 p-2",
-          aspect === "portrait" && "max-w-[336px] mx-auto"
+          aspect === "portrait" && "mx-auto max-w-[336px]"
         )}
       >
         <div className={cn("overflow-hidden rounded-lg bg-muted", aspectClass)}>
           <div className="flex h-full w-full">
-            <div className="relative w-full h-full bg-muted">
+            <div className="relative h-full w-full bg-muted">
               {imageList[0] && (
                 <Image
                   src={imageList[0]}
@@ -304,16 +304,16 @@ export function ProjectSlider({
                   unoptimized
                 />
               )}
-              <div className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-inset ring-black/10 dark:ring-white/10" />
+              <div className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-black/10 ring-inset dark:ring-white/10" />
             </div>
           </div>
         </div>
 
-        <div className="absolute left-4 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-edge bg-background/80 text-foreground/50 backdrop-blur-xs pointer-events-none">
+        <div className="pointer-events-none absolute top-1/2 left-4 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-edge bg-background/80 text-foreground/50 backdrop-blur-xs">
           <ChevronLeft className="size-4" />
         </div>
 
-        <div className="absolute right-4 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-edge bg-background/80 text-foreground/50 backdrop-blur-xs pointer-events-none">
+        <div className="pointer-events-none absolute top-1/2 right-4 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-edge bg-background/80 text-foreground/50 backdrop-blur-xs">
           <ChevronRight className="size-4" />
         </div>
       </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
-import { curveNatural, curveMonotoneX } from "@visx/curve";
+import { curveMonotoneX } from "@visx/curve";
 import { LinePath } from "@visx/shape";
 import { useMotionValue, useSpring, useTransform } from "motion/react";
 import * as m from "motion/react-m";

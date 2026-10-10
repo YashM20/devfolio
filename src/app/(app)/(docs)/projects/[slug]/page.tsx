@@ -20,11 +20,11 @@ import {
   getProjectPostBySlug,
   findNeighbourProject,
 } from "@/data/projects";
+import type { ProjectPost } from "@/data/projects";
 import { PROJECTS } from "@/features/profile/data/projects";
 import { SITE_INFO } from "@/config/site";
 import { USER } from "@/data/user";
 import { cn } from "@/lib/utils";
-import { connection } from "next/server";
 
 export async function generateStaticParams() {
   const posts = getAllProjectPosts();
@@ -45,30 +45,41 @@ export async function generateMetadata({
     return notFound();
   }
 
-  const { title, description } = post.metadata;
+  const { title, description, image } = post.metadata;
+
+  const postUrl = `/projects/${post.slug}`;
+  const ogImage = image || `/og/simple?title=${encodeURIComponent(title)}`;
 
   return {
-    title: `${title} | Project Details`,
+    title,
     description,
+    alternates: {
+      canonical: postUrl,
+    },
     openGraph: {
+      url: postUrl,
       title: `${title} | Project Case Study`,
       description,
       type: "article",
+      images: {
+        url: ogImage,
+        width: 1200,
+        height: 630,
+        alt: title,
+      },
     },
     twitter: {
       card: "summary_large_image",
       title: `${title} | Project Case Study`,
       description,
+      images: [ogImage],
     },
   };
 }
 
-import type { ProjectPost } from "@/data/projects";
-
 async function getPageJsonLd(
   post: ProjectPost
 ): Promise<WithContext<PageSchema>> {
-  await connection();
   return {
     "@context": "https://schema.org",
     "@type": "TechArticle",
@@ -120,7 +131,7 @@ async function ProjectContent({
       />
       <div className="flex items-center justify-between p-2 pl-4">
         <Button
-          className="text-muted-foreground px-0 hover:no-underline active:scale-[0.98] transition-transform"
+          className="px-0 text-muted-foreground transition-transform hover:no-underline active:scale-[0.98]"
           variant="link"
           asChild
         >
@@ -135,7 +146,7 @@ async function ProjectContent({
             <Button
               variant="secondary"
               size="icon"
-              className="active:scale-[0.96] transition-transform"
+              className="transition-transform active:scale-[0.96]"
               asChild
             >
               <Link href={`/projects/${previous.slug}`}>
@@ -149,7 +160,7 @@ async function ProjectContent({
             <Button
               variant="secondary"
               size="icon"
-              className="active:scale-[0.96] transition-transform"
+              className="transition-transform active:scale-[0.96]"
               asChild
             >
               <Link href={`/projects/${next.slug}`}>
@@ -174,7 +185,7 @@ async function ProjectContent({
             />
           )}
           <h1
-            className="m-0! font-semibold text-balance text-2xl md:text-3xl border-none p-0 before:content-none after:content-none"
+            className="m-0! border-none p-0 text-2xl font-semibold text-balance before:content-none after:content-none md:text-3xl"
             style={{ viewTransitionName: `project-title-${post.slug}` }}
           >
             {post.metadata.title}
@@ -182,23 +193,23 @@ async function ProjectContent({
         </div>
 
         <div className="mb-6 flex items-center justify-between">
-          <p className="text-muted-foreground text-sm font-mono uppercase tracking-wider">
+          <p className="font-mono text-sm tracking-wider text-muted-foreground uppercase">
             Case Study
           </p>
 
           <ReadingTime
             content={post.content}
             showWords={true}
-            className="text-sm font-mono"
+            className="font-mono text-sm"
           />
         </div>
 
         <p className="lead mb-6 text-pretty">{post.metadata.description}</p>
 
         {/* Dynamic Project Metadata Grid */}
-        <div className="not-prose my-6 grid grid-cols-2 gap-4 rounded-xl border border-edge border-dashed p-4 bg-muted/10 font-mono text-sm">
+        <div className="not-prose my-6 grid grid-cols-2 gap-4 rounded-xl border border-dashed border-edge bg-muted/10 p-4 font-mono text-sm">
           <div>
-            <span className="text-muted-foreground block text-xs uppercase mb-0.5">
+            <span className="mb-0.5 block text-xs text-muted-foreground uppercase">
               Role
             </span>
             <span className="font-medium text-foreground">
@@ -206,7 +217,7 @@ async function ProjectContent({
             </span>
           </div>
           <div>
-            <span className="text-muted-foreground block text-xs uppercase mb-0.5">
+            <span className="mb-0.5 block text-xs text-muted-foreground uppercase">
               Duration
             </span>
             <span className="font-medium text-foreground">
@@ -214,7 +225,7 @@ async function ProjectContent({
             </span>
           </div>
           <div>
-            <span className="text-muted-foreground block text-xs uppercase mb-0.5">
+            <span className="mb-0.5 block text-xs text-muted-foreground uppercase">
               Client / Partner
             </span>
             <span className="font-medium text-foreground">
@@ -222,7 +233,7 @@ async function ProjectContent({
             </span>
           </div>
           <div>
-            <span className="text-muted-foreground block text-xs uppercase mb-0.5">
+            <span className="mb-0.5 block text-xs text-muted-foreground uppercase">
               Industry
             </span>
             <span className="font-medium text-foreground">
@@ -233,7 +244,7 @@ async function ProjectContent({
 
         {/* Tech Stack Badges */}
         <div className="not-prose mb-6">
-          <span className="text-muted-foreground block text-xs uppercase font-mono mb-2">
+          <span className="mb-2 block font-mono text-xs text-muted-foreground uppercase">
             Technologies & Stack
           </span>
           <div className="flex flex-wrap gap-1.5">
@@ -263,7 +274,7 @@ function ProjectContentSkeleton() {
   return (
     <>
       <div className="flex items-center justify-between p-2 pl-4">
-        <Button className="text-muted-foreground px-0" variant="link" asChild>
+        <Button className="px-0 text-muted-foreground" variant="link" asChild>
           <Link href="/#projects" className="flex items-center gap-1">
             <ArrowLeftIcon className="size-4" />
             Projects
@@ -286,7 +297,7 @@ function ProjectContentSkeleton() {
         <Skeleton className="mb-6 h-6 w-full" />
 
         {/* Metadata Grid Skeleton */}
-        <div className="my-6 grid grid-cols-2 gap-4 rounded-xl border border-edge border-dashed p-4 bg-muted/10">
+        <div className="my-6 grid grid-cols-2 gap-4 rounded-xl border border-dashed border-edge bg-muted/10 p-4">
           <div className="space-y-1">
             <Skeleton className="h-3 w-12" />
             <Skeleton className="h-4 w-28" />
@@ -316,7 +327,7 @@ function ProjectContentSkeleton() {
           </div>
         </div>
 
-        <div className="space-y-4 mt-8">
+        <div className="mt-8 space-y-4">
           <Skeleton className="h-4 w-full" />
           <Skeleton className="h-4 w-5/6" />
           <Skeleton className="h-32 w-full" />
@@ -346,9 +357,9 @@ function Separator({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "border-edge relative flex h-8 w-full border-x",
-        "before:-z-1 before:absolute before:-left-[100vw] before:h-8 before:w-[200vw]",
-        "before:bg-size-[10px_10px] before:[--pattern-foreground:var(--color-edge)]/56 before:bg-[repeating-linear-gradient(315deg,var(--pattern-foreground)_0,var(--pattern-foreground)_1px,transparent_0,transparent_50%)]",
+        "relative flex h-8 w-full border-x border-edge",
+        "before:absolute before:-left-[100vw] before:-z-1 before:h-8 before:w-[200vw]",
+        "before:bg-[repeating-linear-gradient(315deg,var(--pattern-foreground)_0,var(--pattern-foreground)_1px,transparent_0,transparent_50%)] before:bg-size-[10px_10px] before:[--pattern-foreground:var(--color-edge)]/56",
         className
       )}
     />
